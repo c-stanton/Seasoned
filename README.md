@@ -21,7 +21,7 @@ The Hybrid Tech Stack:
 | **Frontend** | Nuxt 4 + Vuetify + CSS |
 | **Backend** | Nuxt Nitro |
 | **Database** | Postgres + pgvector |
-| **Intelligence** | Gemini 1.5 Flash |
+| **Intelligence** | Gemini 2.5 Flash |
 | **Storage** | Local File System |
 
 Technical Requirements:

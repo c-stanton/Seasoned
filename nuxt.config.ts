@@ -6,4 +6,16 @@ export default defineNuxtConfig({
     compatibilityVersion: 4,
   },
   srcDir: 'app/',
+  css: [
+    'vuetify/lib/styles/main.sass',
+    '@mdi/font/css/materialdesignicons.min.css',
+  ],
+  build: {
+    transpile: ['vuetify'],
+  },
+
+  // Environment Variables for Gemini
+  runtimeConfig: {
+    geminiApiKey: '',
+  },
 })
