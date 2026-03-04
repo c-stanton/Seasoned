@@ -1,0 +1,6 @@
+@Seasoned.Backend_HostAddress = http://localhost:5243
+
+GET {{Seasoned.Backend_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

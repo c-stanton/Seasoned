@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+  <metadata>
+    <id>JsonSchema.Net</id>
+    <version>7.3.4</version>
+    <authors>Greg Dennis</authors>
+    <license type="expression">MIT</license>
+    <licenseUrl>https://licenses.nuget.org/MIT</licenseUrl>
+    <icon>json-logo-256.png</icon>
+    <projectUrl>https://github.com/json-everything/json-everything</projectUrl>
+    <description>JSON Schema built on the System.Text.Json namespace</description>
+    <releaseNotes>Release notes can be found at https://docs.json-everything.net/rn-json-schema/</releaseNotes>
+    <tags>json-schema validation schema json</tags>
+    <repository type="git" url="https://github.com/json-everything/json-everything" branch="refs/heads/master" commit="be57a968e9a136002606f09f16c53e10ef33f27d" />
+    <dependencies>
+      <group targetFramework="net8.0">
+        <dependency id="JsonPointer.Net" version="5.3.1" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework="net9.0">
+        <dependency id="JsonPointer.Net" version="5.3.1" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework=".NETStandard2.0">
+        <dependency id="JsonPointer.Net" version="5.3.1" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+  </metadata>
+</package>

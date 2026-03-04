@@ -1,0 +1,30 @@
+using Microsoft.AspNetCore.Mvc;
+using Seasoned.Backend.Services;
+using Seasoned.Backend.DTOs;
+
+namespace Seasoned.Backend.Controllers;
+
+[ApiController]
+[Route("api/[controller]")]
+public class RecipeController : ControllerBase
+{
+    private readonly IRecipeService _recipeService;
+
+    // Dependency Injection: The service is "injected" here
+    public RecipeController(IRecipeService recipeService)
+    {
+        _recipeService = recipeService;
+    }
+
+    [HttpPost("upload")]
+    public async Task<ActionResult<RecipeResponseDto>> UploadRecipe([FromForm] IFormFile image)
+    {
+        if (image == null || image.Length == 0)
+        {
+            return BadRequest("No image uploaded.");
+        }
+
+        var result = await _recipeService.ParseRecipeImageAsync(image);
+        return Ok(result);
+    }
+}

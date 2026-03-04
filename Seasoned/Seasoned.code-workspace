@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../Seasoned.Backend"
+		},
+		{
+			"path": "../Seasoned.Tests"
+		}
+	],
+	"settings": {}
+}
