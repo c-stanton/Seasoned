@@ -1,7 +1,5 @@
 # Seasoned
 
-# Seasoned
-
 The Pitch:
 
 Seasoned is a high-performance, private digital cookbook that bridges the gap between web discovery and kitchen execution. By combining the multimodal power of Gemini 1.5 Flash with a secure, self-hosted PostgreSQL backbone, Seasoned allows users to instantly "distill" messy recipe blogs and food photos into a standardized, searchable, and shareable library they truly own.
