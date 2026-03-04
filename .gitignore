@@ -1,6 +1,6 @@
 bin/
 obj/
-node_modules/
+Seasoned.Frontend/node_modules/
 .nuxt/
 .output/
 dist/
