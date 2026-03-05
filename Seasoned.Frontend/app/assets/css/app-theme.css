@@ -208,3 +208,18 @@
   height: 56px !important;
   border-radius: 8px !important;
 }
+
+.clear-btn-solid {
+  background-color: #dccca7 !important;
+  color: #4a3a2a !important;
+  min-width: 56px !important;
+  height: 56px !important;
+  border-radius: 8px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.d-flex .analyze-btn {
+  margin-bottom: 0 !important;
+}

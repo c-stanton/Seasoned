@@ -36,21 +36,33 @@
             ></v-file-input>
           </div>
 
-          <v-btn 
-            class="analyze-btn w-100"
-            size="large"
-            elevation="0"
-            :loading="loading"
-            :disabled="!files || files.length === 0"
-            @click="uploadImage"
-          >
-            <v-icon icon="mdi-pot-steam" class="mr-2"></v-icon>
-            Analyze Recipe
-          </v-btn>
+          <div class="d-flex w-100 mt-4 align-center">
+            <v-btn 
+              class="analyze-btn flex-grow-1 mr-2"
+              size="large"
+              elevation="0"
+              :loading="loading"
+              :disabled="!files || files.length === 0"
+              @click="uploadImage"
+            >
+              <v-icon icon="mdi-pot-steam" class="mr-2"></v-icon>
+              Analyze Recipe
+            </v-btn>
+
+            <v-btn
+              class="clear-btn-solid"
+              variant="flat"
+              size="large"
+              elevation="0"
+              @click="clearAll"
+            >
+              <v-icon icon="mdi-refresh"></v-icon>
+            </v-btn>
+          </div>
 
           <v-btn
             to="/gallery"
-            class="gallery-btn w-100"
+            class="gallery-btn w-100 mt-4"
             size="large"
             elevation="0"
           >
@@ -92,8 +104,9 @@
 
           <v-row justify="center" class="mt-12 pb-10">
             <v-btn
+              v-if="!hasSaved"
               class="save-recipe-btn px-12"
-              size="x-large"
+              size="large"
               elevation="0"
               :loading="saving"
               @click="saveToCollection"
@@ -112,12 +125,14 @@
 <script setup>
 import { ref } from 'vue'
 import '@/assets/css/app-theme.css'
+
 const config = useRuntimeConfig()
 const files = ref([])
 const loading = ref(false)
 const recipe = ref(null)
 const isDragging = ref(false)
 const saving = ref(false)
+const hasSaved = ref(false)
 
 const handleDrop = (e) => {
   isDragging.value = false
@@ -132,6 +147,9 @@ const uploadImage = async () => {
   if (!fileToUpload) return;
 
   loading.value = true;
+  recipe.value = null;
+  hasSaved.value = false;
+
   const formData = new FormData();
   formData.append('image', fileToUpload);
 
@@ -146,7 +164,31 @@ const uploadImage = async () => {
   } finally {
     loading.value = false;
   }
+}
 
-  
+const saveToCollection = async () => {
+  if (!recipe.value || hasSaved.value) return;
+
+  saving.value = true;
+
+  try {
+    await $fetch(`${config.public.apiBase}api/recipe/save`, {
+      method: 'POST',
+      body: recipe.value
+    });
+    hasSaved.value = true;
+  } catch (error) {
+    console.error("Save failed:", error);
+  } finally {
+    saving.value = false;
+  }
+}
+
+const clearAll = () => {
+  files.value = []
+  recipe.value = null
+  hasSaved.value = false
+  loading.value = false
+  saving.value = false
 }
 </script>
