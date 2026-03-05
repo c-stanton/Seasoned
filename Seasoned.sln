@@ -1,0 +1,30 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.2.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Seasoned.Tests", "Seasoned.Tests\Seasoned.Tests.csproj", "{FEF19240-CC2D-9BD4-7AC8-277372525020}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Seasoned.Backend", "Seasoned.Backend\Seasoned.Backend.csproj", "{874CAB7B-A43B-C80D-494C-C243C69AEE7A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FEF19240-CC2D-9BD4-7AC8-277372525020}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FEF19240-CC2D-9BD4-7AC8-277372525020}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FEF19240-CC2D-9BD4-7AC8-277372525020}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FEF19240-CC2D-9BD4-7AC8-277372525020}.Release|Any CPU.Build.0 = Release|Any CPU
+		{874CAB7B-A43B-C80D-494C-C243C69AEE7A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{874CAB7B-A43B-C80D-494C-C243C69AEE7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{874CAB7B-A43B-C80D-494C-C243C69AEE7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{874CAB7B-A43B-C80D-494C-C243C69AEE7A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {ED9A436F-5793-4685-B738-3AA5653D4AF1}
+	EndGlobalSection
+EndGlobal

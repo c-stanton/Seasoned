@@ -2,7 +2,8 @@ using Seasoned.Backend.DTOs;
 using Mscc.GenerativeAI;
 using Microsoft.AspNetCore.Http;
 using System.IO;
-
+using System.Text.Json;
+using System.Text.Json.Serialization;
 namespace Seasoned.Backend.Services;
 
 public class RecipeService : IRecipeService
@@ -11,7 +12,7 @@ public class RecipeService : IRecipeService
 
     public RecipeService(IConfiguration config)
     {
-        _apiKey = config["GeminiApiKey"] ?? throw new ArgumentNullException("API Key missing");
+        _apiKey = config["GEMINI_API_KEY"] ?? throw new ArgumentNullException("API Key missing");
     }
 
     public async Task<RecipeResponseDto> ParseRecipeImageAsync(IFormFile image)
@@ -23,27 +24,55 @@ public class RecipeService : IRecipeService
         await image.CopyToAsync(ms);
         var base64Image = Convert.ToBase64String(ms.ToArray());
 
-        // 1. Better Prompt: Tell Gemini exactly what the JSON should look like
-        var prompt = @"Extract the recipe from this image. 
-        Return a JSON object with exactly these fields:
+        var prompt = @"Extract the recipe details from this image. 
+        IMPORTANT: Return ONLY a raw JSON string. 
+        DO NOT include markdown formatting (no ```json). 
+        DO NOT include any text before or after the JSON.
+        All property names and string values MUST be enclosed in double quotes.
+        JSON structure:
         {
         ""title"": ""string"",
         ""description"": ""string"",
-        ""ingredients"": [""string""],
-        ""instructions"": [""string""]
+        ""ingredients"": [""string"", ""string""],
+        ""instructions"": [""string"", ""string""]
         }";
         
-        // 2. Set the Response MIME Type to application/json
-        var config = new GenerationConfig { ResponseMimeType = "application/json" };
+        var config = new GenerationConfig { 
+            ResponseMimeType = "application/json",
+            Temperature = 0.1f
+        };
+
         var request = new GenerateContentRequest(prompt, config);
-        request.AddMedia(base64Image, "image/png");
+        await Task.Run(() => request.AddMedia(base64Image, "image/png"));
 
         var response = await model.GenerateContent(request);
+        string rawText = response.Text?.Trim() ?? "";
 
-        // 3. Use System.Text.Json to turn that string back into our DTO
-        var options = new System.Text.Json.JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-        var result = System.Text.Json.JsonSerializer.Deserialize<RecipeResponseDto>(response.Text, options);
+        int start = rawText.IndexOf('{');
+        int end = rawText.LastIndexOf('}');
 
-        return result ?? new RecipeResponseDto { Title = "Error parsing JSON" };
+        if (start == -1 || end == -1) 
+        {
+            return new RecipeResponseDto { Title = "Error", Description = "AI failed to generate a valid JSON block." };
+        }
+
+        string cleanJson = rawText.Substring(start, (end - start) + 1);
+
+        try 
+        {
+            var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+            var result = JsonSerializer.Deserialize<RecipeResponseDto>(cleanJson, options);
+            return result ?? new RecipeResponseDto { Title = "Empty Response" };
+        }
+        catch (JsonException ex)
+        {
+            Console.WriteLine($"Raw AI Output: {rawText}");
+            Console.WriteLine($"Failed to parse JSON: {ex.Message}");
+            
+            return new RecipeResponseDto { 
+                Title = "Parsing Error", 
+                Description = "The AI response was malformed. Check logs." 
+            };
+        }
     }
 }

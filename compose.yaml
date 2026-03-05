@@ -1,0 +1,34 @@
+services:
+  # Database: Postgres with pgvector
+  db:
+    image: pgvector/pgvector:pg16
+    container_name: seasoned-db
+    restart: always
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./init-db:/docker-entrypoint-initdb.d
+
+  # Seasoned App: C# .NET 9 + Nuxt 4
+  app:
+    build: .
+    container_name: seasoned-main
+    restart: always
+    ports:
+      - "5000:8080"
+    environment:
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - NUXT_PUBLIC_API_BASE=${NUXT_PUBLIC_API_BASE}
+      - ConnectionStrings__DefaultConnection=Host=db;Database=${DB_NAME};Username=${DB_USER};Password=${DB_PASSWORD}
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_HTTP_PORTS=8080
+    depends_on:
+      - db
+
+volumes:
+  pgdata:

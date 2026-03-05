@@ -23,16 +23,18 @@ export default defineNuxtConfig({
   ],
 
   runtimeConfig: {
-    geminiApiKey: '',
+    public: {
+      apiBase: '' 
+    }
   },
 
   vite: {
     server: {
-      hmr: {
+      hmr: process.env.NODE_ENV !== 'production' ? {
         protocol: 'ws',
         host: 'localhost',
         port: 3000
-      }
+      } : undefined
     }
   }
 })

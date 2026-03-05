@@ -5,12 +5,11 @@ using Seasoned.Backend.DTOs;
 namespace Seasoned.Backend.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/recipe")]
 public class RecipeController : ControllerBase
 {
     private readonly IRecipeService _recipeService;
 
-    // Dependency Injection: The service is "injected" here
     public RecipeController(IRecipeService recipeService)
     {
         _recipeService = recipeService;

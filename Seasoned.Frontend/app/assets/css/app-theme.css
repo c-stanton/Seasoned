@@ -1,0 +1,116 @@
+@import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;600&display=swap');
+
+.recipe-bg {
+  background-color: #3e2a14 !important; 
+  background-image: url("https://www.transparenttextures.com/patterns/dark-wood.png") !important; /* Richer wood texture */
+  background-size: cover;
+}
+
+.recipe-card {
+  background-color: #f4e4bc !important;
+  background-image: url("https://www.transparenttextures.com/patterns/natural-paper.png"); /* Stronger linen texture */
+  border: 1px solid #c9b996 !important;
+  border-radius: 12px !important;
+  font-family: 'Inter', sans-serif;
+}
+
+.brand-title {
+  font-family: 'Libre Baskerville', serif;
+  font-weight: 700;
+  font-size: 2.8rem;
+  color: #2e1e0a;
+  letter-spacing: -1px;
+}
+
+.brand-subtitle {
+  font-family: 'Libre Baskerville', serif;
+  font-style: italic;
+  color: #6d5e4a;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+}
+
+.recipe-title {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 2.4rem;
+  color: #1e1408;
+}
+
+.section-header {
+  font-family: 'Libre Baskerville', serif;
+  font-weight: bold;
+  font-size: 1.1rem;
+  border-bottom: 2px solid #dccca7;
+  color: #4a3a2a;
+  display: flex;
+  align-items: center;
+  text-transform: uppercase;
+}
+
+.custom-input .v-field {
+  background-color: #5d4037 !important;
+  color: #f8f1e0 !important;
+  border-radius: 8px !important;
+  border: 2px solid #5d4037 !important;
+}
+
+.custom-input .v-label {
+  color: #f8f1e0 !important;
+  opacity: 1 !important;
+  font-weight: 600;
+}
+
+.custom-input .v-icon {
+  color: #f8f1e0 !important;
+}
+
+.custom-input .v-field--focused {
+  border: 2px solid #556b2f !important;
+}
+
+.analyze-btn {
+  background-color: #556b2f !important;
+  color: #ffffff !important;
+  font-family: 'Libre Baskerville', serif;
+  text-transform: none;
+  font-size: 1.1rem;
+  letter-spacing: 0.5px;
+}
+
+.ingredients-list {
+  background: transparent !important;
+}
+
+.ingredient-item {
+  border-bottom: 1px dotted #c1b18e;
+  font-style: italic;
+  color: #2c2925;
+}
+
+.instruction-step {
+  display: flex;
+  gap: 20px;
+  line-height: 1.6;
+  color: #2c2925;
+}
+
+.step-number {
+  font-family: 'Libre Baskerville', serif;
+  font-weight: bold;
+  color: #3b4e1e;
+  font-size: 1.3rem;
+  min-width: 25px;
+}
+
+.separator {
+  border-color: #dccca7 !important;
+  opacity: 1;
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.6s ease;
+}
+.fade-enter-from, .fade-leave-to {
+  opacity: 0;
+}
