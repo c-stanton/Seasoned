@@ -1,17 +1,22 @@
 @import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;600&display=swap');
 
 .recipe-bg {
-  background-color: #3e2a14 !important; 
-  background-image: url("https://www.transparenttextures.com/patterns/dark-wood.png") !important; /* Richer wood texture */
-  background-size: cover;
+  /* A rich, warm medium-brown walnut tone */
+  background-color: #5d4a36 !important; 
+  /* Using the wood pattern but allowing the lighter base to show through */
+  background-image: url("https://www.transparenttextures.com/patterns/tileable-wood-colored.png") !important;
+  background-size: 500px; /* Slightly larger scale makes the grain easier to see */
+  background-attachment: fixed;
 }
 
+/* Ensure the card has a natural 'sit' on this visible wood */
 .recipe-card {
   background-color: #f4e4bc !important;
-  background-image: url("https://www.transparenttextures.com/patterns/natural-paper.png"); /* Stronger linen texture */
+  background-image: url("https://www.transparenttextures.com/patterns/natural-paper.png");
   border: 1px solid #c9b996 !important;
   border-radius: 12px !important;
-  font-family: 'Inter', sans-serif;
+  /* A deeper, more spread-out shadow to account for the lighter background */
+  box-shadow: 0 15px 45px rgba(0, 0, 0, 0.35) !important;
 }
 
 .brand-title {
@@ -69,15 +74,6 @@
   border: 2px solid #556b2f !important;
 }
 
-.analyze-btn {
-  background-color: #556b2f !important;
-  color: #ffffff !important;
-  font-family: 'Libre Baskerville', serif;
-  text-transform: none;
-  font-size: 1.1rem;
-  letter-spacing: 0.5px;
-}
-
 .ingredients-list {
   background: transparent !important;
 }
@@ -113,4 +109,102 @@
 }
 .fade-enter-from, .fade-leave-to {
   opacity: 0;
+}
+
+.custom-input .v-field__input {
+  justify-content: center !important;
+  text-align: center !important;
+}
+
+/* 2. Center the floating label specifically */
+.custom-input .v-label.v-field-label {
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  width: 100% !important;
+  justify-content: center !important;
+}
+
+/* 3. Ensure both elements are the exact same height and shape */
+.custom-input .v-field {
+  height: 56px !important;
+  min-height: 56px !important;
+  border-radius: 8px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+/* 4. Remove the prepend icon space that kicks text to the right */
+.custom-input .v-field__prepend-inner {
+  display: none !important;
+}
+
+/* 5. Typography match: ensure font weight and size are identical */
+.custom-input .v-label {
+  font-family: 'Inter', sans-serif !important;
+  font-weight: 600 !important;
+  font-size: 1rem !important;
+  letter-spacing: normal !important;
+}
+
+/* Drag and Drop Zone Styling */
+.drop-zone {
+  width: 100%;
+  height: 150px;
+  border: 2px dashed #8c857b;
+  border-radius: 12px;
+  background-color: rgba(62, 42, 20, 0.03) !important;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: #3e3a35 !important;
+  text-align: center;
+  padding: 20px;
+}
+
+.drop-zone--active {
+  background-color: rgba(85, 107, 47, 0.1) !important;
+  border-color: #556b2f;
+  transform: scale(1.02);
+}
+
+.drop-text {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+.selected-text {
+  font-weight: 600;
+  color: #556b2f;
+}
+
+.analyze-btn, 
+.gallery-btn,
+.analyze-btn *, 
+.gallery-btn * {
+  font-family: 'Libre Baskerville', serif !important;
+  text-transform: none !important;
+  font-size: 1.1rem !important;
+  letter-spacing: 0.5px !important;
+  font-weight: 400 !important;
+  border-radius: 8px !important;
+}
+
+.analyze-btn {
+  margin-bottom: 16px !important; 
+  background-color: #556b2f !important;
+  color: #ffffff !important;
+  height: 56px !important;
+  border-radius: 8px !important;
+}
+
+.gallery-btn {
+  background-color: #8c4a32 !important; 
+  color: #ffffff !important;
+  height: 56px !important;
+  border-radius: 8px !important;
 }

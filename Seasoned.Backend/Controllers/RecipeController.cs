@@ -26,4 +26,15 @@ public class RecipeController : ControllerBase
         var result = await _recipeService.ParseRecipeImageAsync(image);
         return Ok(result);
     }
+
+    [HttpGet]
+    public async Task<IActionResult> GetRecipes()
+    {
+        // This assumes your DbContext is injected as _context
+        var recipes = await _context.Recipes
+            .OrderByDescending(r => r.CreatedAt)
+            .ToListAsync();
+            
+        return Ok(recipes);
+    }
 }

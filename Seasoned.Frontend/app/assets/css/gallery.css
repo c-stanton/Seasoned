@@ -1,0 +1,37 @@
+/* assets/css/gallery.css */
+
+.gallery-item-card {
+  background-color: #fcfaf5 !important; 
+  border: 1px solid #e2d7ba !important;
+  border-radius: 4px !important; 
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.gallery-item-card:hover {
+  transform: translateY(-5px) rotate(1deg); /* Physical paper feel */
+  box-shadow: 0 10px 20px rgba(0,0,0,0.15) !important;
+}
+
+.recipe-thumbnail {
+  filter: sepia(0.15) contrast(1.1); /* Heirloom photo effect */
+}
+
+.gallery-item-title {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 1.25rem;
+  color: #2e1e0a; /* Dark ink color */
+}
+
+.gallery-item-date {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.7rem;
+  color: #8c857b;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+}
+
+.view-recipe-btn {
+  font-family: 'Libre Baskerville', serif !important;
+  font-style: italic;
+  text-transform: none !important;
+}
