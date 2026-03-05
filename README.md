@@ -2,7 +2,7 @@
 
 The Pitch:
 
-Seasoned is a high-performance, private digital cookbook that bridges the gap between web discovery and kitchen execution. By combining the multimodal power of Gemini 1.5 Flash with a secure, self-hosted PostgreSQL backbone, Seasoned allows users to instantly "distill" messy recipe blogs and food photos into a standardized, searchable, and shareable library they truly own.
+Seasoned is a high-performance, private digital cookbook that bridges the gap between web discovery and kitchen execution. By combining the multimodal power of Gemini 2.5 Flash with a secure, self-hosted PostgreSQL backbone, Seasoned allows users to instantly "distill" messy recipe blogs and food photos into a standardized, searchable, and shareable library they truly own.
 
 Target Audience:
 
@@ -19,7 +19,7 @@ The Hybrid Tech Stack:
 | **Hosting** | Private Server (Dockerized on home hardware) |
 | **CI/CD** | Jenkins server |
 | **Frontend** | Nuxt 4 + Vuetify + CSS |
-| **Backend** | Nuxt Nitro |
+| **Backend** | Dotnet |
 | **Database** | Postgres + pgvector |
 | **Intelligence** | Gemini 2.5 Flash |
 | **Storage** | Local File System |
