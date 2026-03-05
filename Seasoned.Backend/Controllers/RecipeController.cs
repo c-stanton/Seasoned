@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Seasoned.Backend.Services;
 using Seasoned.Backend.DTOs;
+using Seasoned.Backend.Data;
+using Seasoned.Backend.Models;
 
 namespace Seasoned.Backend.Controllers;
 
@@ -9,10 +11,12 @@ namespace Seasoned.Backend.Controllers;
 public class RecipeController : ControllerBase
 {
     private readonly IRecipeService _recipeService;
+    private readonly ApplicationDbContext _context;
 
-    public RecipeController(IRecipeService recipeService)
+    public RecipeController(IRecipeService recipeService, ApplicationDbContext context)
     {
         _recipeService = recipeService;
+        _context = context;
     }
 
     [HttpPost("upload")]
@@ -27,14 +31,28 @@ public class RecipeController : ControllerBase
         return Ok(result);
     }
 
-    [HttpGet]
-    public async Task<IActionResult> GetRecipes()
+    [HttpPost("save")]
+    public async Task<IActionResult> SaveRecipe([FromBody] RecipeResponseDto recipeDto)
     {
-        // This assumes your DbContext is injected as _context
-        var recipes = await _context.Recipes
-            .OrderByDescending(r => r.CreatedAt)
-            .ToListAsync();
-            
-        return Ok(recipes);
+        if (recipeDto == null)
+        {
+            return BadRequest("Invalid recipe data.");
+        }
+
+        var recipe = new Recipe
+        {
+            Title = recipeDto.Title,
+            Description = recipeDto.Description,
+            Ingredients = recipeDto.Ingredients,
+            Instructions = recipeDto.Instructions,
+            CreatedAt = DateTime.UtcNow
+        };
+
+        _context.Recipes.Add(recipe);
+        await _context.SaveChangesAsync();
+
+        return Ok(new { message = "Recipe saved!" });
     }
+
+
 }

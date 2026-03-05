@@ -18,7 +18,7 @@ public class RecipeService : IRecipeService
     public async Task<RecipeResponseDto> ParseRecipeImageAsync(IFormFile image)
     {
         var googleAI = new GoogleAI(_apiKey);
-        var model = googleAI.GenerativeModel("gemini-2.5-flash"); 
+        var model = googleAI.GenerativeModel("gemini-3.1-flash-lite-preview"); 
 
         using var ms = new MemoryStream();
         await image.CopyToAsync(ms);
