@@ -20,11 +20,11 @@ services:
     container_name: seasoned-main
     restart: always
     ports:
-      - "5000:8080"
+      - "5000:5000"
     environment:
       - GEMINI_API_KEY=${GEMINI_API_KEY}
       - NUXT_PUBLIC_API_BASE=${NUXT_PUBLIC_API_BASE}
-      - ConnectionStrings__DefaultConnection=Host=db;Database=${DB_NAME};Username=${DB_USER};Password=${DB_PASSWORD}
+      - ConnectionStrings__DefaultConnection=${ConnectionStrings__DefaultConnection}
       - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_HTTP_PORTS=8080
     depends_on:
