@@ -20,6 +20,7 @@
             ></v-text-field>
 
             <v-text-field
+              v-model="email"
               label="Email"
               placeholder="email@example.com"
               class="custom-input auth-input mb-4"
@@ -28,6 +29,7 @@
             ></v-text-field>
 
             <v-text-field
+              v-model="password"
               label="Password"
               type="password"
               placeholder="••••••••"
@@ -69,36 +71,28 @@
 const isLogin = ref(true)
 const email = ref('')
 const password = ref('')
-
-const authUrl = '/api/auth/login?useCookies=false'
+const config = useRuntimeConfig()
 
 const handleAuth = async () => {
+  const endpoint = isLogin.value ? 'api/auth/login' : 'api/auth/register'
+  
+  const url = `${config.public.apiBase}${endpoint}?useCookies=false`
+
   try {
-    const response = await $fetch(isLogin.value ? authUrl : '/api/auth/register', {
+    const response = await $fetch(url, {
       method: 'POST',
       body: {
         email: email.value,
+        userName: email.value,
         password: password.value
       }
     })
 
     if (isLogin.value && response.accessToken) {
-      const token = useCookie('seasoned_token', {
-        maxAge: response.expiresIn,
-        sameSite: 'lax',
-        secure: true,
-        path: '/'
-      })
-
-      token.value = response.accessToken
-
-      navigateTo('/gallery')
-    } else if (!isLogin.value) {
-      isLogin.value = true
-      alert("Account created. Please sign in to open your ledger.")
+       navigateTo('/gallery')
     }
   } catch (err) {
-    console.error("Authentication failed:", err.data?.errors || err)
+    alert("Authentication failed. Check your credentials.")
   }
 }
 </script>

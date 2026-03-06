@@ -26,7 +26,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("SeasonedOriginPolicy", policy =>
     {
-        policy.WithOrigins("https://https://seasoned.ddns.net")
+        policy.WithOrigins("https://seasoned.ddns.net")
               .AllowAnyMethod()
               .AllowAnyHeader()
               .AllowCredentials();

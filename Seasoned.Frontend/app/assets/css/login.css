@@ -16,7 +16,7 @@
 
 /* Enhancing the custom-input for Auth with icons */
 .auth-input .v-field__prepend-inner {
-    display: flex !important; /* Overriding the 'display: none' from app-theme.css */
+    display: flex !important;
     padding-right: 12px;
 }
 

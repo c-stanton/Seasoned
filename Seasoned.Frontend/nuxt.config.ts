@@ -14,7 +14,7 @@ export default defineNuxtConfig({
     '@mdi/font/css/materialdesignicons.min.css',
     '~/assets/css/app-theme.css',
     '~/assets/css/gallery.css',
-    '~/assets/css/auth.css'
+    '~/assets/css/login.css'
   ],
 
   build: {

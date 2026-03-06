@@ -61,10 +61,10 @@
           </div>
 
           <v-btn
-            to="/gallery"
             class="gallery-btn w-100 mt-4"
             size="large"
             elevation="0"
+            @click="handleViewCollection"
           >
             <v-icon icon="mdi-book-open-variant" class="mr-2"></v-icon>
             View Collection
@@ -124,8 +124,10 @@
 
 <script setup>
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 import '@/assets/css/app-theme.css'
 
+const router = useRouter()
 const config = useRuntimeConfig()
 const files = ref([])
 const loading = ref(false)
@@ -133,6 +135,21 @@ const recipe = ref(null)
 const isDragging = ref(false)
 const saving = ref(false)
 const hasSaved = ref(false)
+
+const isAuthenticated = () => {
+  if (import.meta.client) {
+    return !!localStorage.getItem('token');
+  }
+  return false;
+}
+
+const handleViewCollection = () => {
+  if (isAuthenticated()) {
+    router.push('/gallery')
+  } else {
+    router.push('/login')
+  }
+}
 
 const handleDrop = (e) => {
   isDragging.value = false
