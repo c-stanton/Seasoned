@@ -1,6 +1,6 @@
 <template>
   <v-container class="fill-height">
-    <v-card class="recipe-card auth-card pa-10 mx-auto" elevation="10">
+    <v-card class="recipe-card auth-card pa-10 mx-auto" elevation="10" max-width="500">
       
       <v-fade-transition mode="out-in">
         <div :key="isLogin">
@@ -10,15 +10,6 @@
           </header>
 
           <v-form @submit.prevent="handleAuth">
-            <v-text-field
-              v-if="!isLogin"
-              label="Name"
-              placeholder="Your name"
-              class="custom-input auth-input mb-4"
-              variant="flat"
-              prepend-inner-icon="mdi-account-outline"
-            ></v-text-field>
-
             <v-text-field
               v-model="email"
               label="Email"
@@ -49,7 +40,7 @@
             </v-btn>
 
             <div class="text-center">
-              <span class="auth-toggle-btn" @click="isLogin = !isLogin">
+              <span class="auth-toggle-btn" @click="isLogin = !isLogin" style="cursor: pointer;">
                 {{ isLogin ? "New here? Register an account" : "Already a member? Sign in" }}
               </span>
             </div>
@@ -76,7 +67,9 @@ const config = useRuntimeConfig()
 const handleAuth = async () => {
   const endpoint = isLogin.value ? 'api/auth/login' : 'api/auth/register'
   
-  const url = `${config.public.apiBase}${endpoint}?useCookies=false`
+  const url = isLogin.value 
+    ? `${config.public.apiBase}${endpoint}?useCookies=false` 
+    : `${config.public.apiBase}${endpoint}`
 
   try {
     const response = await $fetch(url, {
@@ -88,11 +81,28 @@ const handleAuth = async () => {
       }
     })
 
-    if (isLogin.value && response.accessToken) {
-       navigateTo('/gallery')
+    if (isLogin.value) {
+      if (response.accessToken) {
+
+        const tokenCookie = useCookie('seasoned_token', { maxAge: response.expiresIn })
+        tokenCookie.value = response.accessToken
+
+        if (import.meta.client) {
+          localStorage.setItem('token', response.accessToken)
+        }
+
+        navigateTo('/gallery')
+      }
+    } else {
+      alert("Account created successfully! Please sign in to open your ledger.")
+      isLogin.value = true
     }
   } catch (err) {
-    alert("Authentication failed. Check your credentials.")
+    const errorDetail = err.data?.errors 
+      ? Object.values(err.data.errors).flat().join('\n') 
+      : "Check your credentials and try again."
+    
+    alert(`Authentication failed:\n${errorDetail}`)
   }
 }
 </script>
