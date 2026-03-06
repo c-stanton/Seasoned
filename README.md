@@ -4,7 +4,7 @@ In progress link: https://seasoned.ddns.net/
 
 The Pitch:
 
-Seasoned is a high-performance, private digital cookbook that bridges the gap between web discovery and kitchen execution. By combining the multimodal power of Gemini 2.5 Flash with a secure, self-hosted PostgreSQL backbone, Seasoned allows users to instantly "distill" messy recipe blogs and food photos into a standardized, searchable, and shareable library they truly own.
+Seasoned is a high-performance, private digital cookbook that bridges the gap between web discovery and kitchen execution. By combining the multimodal power of Gemini 3.1 Flash Lite with a secure, self-hosted PostgreSQL backbone, Seasoned allows users to instantly "distill" messy recipe blogs and food photos into a standardized, searchable, and shareable library they truly own.
 
 Target Audience:
 
@@ -23,7 +23,7 @@ The Hybrid Tech Stack:
 | **Frontend** | Nuxt 4 + Vuetify + CSS |
 | **Backend** | Dotnet |
 | **Database** | Postgres + pgvector |
-| **Intelligence** | Gemini 2.5 Flash |
+| **Intelligence** | Gemini 3.1 Flash Lite |
 | **Storage** | Local File System |
 
 Technical Requirements:
