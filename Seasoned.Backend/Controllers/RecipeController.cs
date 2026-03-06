@@ -61,4 +61,18 @@ public class RecipeController : ControllerBase
         return Ok(new { message = "Recipe saved to your collection!" });
     }
 
+    [Authorize]
+    [HttpGet("my-collection")]
+    public async Task<ActionResult<IEnumerable<Recipe>>> GetMyRecipes()
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        
+        var myRecipes = await _context.Recipes
+            .Where(r => r.UserId == userId)
+            .OrderByDescending(r => r.CreatedAt)
+            .ToListAsync();
+
+        return Ok(myRecipes);
+    }
+
 }

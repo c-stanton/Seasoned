@@ -186,16 +186,29 @@ const uploadImage = async () => {
 const saveToCollection = async () => {
   if (!recipe.value || hasSaved.value) return;
 
+  // 1. Get the token (same logic as gallery)
+  const token = useCookie('seasoned_token').value 
+                || (import.meta.client ? localStorage.getItem('token') : null)
+
+  if (!token) {
+    alert("Please sign in to save recipes.")
+    return navigateTo('/login')
+  }
+
   saving.value = true;
 
   try {
     await $fetch(`${config.public.apiBase}api/recipe/save`, {
       method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`
+      },
       body: recipe.value
     });
     hasSaved.value = true;
   } catch (error) {
     console.error("Save failed:", error);
+    alert("Could not save recipe. Your session might have expired.")
   } finally {
     saving.value = false;
   }

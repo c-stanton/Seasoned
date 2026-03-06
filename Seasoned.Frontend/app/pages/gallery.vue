@@ -20,7 +20,14 @@
         Back to Recipe Upload
       </v-btn>
 
-      <v-row v-if="recipes?.length">
+      <v-row v-if="loading" justify="center" class="py-16">
+        <v-col cols="12" class="d-flex flex-column align-center">
+          <v-progress-circular indeterminate color="#556b2f" size="64" width="3"></v-progress-circular>
+          <p class="brand-subtitle mt-4">Opening the Ledger...</p>
+        </v-col>
+      </v-row>
+
+      <v-row v-else-if="recipes?.length">
         <v-col v-for="recipe in recipes" :key="recipe.id" cols="12" sm="6" md="4">
           <v-card class="gallery-item-card pa-4">
             <v-img
@@ -53,6 +60,7 @@
       <v-row v-else justify="center" class="py-10 text-center">
         <v-col cols="12">
           <p class="brand-subtitle mb-4">Your collection is empty.</p>
+          <v-btn to="/" variant="text" color="#556b2f">Return to kitchen to add some</v-btn>
         </v-col>
       </v-row>
 
@@ -60,28 +68,41 @@
   </v-container>
 </template>
 
+
 <script setup>
 import '@/assets/css/gallery.css'
-//const config = useRuntimeConfig();
-//const { data: recipes } = await useFetch(`${config.public.apiBase}api/recipe`);
-const recipes = ref([
-  {
-    id: 1,
-    title: 'Salmon Salad',
-    createdAt: '2026-03-05T12:00:00Z',
-    description: 'A fresh herb-crusted salmon over greens.'
-  },
-  {
-    id: 2,
-    title: 'Power Bowl',
-    createdAt: '2026-03-04T10:00:00Z',
-    description: 'Rich and earthy pesto with toasted walnuts.'
-  },
-  {
-    id: 3,
-    title: 'Protein Slam',
-    createdAt: '2026-03-01T08:00:00Z',
-    description: 'Crispy crust with a light, airy center.'
+const config = useRuntimeConfig()
+const recipes = ref([])
+const loading = ref(true)
+
+onMounted(async () => {
+  await fetchRecipes()
+})
+
+const fetchRecipes = async () => {
+  // Get the token we saved during login
+  const token = useCookie('seasoned_token').value 
+                || (import.meta.client ? localStorage.getItem('token') : null)
+
+  if (!token) {
+    // If no token, kick them back to login
+    return navigateTo('/login')
   }
-]);
+
+  try {
+    loading.value = true
+    // You'll need to add this GET endpoint to your RecipeController
+    const data = await $fetch(`${config.public.apiBase}api/recipe/my-collection`, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    })
+    recipes.value = data
+  } catch (err) {
+    console.error("Failed to load collection:", err)
+    if (err.status === 401) navigateTo('/login')
+  } finally {
+    loading.value = false
+  }
+}
 </script>
