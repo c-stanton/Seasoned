@@ -1,0 +1,48 @@
+/* app/assets/css/auth.css */
+
+.auth-card {
+    /* Inherits recipe-card but adds a tighter feel for a login form */
+    max-width: 450px;
+    margin-top: 5vh;
+}
+
+.auth-title {
+    font-family: 'Libre Baskerville', serif;
+    font-weight: 700;
+    font-size: 2.2rem;
+    color: #2e1e0a;
+    margin-bottom: 8px;
+}
+
+/* Enhancing the custom-input for Auth with icons */
+.auth-input .v-field__prepend-inner {
+    display: flex !important; /* Overriding the 'display: none' from app-theme.css */
+    padding-right: 12px;
+}
+
+.auth-input .v-icon {
+    color: #f8f1e0 !important;
+    opacity: 0.6;
+}
+
+.auth-toggle-btn {
+    font-family: 'Inter', sans-serif !important;
+    font-size: 0.85rem !important;
+    color: #6d5e4a !important;
+    text-decoration: underline;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.auth-toggle-btn:hover {
+    color: #2e1e0a !important;
+}
+
+/* Subtle animation when switching between Login and Register */
+.auth-switch-enter-active, .auth-switch-leave-active {
+    transition: all 0.3s ease;
+}
+.auth-switch-enter-from, .auth-switch-leave-to {
+    opacity: 0;
+    transform: translateY(10px);
+}

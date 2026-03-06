@@ -2,7 +2,10 @@ using Microsoft.AspNetCore.Mvc;
 using Seasoned.Backend.Services;
 using Seasoned.Backend.DTOs;
 using Seasoned.Backend.Data;
+using System.Security.Claims;
 using Seasoned.Backend.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace Seasoned.Backend.Controllers;
 
@@ -31,6 +34,7 @@ public class RecipeController : ControllerBase
         return Ok(result);
     }
 
+    [Authorize]
     [HttpPost("save")]
     public async Task<IActionResult> SaveRecipe([FromBody] RecipeResponseDto recipeDto)
     {
@@ -39,20 +43,22 @@ public class RecipeController : ControllerBase
             return BadRequest("Invalid recipe data.");
         }
 
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
         var recipe = new Recipe
         {
             Title = recipeDto.Title,
             Description = recipeDto.Description,
             Ingredients = recipeDto.Ingredients,
             Instructions = recipeDto.Instructions,
-            CreatedAt = DateTime.UtcNow
+            CreatedAt = DateTime.UtcNow,
+            UserId = userId
         };
 
         _context.Recipes.Add(recipe);
         await _context.SaveChangesAsync();
 
-        return Ok(new { message = "Recipe saved!" });
+        return Ok(new { message = "Recipe saved to your collection!" });
     }
-
 
 }

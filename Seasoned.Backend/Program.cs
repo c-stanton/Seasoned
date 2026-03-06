@@ -3,10 +3,17 @@ using Microsoft.AspNetCore.HttpOverrides;
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using Seasoned.Backend.Data;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddScoped<IRecipeService, RecipeService>();
+
+builder.Services.AddIdentityApiEndpoints<IdentityUser>()
+    .AddEntityFrameworkStores<ApplicationDbContext>();
+
+builder.Services.AddAuthorization();
 
 builder.Services.AddControllers()
     .AddJsonOptions(options => {
@@ -17,11 +24,12 @@ builder.Services.AddOpenApi();
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll", policy =>
+    options.AddPolicy("SeasonedOriginPolicy", policy =>
     {
-        policy.AllowAnyOrigin()
+        policy.WithOrigins("https://https://seasoned.ddns.net")
               .AllowAnyMethod()
-              .AllowAnyHeader();
+              .AllowAnyHeader()
+              .AllowCredentials();
     });
 });
 
@@ -39,13 +47,16 @@ using (var scope = app.Services.CreateScope())
 
 app.UseDefaultFiles();
 app.UseStaticFiles();
-app.UseCors("AllowAll");
+app.UseCors("SeasonedOriginPolicy");
+app.UseAuthentication();
+app.UseAuthorization();
 
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 }
 
+app.MapGroup("/api/auth").MapIdentityApi<IdentityUser>();
 app.MapControllers();
 app.MapFallbackToFile("index.html");
 app.Run();

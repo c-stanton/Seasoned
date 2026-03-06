@@ -13,7 +13,8 @@ export default defineNuxtConfig({
     'vuetify/lib/styles/main.sass',
     '@mdi/font/css/materialdesignicons.min.css',
     '~/assets/css/app-theme.css',
-    '~/assets/css/gallery.css'
+    '~/assets/css/gallery.css',
+    '~/assets/css/auth.css'
   ],
 
   build: {
