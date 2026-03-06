@@ -6,6 +6,7 @@ using System.Security.Claims;
 using Seasoned.Backend.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace Seasoned.Backend.Controllers;
 
