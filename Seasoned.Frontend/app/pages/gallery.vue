@@ -30,26 +30,30 @@
       <v-row v-else-if="recipes?.length">
         <v-col v-for="recipe in recipes" :key="recipe.id" cols="12" sm="6" md="4">
           <v-card class="gallery-item-card pa-4">
-            <v-img
-              src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c"
+            <v-sheet
               height="200"
-              cover
-              class="rounded-sm mb-4 recipe-thumbnail"
+              color="#f8f5f0"
+              class="rounded-sm mb-4 d-flex align-center justify-center"
+              style="border: 1px solid #e8e2d6;"
             >
-              <template v-slot:placeholder>
-                <v-row class="fill-height ma-0" align="center" justify="center">
-                  <v-progress-circular indeterminate color="#556b2f"></v-progress-circular>
-                </v-row>
-              </template>
-            </v-img>
-
+              <v-icon 
+                :icon="getRecipeIcon(recipe.title)" 
+                size="80" 
+                color="#d1c7b7"
+              ></v-icon>
+            </v-sheet>
             <h3 class="gallery-item-title text-center">{{ recipe.title }}</h3>
             <p class="gallery-item-date text-center">
               Added {{ new Date(recipe.createdAt).toLocaleDateString('en-US', { month: 'long', year: 'numeric' }) }}
             </p>
             
             <v-card-actions class="justify-center">
-              <v-btn variant="text" class="view-recipe-btn" color="#556b2f">
+              <v-btn 
+                variant="text" 
+                class="view-recipe-btn" 
+                color="#556b2f"
+                @click="openRecipe(recipe)"
+              >
                 Open Recipe
               </v-btn>
             </v-card-actions>
@@ -74,24 +78,23 @@ import '@/assets/css/gallery.css'
 const config = useRuntimeConfig()
 const recipes = ref([])
 const loading = ref(true)
+const showDetails = ref(false)
+const selectedRecipe = ref(null)
 
 onMounted(async () => {
   await fetchRecipes()
 })
 
 const fetchRecipes = async () => {
-  // Get the token we saved during login
   const token = useCookie('seasoned_token').value 
                 || (import.meta.client ? localStorage.getItem('token') : null)
 
   if (!token) {
-    // If no token, kick them back to login
     return navigateTo('/login')
   }
 
   try {
     loading.value = true
-    // You'll need to add this GET endpoint to your RecipeController
     const data = await $fetch(`${config.public.apiBase}api/recipe/my-collection`, {
       headers: {
         'Authorization': `Bearer ${token}`

@@ -3,7 +3,15 @@
     <v-card class="recipe-card pa-10 mx-auto mt-10" max-width="950" elevation="1">
       
       <header class="text-center mb-10">
-        <h1 class="brand-title">Seasoned</h1>
+        <div class="brand-icon-container mb-4">
+          <v-img
+          
+            alt="Seasoned Logo"
+            width="120"
+            class="mx-auto"
+            cover
+          ></v-img>
+        </div>
         <p class="brand-subtitle">A Recipe Collection</p>
       </header>
       

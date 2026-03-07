@@ -1,21 +1,15 @@
-@import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;600&display=swap');
-
 .recipe-bg {
-  /* A rich, warm medium-brown walnut tone */
   background-color: #5d4a36 !important; 
-  /* Using the wood pattern but allowing the lighter base to show through */
   background-image: url("https://www.transparenttextures.com/patterns/tileable-wood-colored.png") !important;
-  background-size: 500px; /* Slightly larger scale makes the grain easier to see */
+  background-size: 500px;
   background-attachment: fixed;
 }
 
-/* Ensure the card has a natural 'sit' on this visible wood */
 .recipe-card {
   background-color: #f4e4bc !important;
   background-image: url("https://www.transparenttextures.com/patterns/natural-paper.png");
   border: 1px solid #c9b996 !important;
   border-radius: 12px !important;
-  /* A deeper, more spread-out shadow to account for the lighter background */
   box-shadow: 0 15px 45px rgba(0, 0, 0, 0.35) !important;
 }
 
@@ -29,9 +23,8 @@
 
 .brand-subtitle {
   font-family: 'Libre Baskerville', serif;
-  font-style: italic;
   color: #6d5e4a;
-  font-size: 0.85rem;
+  font-size: 1.1rem;
   text-transform: uppercase;
   letter-spacing: 3px;
 }
@@ -116,7 +109,6 @@
   text-align: center !important;
 }
 
-/* 2. Center the floating label specifically */
 .custom-input .v-label.v-field-label {
   left: 50% !important;
   transform: translateX(-50%) !important;
@@ -124,7 +116,6 @@
   justify-content: center !important;
 }
 
-/* 3. Ensure both elements are the exact same height and shape */
 .custom-input .v-field {
   height: 56px !important;
   min-height: 56px !important;
@@ -134,12 +125,10 @@
   justify-content: center !important;
 }
 
-/* 4. Remove the prepend icon space that kicks text to the right */
 .custom-input .v-field__prepend-inner {
   display: none !important;
 }
 
-/* 5. Typography match: ensure font weight and size are identical */
 .custom-input .v-label {
   font-family: 'Inter', sans-serif !important;
   font-weight: 600 !important;
@@ -147,7 +136,6 @@
   letter-spacing: normal !important;
 }
 
-/* Drag and Drop Zone Styling */
 .drop-zone {
   width: 100%;
   height: 150px;
@@ -222,4 +210,44 @@
 
 .d-flex .analyze-btn {
   margin-bottom: 0 !important;
+}
+
+.v-app-bar {
+  background: linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, transparent 100%) !important;
+}
+
+.nav-brand {
+  font-family: 'Libre Baskerville', serif !important;
+  color: #f4e4bc !important;
+  text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.8) !important;
+  font-size: 1.8rem !important;
+  letter-spacing: 1px;
+}
+
+.nav-auth-btn, .nav-btn {
+  font-family: 'Libre Baskerville', serif !important;
+  font-size: 1.3rem !important;
+  color: #f4e4bc !important;
+  border: 1.5px solid rgba(244, 228, 188, 0.6) !important;
+  background-color: rgba(0, 0, 0, 0.2) !important;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8) !important;
+  letter-spacing: 1px;
+  
+}
+
+.nav-auth-btn:hover, .nav-btn:hover {
+  background-color: #f4e4bc !important;
+  color: #2e1e0a !important;
+  text-shadow: none !important;
+}
+
+.brand-icon-container {
+  /* Subtle rustic touch */
+  filter: sepia(0.2) contrast(1.1);
+  opacity: 0.9;
+}
+
+.brand-icon-container .v-img {
+  /* Gives it a slightly 'stamped' look on the paper */
+  filter: drop-shadow(0px 1px 1px rgba(0,0,0,0.1));
 }
