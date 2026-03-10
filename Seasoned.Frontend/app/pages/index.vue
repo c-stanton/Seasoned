@@ -4,8 +4,8 @@
       
       <header class="text-center mb-10">
         <div class="brand-icon-container mb-4">
-          <v-img
-          
+          <v-img 
+            :src="'/images/seasoned-logo.png'"
             alt="Seasoned Logo"
             width="120"
             class="mx-auto"
@@ -152,6 +152,8 @@ const isAuthenticated = () => {
 }
 
 const handleViewCollection = () => {
+  const token = useCookie('seasoned_token').value 
+                || (import.meta.client ? localStorage.getItem('token') : null)
   if (isAuthenticated()) {
     router.push('/gallery')
   } else {

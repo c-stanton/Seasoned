@@ -6,37 +6,41 @@
         <div :key="isLogin">
           <header class="text-center mb-8">
             <h1 class="auth-title">{{ isLogin ? 'Sign In' : 'Join Us' }}</h1>
-            <p class="brand-subtitle">The Seasoned Ledger</p>
           </header>
 
           <v-form @submit.prevent="handleAuth">
             <v-text-field
+              autofocus
               v-model="email"
-              label="Email"
-              placeholder="email@example.com"
-              class="custom-input auth-input mb-4"
-              variant="flat"
+              placeholder="Email"
+              bg-color="#5d4037"
+              base-color="#f8f1e0"
+              class="auth-input mb-4"
+              variant="outlined"
+              hide-details
               prepend-inner-icon="mdi-email-outline"
             ></v-text-field>
 
             <v-text-field
               v-model="password"
-              label="Password"
+              placeholder="Password"
+              bg-color="#5d4037"
+              base-color="#f8f1e0"
               type="password"
-              placeholder="••••••••"
-              class="custom-input auth-input mb-6"
-              variant="flat"
+              class="auth-input mb-6"
+              variant="outlined"
+              hide-details
               prepend-inner-icon="mdi-lock-outline"
             ></v-text-field>
 
             <v-btn
               block
               class="analyze-btn mb-4"
-              size="large"
+              size=""
               elevation="0"
               type="submit"
             >
-              {{ isLogin ? 'Open Ledger' : 'Create Account' }}
+              {{ isLogin ? 'Login' : 'Create Account' }}
             </v-btn>
 
             <div class="text-center">
@@ -52,7 +56,7 @@
 
       <v-btn to="/" variant="text" color="#6d5e4a" block class="view-recipe-btn">
         <v-icon icon="mdi-chevron-left" class="mr-1"></v-icon>
-        Return to Kitchen
+        Return to Home
       </v-btn>
     </v-card>
   </v-container>

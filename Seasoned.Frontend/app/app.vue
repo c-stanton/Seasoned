@@ -7,21 +7,22 @@
       class="px-4"
       height="70"
     >
-      <v-app-bar-title 
-        class="nav-brand" 
-        style="cursor: pointer; user-select: none;" 
-        @click="navigateTo('/')"
+      <v-btn
+        to="/"
+        variant="text"
+        class="nav-home-btn ml-4"
+        elevation="0"
       >
         Seasoned
-      </v-app-bar-title>
+      </v-btn>
 
       <v-spacer></v-spacer>
 
       <div class="nav-links d-flex align-center">
         <v-btn 
-          to="/gallery" 
+          to="/gallery"
+          variant="text" 
           class="nav-auth-btn ml-4" 
-          variant="outlined"
           elevation="0"
         >
           Collection
@@ -30,8 +31,8 @@
         <v-btn 
           v-if="!token" 
           to="/login" 
+          variant="text"
           class="nav-auth-btn ml-4" 
-          variant="outlined"
           elevation="0"
         >
           Sign In
@@ -40,8 +41,8 @@
         <v-btn 
           v-else 
           @click="logout" 
+          variant="text"
           class="nav-auth-btn ml-4" 
-          variant="outlined"
           elevation="0"
         >
           Logout
