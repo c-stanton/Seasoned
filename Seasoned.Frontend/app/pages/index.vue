@@ -5,7 +5,7 @@
       <header class="text-center mb-10">
         <div class="brand-icon-container mb-4">
           <v-img 
-            :src="'/images/seasoned-logo.png'"
+            :src="'/images/seasoned-icon.png'"
             alt="Seasoned Logo"
             width="120"
             class="mx-auto"

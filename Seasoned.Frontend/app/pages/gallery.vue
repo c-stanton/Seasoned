@@ -122,7 +122,7 @@
               
               <v-list v-else class="ingredients-list">
                 <v-list-item 
-                  v-for="(ing, index) in selectedRecipe.ingredients?.split('\n').filter(i => i.trim())" 
+                  v-for="(ing, index) in (Array.isArray(selectedRecipe.ingredients) ? selectedRecipe.ingredients : selectedRecipe.ingredients?.split('\n') || [])" 
                   :key="index"
                   class="ingredient-item px-0"
                 >
@@ -148,7 +148,7 @@
             ></v-textarea>
 
             <div v-else
-              v-for="(step, index) in selectedRecipe.instructions?.split('\n').filter(s => s.trim())" 
+              v-for="(step, index) in (Array.isArray(selectedRecipe.instructions) ? selectedRecipe.instructions : selectedRecipe.instructions?.split('\n') || [])"
               :key="index"
               class="instruction-step mb-4"
             >
@@ -226,10 +226,19 @@ const openRecipe = (recipe) => {
 }
 
 const editRecipe = (recipe) => {
-  originalRecipe.value = JSON.parse(JSON.stringify(recipe)) 
-  selectedRecipe.value = { ...recipe }
-  isEditing.value = true
-  showDetails.value = true
+  const editableRecipe = JSON.parse(JSON.stringify(recipe));
+  
+  if (Array.isArray(editableRecipe.ingredients)) {
+    editableRecipe.ingredients = editableRecipe.ingredients.join('\n');
+  }
+  if (Array.isArray(editableRecipe.instructions)) {
+    editableRecipe.instructions = editableRecipe.instructions.join('\n');
+  }
+
+  originalRecipe.value = JSON.parse(JSON.stringify(recipe));
+  selectedRecipe.value = editableRecipe;
+  isEditing.value = true;
+  showDetails.value = true;
 }
 
 const closeDetails = () => {
@@ -247,17 +256,25 @@ const closeDetails = () => {
 
 const saveChanges = async () => {
  try {
+    const payload = { ...selectedRecipe.value };
+    if (typeof payload.ingredients === 'string') {
+      payload.ingredients = payload.ingredients.split('\n').filter(i => i.trim());
+    }
+    if (typeof payload.instructions === 'string') {
+      payload.instructions = payload.instructions.split('\n').filter(i => i.trim());
+    }
+
     await $fetch(`${config.public.apiBase}api/recipe/update/${selectedRecipe.value.id}`, {
       method: 'PUT',
       credentials: 'include',
-      body: selectedRecipe.value
-    })
+      body: payload
+    });
 
-    await fetchRecipes()
-    closeDetails()
+    await fetchRecipes();
+    closeDetails();
   } catch (e) {
-    console.error("Failed to update recipe:", e)
-    alert("Could not save changes. Your session might have expired.")
+    console.error("Failed to update recipe:", e);
+    alert("Could not save changes.");
   }
 }
 
