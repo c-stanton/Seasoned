@@ -42,12 +42,12 @@ public class RecipeService : IRecipeService
           ""instructions"": [""string"", ""string""]
         }";
         
-        var config = new GenerationConfig { 
+        var generationConfig = new GenerationConfig { 
             ResponseMimeType = "application/json",
             Temperature = 0.1f
         };
 
-        var request = new GenerateContentRequest(prompt, config);
+        var request = new GenerateContentRequest(prompt, generationConfig);
     
         await Task.Run(() => request.AddMedia(base64Image, image.ContentType ?? "image/png"));
 

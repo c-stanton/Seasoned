@@ -197,25 +197,17 @@ const showDetails = ref(false)
 const selectedRecipe = ref(null)
 const isEditing = ref(false)
 const originalRecipe = ref(null)
+const config = useRuntimeConfig()
 
 onMounted(async () => {
   await fetchRecipes()
 })
 
 const fetchRecipes = async () => {
-  const token = useCookie('seasoned_token').value 
-                || (import.meta.client ? localStorage.getItem('token') : null)
-
-  if (!token) {
-    return navigateTo('/login')
-  }
-
   try {
     loading.value = true
     const data = await $fetch(`${config.public.apiBase}api/recipe/my-collection`, {
-      headers: {
-        'Authorization': `Bearer ${token}`
-      }
+      credentials: 'include' 
     })
     recipes.value = data
   } catch (err) {
@@ -234,34 +226,38 @@ const openRecipe = (recipe) => {
 }
 
 const editRecipe = (recipe) => {
+  originalRecipe.value = JSON.parse(JSON.stringify(recipe)) 
   selectedRecipe.value = { ...recipe }
-  originalRecipe.value = { ...recipe }
   isEditing.value = true
   showDetails.value = true
 }
 
 const closeDetails = () => {
+  if (isEditing.value && originalRecipe.value) {
+    const index = recipes.value.findIndex(r => r.id === originalRecipe.value.id)
+    if (index !== -1) {
+      recipes.value[index] = originalRecipe.value
+    }
+  }
+  
   showDetails.value = false
   isEditing.value = false
+  originalRecipe.value = null
 }
 
 const saveChanges = async () => {
-  const token = useCookie('seasoned_token').value
-
-  try {
+ try {
     await $fetch(`${config.public.apiBase}api/recipe/update/${selectedRecipe.value.id}`, {
       method: 'PUT',
-      headers: { 'Authorization': `Bearer ${token}` },
+      credentials: 'include',
       body: selectedRecipe.value
     })
 
     await fetchRecipes()
-    
-    isEditing.value = false
-    showDetails.value = false
+    closeDetails()
   } catch (e) {
     console.error("Failed to update recipe:", e)
-    alert("Could not save changes. Please try again.")
+    alert("Could not save changes. Your session might have expired.")
   }
 }
 
@@ -297,12 +293,13 @@ const saveChanges = async () => {
   //showDetails.value = false
 //}
 
-const getRecipeIcon = (title) => {
-  const t = title.toLowerCase()
+const getRecipeIcon = (recipe) => {
   if (recipe.icon) return recipe.icon
+  const t = (recipe.title || '').toLowerCase()
   if (t.includes('cake') || t.includes('cookie') || t.includes('dessert')) return 'mdi-cookie'
   if (t.includes('soup') || t.includes('stew')) return 'mdi-bowl-mix'
   if (t.includes('drink') || t.includes('cocktail')) return 'mdi-glass-cocktail'
+  
   return 'mdi-silverware-fork-knife'
 }
 </script>

@@ -144,11 +144,15 @@ const isDragging = ref(false)
 const saving = ref(false)
 const hasSaved = ref(false)
 
-const isAuthenticated = () => {
-  if (import.meta.client) {
-    return !!localStorage.getItem('token');
+const isAuthenticated = async () => {
+ try {
+    await $fetch('/api/auth/manage/info', {
+      credentials: 'include'
+    })
+    return true
+  } catch {
+    return false
   }
-  return false;
 }
 
 const handleViewCollection = () => {
@@ -196,7 +200,6 @@ const uploadImage = async () => {
 const saveToCollection = async () => {
   if (!recipe.value || hasSaved.value) return;
 
-  // 1. Get the token (same logic as gallery)
   const token = useCookie('seasoned_token').value 
                 || (import.meta.client ? localStorage.getItem('token') : null)
 
@@ -210,9 +213,6 @@ const saveToCollection = async () => {
   try {
     await $fetch(`${config.public.apiBase}api/recipe/save`, {
       method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${token}`
-      },
       body: recipe.value
     });
     hasSaved.value = true;

@@ -5,6 +5,9 @@ using Microsoft.EntityFrameworkCore;
 using Seasoned.Backend.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using DotNetEnv;
+
+Env.Load("../.env");
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -49,7 +52,7 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    db.Database.EnsureCreated();
+    db.Database.Migrate();
 }
 
 app.UseDefaultFiles();

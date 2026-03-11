@@ -72,7 +72,7 @@ const handleAuth = async () => {
   const endpoint = isLogin.value ? 'api/auth/login' : 'api/auth/register'
   
   const url = isLogin.value 
-    ? `${config.public.apiBase}${endpoint}?useCookies=false` 
+    ? `${config.public.apiBase}${endpoint}?useCookies=true` 
     : `${config.public.apiBase}${endpoint}`
 
   try {
@@ -80,33 +80,16 @@ const handleAuth = async () => {
       method: 'POST',
       body: {
         email: email.value,
-        userName: email.value,
         password: password.value
       }
     })
 
     if (isLogin.value) {
-      if (response.accessToken) {
-
-        const tokenCookie = useCookie('seasoned_token', { maxAge: response.expiresIn })
-        tokenCookie.value = response.accessToken
-
-        if (import.meta.client) {
-          localStorage.setItem('token', response.accessToken)
-        }
-
-        navigateTo('/gallery')
-      }
-    } else {
-      alert("Account created successfully! Please sign in to open your ledger.")
-      isLogin.value = true
+      navigateTo('/gallery')
+    
     }
   } catch (err) {
-    const errorDetail = err.data?.errors 
-      ? Object.values(err.data.errors).flat().join('\n') 
-      : "Check your credentials and try again."
-    
-    alert(`Authentication failed:\n${errorDetail}`)
+    alert("Authentication failed. Check your credentials.")
   }
 }
 </script>

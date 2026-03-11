@@ -231,7 +231,8 @@ namespace Seasoned.Backend.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("Description")
+                    b.Property<string>("Icon")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.PrimitiveCollection<List<string>>("Ingredients")
