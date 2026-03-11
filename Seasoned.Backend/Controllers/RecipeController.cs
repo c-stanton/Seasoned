@@ -5,7 +5,6 @@ using Seasoned.Backend.Data;
 using System.Security.Claims;
 using Seasoned.Backend.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Seasoned.Backend.Controllers;
@@ -49,7 +48,7 @@ public class RecipeController : ControllerBase
         var recipe = new Recipe
         {
             Title = recipeDto.Title,
-            Description = recipeDto.Description,
+            Icon = recipeDto.Icon,
             Ingredients = recipeDto.Ingredients,
             Instructions = recipeDto.Instructions,
             CreatedAt = DateTime.UtcNow,
@@ -60,6 +59,29 @@ public class RecipeController : ControllerBase
         await _context.SaveChangesAsync();
 
         return Ok(new { message = "Recipe saved to your collection!" });
+    }
+
+    [Authorize]
+    [HttpPut("update/{id}")]
+    public async Task<IActionResult> UpdateRecipe(int id, [FromBody] Recipe updatedRecipe)
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        var existingRecipe = await _context.Recipes
+            .FirstOrDefaultAsync(r => r.Id == id && r.UserId == userId);
+
+        if (existingRecipe == null)
+        {
+            return NotFound("Recipe not found or you do not have permission to edit it.");
+        }
+
+        existingRecipe.Title = updatedRecipe.Title;
+        existingRecipe.Ingredients = updatedRecipe.Ingredients;
+        existingRecipe.Instructions = updatedRecipe.Instructions;
+
+        await _context.SaveChangesAsync();
+
+        return Ok(new { message = "Recipe updated successfully!" });
     }
 
     [Authorize]
@@ -75,5 +97,4 @@ public class RecipeController : ControllerBase
 
         return Ok(myRecipes);
     }
-
 }
