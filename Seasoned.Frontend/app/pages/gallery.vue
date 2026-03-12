@@ -191,6 +191,7 @@
 
 <script setup>
 import '@/assets/css/gallery.css'
+
 const recipes = ref([])
 const loading = ref(true)
 const showDetails = ref(false)

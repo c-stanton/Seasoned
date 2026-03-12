@@ -6,4 +6,5 @@ public class RecipeResponseDto
     public string Icon { get; set; } = "mdi-silverware-fork-knife";
     public List<string> Ingredients { get; set; } = new();
     public List<string> Instructions { get; set; } = new();
+    
 }

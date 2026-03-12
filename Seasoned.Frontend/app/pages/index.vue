@@ -12,10 +12,53 @@
             cover
           ></v-img>
         </div>
-        <p class="brand-subtitle">A Recipe Collection</p>
+        <p class="brand-subtitle">Recipe Creator and Recipe Uploader</p>
       </header>
       
       <v-divider class="mb-10 separator"></v-divider>
+
+      <v-row justify="center" class="mb-6">
+        <v-col cols="12" md="8">
+          <div class="chat-container">
+            <div class="section-header mb-4 d-flex align-center">
+              <v-icon icon="mdi-chef-hat" class="mr-2" size="small"></v-icon>
+              <span>Kitchen Consultation</span>
+              <v-spacer></v-spacer>
+              <v-btn 
+                v-if="chatMessages.length > 0"
+                icon="mdi-delete-sweep-outline" 
+                variant="text" 
+                size="x-small" 
+                color="#8c7e6a"
+                title="Clear Conversation"
+                @click="chatMessages = []"
+              ></v-btn>
+            </div>
+            
+            <div class="chat-display mb-4" ref="chatDisplay">
+              <div v-if="chatMessages.length === 0" class="chat-placeholder">
+                "What shall we create today?"
+              </div>
+              <div v-for="(msg, i) in chatMessages" :key="i" :class="['message', msg.role]">
+                <span class="message-text">{{ msg.text }}</span>
+              </div>
+            </div>
+
+            <v-text-field
+              v-model="userQuery"
+              variant="outlined"
+              hide-details
+              class="chat-input"
+              @keyup.enter="askChef"
+              :loading="chatLoading"
+            >
+              <template v-slot:append-inner>
+                <v-btn icon="mdi-send-variant" variant="text" size="small" color="#5d4037" @click="askChef"></v-btn>
+              </template>
+            </v-text-field>
+          </div>
+        </v-col>
+      </v-row>
 
       <v-row justify="center" class="mb-12">
         <v-col cols="12" md="8" class="d-flex flex-column align-center">
@@ -147,7 +190,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
 import '@/assets/css/app-theme.css'
 
@@ -159,6 +202,10 @@ const recipe = ref(null)
 const isDragging = ref(false)
 const saving = ref(false)
 const hasSaved = ref(false)
+const userQuery = ref('')
+const chatLoading = ref(false)
+const chatMessages = ref([])
+const chatDisplay = ref(null)
 
 onMounted(() => {
   const savedRecipe = localStorage.getItem('pending_recipe')
@@ -303,5 +350,50 @@ const clearAll = () => {
   loading.value = false
   saving.value = false
   localStorage.removeItem('pending_recipe')
+}
+
+const askChef = async () => {
+  if (!userQuery.value.trim()) return
+
+  const query = userQuery.value
+  chatMessages.value.push({ role: 'user', text: userQuery.value })
+  userQuery.value = ''
+  chatLoading.value = true
+
+  await nextTick()
+  scrollToBottom()
+
+  try {
+    const data = await $fetch(`${config.public.apiBase}api/recipe/consult`, {
+      method: 'POST',
+      body: { prompt: query }
+    })
+
+    chatMessages.value.push({ role: 'assistant', text: data.reply })
+
+    if (data.recipe && data.recipe.title) {
+      recipe.value = data.recipe
+      hasSaved.value = false
+      files.value = []
+      localStorage.removeItem('pending_recipe')
+    }
+
+    await nextTick()
+    scrollToBottom()
+
+  } catch (err) {
+    chatMessages.value.push({ 
+      role: 'assistant', 
+      text: "The kitchen is currently closed for repairs. Try again in a moment?" 
+    })
+  } finally {
+    chatLoading.value = false
+  }
+}
+
+const scrollToBottom = () => {
+  if (chatDisplay.value) {
+    chatDisplay.value.scrollTop = chatDisplay.value.scrollHeight
+  }
 }
 </script>

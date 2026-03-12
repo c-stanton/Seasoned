@@ -84,4 +84,59 @@ public class RecipeService : IRecipeService
             return new RecipeResponseDto { Title = "Parsing Error" };
         }
     }
+
+    public async Task<ChefConsultResponseDto> ConsultChefAsync(string userPrompt)
+    {
+        var googleAI = new GoogleAI(_apiKey);
+        var model = googleAI.GenerativeModel("gemini-3.1-flash-lite-preview");
+
+        var systemPrompt = @"You are the 'Seasoned' Head Chef, a master of real-world culinary arts. 
+        You operate a professional kitchen and only provide advice that can be used in a real kitchen.
+
+        STRICT CONTENT RULES:
+        1. REAL FOOD ONLY: You specialize in real-world ingredients and techniques. 
+        2. CELEBRITY CHEFS: You can provide recipes from real chefs like Gordon Ramsay or Julia Child.
+        3. FICTIONAL FOOD TRANSLATION: If a user asks for food from a game (like a Skyrim Sweetroll) or movie, 
+        do NOT give game mechanics. Instead, provide a REAL-WORLD recipe that recreates that item. 
+        In your 'reply', treat it like a fun culinary challenge.
+        4. REFUSAL POLICY: If the user asks about non-food topics (video game strategies, tech support, politics, or 'Minecraft crafting grids'), 
+        politely refuse. Stay in character: 'The Chef's Grimoire is for spices, not spells' or 'I deal in pans, not pixels.'
+
+        RESPONSE FORMAT:
+        You MUST return ONLY a raw JSON object with these keys:
+        {
+            ""reply"": ""A friendly, thematic response from the Chef."",
+            ""recipe"": {
+                ""title"": ""string"",
+                ""icon"": ""string (must be a valid mdi- icon name)"",
+                ""ingredients"": [""string"", ""string""],
+                ""instructions"": [""string"", ""string""]
+            } 
+        }
+        Note: Set the 'recipe' object to null if you are only chatting or refusing a non-food prompt.";
+
+        var fullPrompt = $"{systemPrompt}\n\nUser Question: {userPrompt}";
+
+        var generationConfig = new GenerationConfig { 
+            ResponseMimeType = "application/json",
+            Temperature = 0.7f
+        };
+
+        var request = new GenerateContentRequest(fullPrompt, generationConfig);
+        var response = await model.GenerateContent(request);
+
+        try 
+        {
+            var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+            string jsonToParse = response.Text ?? "{ \"reply\": \"The chef is speechless. Try again?\" }";
+
+            var result = JsonSerializer.Deserialize<ChefConsultResponseDto>(jsonToParse, options);
+
+            return result ?? new ChefConsultResponseDto { Reply = "Chef is a bit confused!" };
+        }
+        catch (JsonException)
+        {
+            return new ChefConsultResponseDto { Reply = "The kitchen is a mess right now. Try again?" };
+        }
+    }
 }

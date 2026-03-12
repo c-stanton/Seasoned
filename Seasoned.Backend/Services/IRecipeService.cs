@@ -5,4 +5,5 @@ namespace Seasoned.Backend.Services;
 public interface IRecipeService
 {
     Task<RecipeResponseDto> ParseRecipeImageAsync(IFormFile image);
+    Task<ChefConsultResponseDto> ConsultChefAsync(string userPrompt);
 }

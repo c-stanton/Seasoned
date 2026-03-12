@@ -97,4 +97,14 @@ public class RecipeController : ControllerBase
 
         return Ok(myRecipes);
     }
+
+    [HttpPost("consult")]
+    public async Task<IActionResult> Consult([FromBody] ChatRequestDto request)
+    {
+        if (string.IsNullOrWhiteSpace(request.Prompt))
+            return BadRequest("The Chef needs a prompt.");
+
+        var result = await _recipeService.ConsultChefAsync(request.Prompt);
+        return Ok(result);
+    }
 }
