@@ -5,10 +5,10 @@
       <header class="text-center mb-10">
         <div class="brand-icon-container mb-4">
           <v-img 
-            :src="'/images/seasoned-icon.png'"
+            :src="'/images/seasoned-logo.png'"
             alt="Seasoned Logo"
             width="120"
-            class="mx-auto"
+            class="auth-logo mx-auto"
             cover
           ></v-img>
         </div>
@@ -127,11 +127,27 @@
         </div>
       </transition>
     </v-card>
+
+    <v-snackbar
+      v-model="snackbar.show"
+      :timeout="4000"
+      :color="snackbar.color"
+      class="thematic-snackbar"
+      location="bottom"
+    >
+      <div class="d-flex align-center">
+        <v-icon :icon="snackbar.icon" :color="snackbar.iconColor" class="mr-3"></v-icon>
+        <span class="snackbar-text" :style="{ color: snackbar.textColor }">
+          {{ snackbar.message }}
+        </span>
+      </div>
+    </v-snackbar>
+
   </v-container>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import '@/assets/css/app-theme.css'
 
@@ -143,6 +159,23 @@ const recipe = ref(null)
 const isDragging = ref(false)
 const saving = ref(false)
 const hasSaved = ref(false)
+
+onMounted(() => {
+  const savedRecipe = localStorage.getItem('pending_recipe')
+  if (savedRecipe) {
+    recipe.value = JSON.parse(savedRecipe)
+    localStorage.removeItem('pending_recipe')
+    
+    snackbar.value = {
+      show: true,
+      message: 'Restored your analyzed recipe.',
+      color: '#f4ede1',
+      icon: 'mdi-history',
+      iconColor: '#556b2f',
+      textColor: '#5d4037'
+    }
+  }
+})
 
 const isAuthenticated = async () => {
  try {
@@ -200,29 +233,68 @@ const uploadImage = async () => {
 const saveToCollection = async () => {
   if (!recipe.value || hasSaved.value) return;
 
-  const token = useCookie('seasoned_token').value 
-                || (import.meta.client ? localStorage.getItem('token') : null)
-
-  if (!token) {
-    alert("Please sign in to save recipes.")
-    return navigateTo('/login')
-  }
-
   saving.value = true;
+
+  const isAuth = await isAuthenticated();
+
+  if (!isAuth) {
+    saving.value = false;
+    localStorage.setItem('pending_recipe', JSON.stringify(recipe.value))
+    
+    snackbar.value = {
+      show: true,
+      message: 'Please sign in to preserve this recipe in your archives.',
+      color: '#efe5e3',
+      icon: 'mdi-account-key',
+      iconColor: '#8c4a32',
+      textColor: '#5d4037'
+    };
+
+    setTimeout(() => {
+      router.push('/login')
+    }, 2000)
+    return;
+  }
 
   try {
     await $fetch(`${config.public.apiBase}api/recipe/save`, {
       method: 'POST',
+      credentials: 'include',
       body: recipe.value
     });
+
     hasSaved.value = true;
+    snackbar.value = {
+      show: true,
+      message: 'Recipe added to your collection.',
+      color: '#f4ede1',
+      icon: 'mdi-check-decagram',
+      iconColor: '#556b2f',
+      textColor: '#5d4037'
+    };
   } catch (error) {
     console.error("Save failed:", error);
-    alert("Could not save recipe. Your session might have expired.")
+    snackbar.value = {
+      show: true,
+      message: 'Failure to save recipe.',
+      color: '#f8d7da',
+      icon: 'mdi-alert-rhombus',
+      iconColor: '#8c4a32',
+      textColor: '#5d4037'
+    };
   } finally {
     saving.value = false;
   }
 }
+
+const snackbar = ref({
+  show: false,
+  message: '',
+  color: '#f4ede1',
+  icon: 'mdi-check-decagram',
+  iconColor: '#556b2f',
+  textColor: '#5d4037'
+})
 
 const clearAll = () => {
   files.value = []
@@ -230,5 +302,6 @@ const clearAll = () => {
   hasSaved.value = false
   loading.value = false
   saving.value = false
+  localStorage.removeItem('pending_recipe')
 }
 </script>

@@ -36,9 +36,11 @@
             <v-btn
               block
               class="analyze-btn mb-4"
-              size=""
+              size="large"
               elevation="0"
               type="submit"
+              :loading="authLoading"
+              :disabled="authLoading"
             >
               {{ isLogin ? 'Login' : 'Create Account' }}
             </v-btn>
@@ -60,15 +62,42 @@
       </v-btn>
     </v-card>
   </v-container>
+
+  <v-snackbar
+    v-model="snackbar.show"
+    :timeout="4000"
+    :color="snackbar.color"
+    class="thematic-snackbar"
+    location="bottom"
+  >
+    <div class="d-flex align-center">
+      <v-icon :icon="snackbar.icon" :color="snackbar.iconColor" class="mr-3"></v-icon>
+      <span class="snackbar-text" :style="{ color: snackbar.textColor }">
+        {{ snackbar.message }}
+      </span>
+    </div>
+  </v-snackbar>
 </template>
 
 <script setup>
+import { ref } from 'vue'
 const isLogin = ref(true)
 const email = ref('')
 const password = ref('')
+const authLoading = ref(false)
 const config = useRuntimeConfig()
 
+const snackbar = ref({
+  show: false,
+  message: '',
+  color: '#f4ede1',
+  icon: 'mdi-check-decagram',
+  iconColor: '#556b2f',
+  textColor: '#5d4037'
+})
+
 const handleAuth = async () => {
+  authLoading.value = true
   const endpoint = isLogin.value ? 'api/auth/login' : 'api/auth/register'
   
   const url = isLogin.value 
