@@ -29,7 +29,7 @@
         </v-btn>
 
         <v-btn 
-          v-if="!token" 
+          v-if="!isLoggedIn" 
           to="/login" 
           variant="text"
           class="nav-auth-btn ml-4" 
@@ -58,11 +58,18 @@
 
 <script setup>
 import '@/assets/css/app-theme.css'
+const isLoggedIn = useState('isLoggedIn', () => false)
+const tokenCookie = useCookie('seasoned_token')
 
-const token = useCookie('seasoned_token')
+onMounted(() => {
+  if (tokenCookie.value) {
+    isLoggedIn.value = true
+  }
+})
 
 const logout = () => {
-  token.value = null
+  tokenCookie.value = null
+  isLoggedIn.value = false
   
   if (import.meta.client) {
     localStorage.removeItem('token')

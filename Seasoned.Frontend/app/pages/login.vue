@@ -114,11 +114,41 @@ const handleAuth = async () => {
     })
 
     if (isLogin.value) {
-      navigateTo('/gallery')
-    
+      const isLoggedIn = useState('isLoggedIn')
+      isLoggedIn.value = true
+      snackbar.value = {
+        show: true,
+        message: 'Welcome back!',
+        color: '#f4ede1',
+        icon: 'mdi-account-check',
+        iconColor: '#556b2f',
+        textColor: '#5d4037'
+      }
+    setTimeout(() => {
+        navigateTo('/')
+      }, 1200)
+    } else {
+      snackbar.value = {
+        show: true,
+        message: 'Account created! Try signing in.',
+        color: '#f4ede1',
+        icon: 'mdi-feather',
+        iconColor: '#556b2f',
+        textColor: '#5d4037'
+      }
+      isLogin.value = true
+      authLoading.value = false
     }
   } catch (err) {
-    alert("Authentication failed. Check your credentials.")
+    authLoading.value = false
+    snackbar.value = {
+      show: true,
+      message: 'The archives do not recognize these credentials.',
+      color: '#efe5e3',
+      icon: 'mdi-alert-rhombus',
+      iconColor: '#8c4a32',
+      textColor: '#5d4037'
+    }
   }
 }
 </script>
