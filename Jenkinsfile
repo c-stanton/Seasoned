@@ -26,12 +26,8 @@ pipeline {
                 echo "Building image: ${env.FULL_IMAGE}"
                 sh """
                     docker build -t ${env.FULL_IMAGE} .
-                """
-                script {         
-                if (env.BRANCH_NAME == 'main') {
-                        sh "docker tag ${env.FULL_IMAGE} ${env.DOCKER_REGISTRY}/${env.DOCKER_IMAGE}:latest"
-                    }
-                }
+                    docker tag ${env.FULL_IMAGE} ${env.DOCKER_REGISTRY}/${env.DOCKER_IMAGE}:latest
+                """               
             }
         }
 
@@ -45,12 +41,8 @@ pipeline {
                     sh """
                         echo \$DOCKER_PASS | docker login -u \$DOCKER_USER --password-stdin ${env.DOCKER_REGISTRY}
                         docker push ${env.FULL_IMAGE}
+                        docker push ${env.DOCKER_REGISTRY}/${env.DOCKER_IMAGE}:latest
                     """
-                    script {
-                        if (env.BRANCH_NAME == 'main') {
-                            sh "docker push ${env.DOCKER_REGISTRY}/${env.DOCKER_IMAGE}:latest"
-                        }
-                    }
                 }
             }
         }
