@@ -41,6 +41,11 @@ pipeline {
                         echo \$DOCKER_PASS | docker login -u \$DOCKER_USER --password-stdin ${env.DOCKER_REGISTRY}
                         docker push ${env.FULL_IMAGE}
                     """
+                    script {
+                        if (env.BRANCH_NAME == 'main') {
+                            sh "docker push ${env.DOCKER_REGISTRY}/${env.DOCKER_IMAGE}:latest"
+                        }
+                    }
                 }
             }
         }
