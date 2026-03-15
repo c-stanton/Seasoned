@@ -27,6 +27,11 @@ pipeline {
                 sh """
                     docker build -t ${env.FULL_IMAGE} .
                 """
+                script {         
+                if (env.BRANCH_NAME == 'main') {
+                        sh "docker tag ${env.FULL_IMAGE} ${env.DOCKER_REGISTRY}/${env.DOCKER_IMAGE}:latest"
+                    }
+                }
             }
         }
 
