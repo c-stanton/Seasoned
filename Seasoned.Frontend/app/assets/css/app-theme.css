@@ -1,24 +1,55 @@
-.recipe-bg {
+html, body {
+  margin: 0 !important;
+  padding: 0 !important;
+  min-height: 100%;
+}
+
+.recipe-bg, .landing-page {
   background-color: #5d4a36 !important; 
   background-image: url("https://www.transparenttextures.com/patterns/tileable-wood-colored.png") !important;
   background-size: 500px;
   background-attachment: fixed;
 }
 
+.landing-wrapper {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
 .recipe-card {
   background-color: #f4e4bc !important;
   background-image: url("https://www.transparenttextures.com/patterns/natural-paper.png");
-  border: 1px solid #c9b996 !important;
-  border-radius: 12px !important;
-  box-shadow: 0 15px 45px rgba(0, 0, 0, 0.35) !important;
+  border: 1px solid #dccca7 !important;
+  border-radius: 4px !important;
+  padding: 40px !important;
+  box-shadow: 0 35px 60px rgba(0, 0, 0, 0.5) !important;
+  transition: none !important;
+}
+
+.recipe-title {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 1.4rem;
+  color: #1e1408;
+}
+
+.v-app-bar {
+  background: transparent !important;
+  box-shadow: none !important;
 }
 
 .brand-title {
   font-family: 'Libre Baskerville', serif;
   font-weight: 700;
   font-size: 2.8rem;
-  color: #2e1e0a;
+  background: linear-gradient(to bottom, #8c4a32 20%, #4a2a14 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: 0.9 !important;
   letter-spacing: -1px;
+  filter: drop-shadow(1px 1px 0px rgba(255,255,255,0.1));
 }
 
 .brand-subtitle {
@@ -29,42 +60,149 @@
   letter-spacing: 3px;
 }
 
-.recipe-title {
-  font-family: 'Libre Baskerville', serif;
-  font-size: 2.4rem;
-  color: #1e1408;
-}
-
 .section-header {
   font-family: 'Libre Baskerville', serif;
   font-weight: bold;
   font-size: 1.1rem;
   border-bottom: 2px solid #dccca7;
-  color: #4a3a2a;
+  color: #2e1e0a;
   display: flex;
   align-items: center;
+  justify-content: center;
   text-transform: uppercase;
+  width: fit-content;
+  margin: 0 auto 1rem auto;
+  padding-bottom: 4px;
 }
 
-.custom-input .v-field {
-  background-color: #5d4037 !important;
-  color: #f8f1e0 !important;
+.feature-text {
+  font-family: 'Libre Baskerville', serif;
+  color: #5d4a36 !important;
+  line-height: 1.6;
+  max-width: 260px;
+  margin: 0 auto;
+}
+
+.clear-btn-solid {
+  background-color: #dccca7 !important;
+  color: #4a3a2a !important;
+  min-width: 56px !important;
+  height: 56px !important;
   border-radius: 8px !important;
-  border: 2px solid #5d4037 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
 }
 
-.custom-input .v-label {
-  color: #f8f1e0 !important;
+.drop-zone, .chat-container {
+  width: 100%;
+  background-color: rgba(62, 42, 20, 0.03) !important;
+  border: 2px dashed #8c857b;
+  border-radius: 12px;
+  padding: 40px 20px;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.drop-zone:hover {
+  border-color: #556b2f;
+  background-color: rgba(85, 107, 47, 0.05) !important;
+}
+
+.drop-text {
+  font-family: 'Libre Baskerville', serif !important;
+  color: #5d4a36 !important;
+  font-size: 1.1rem;
+  text-align: center;
+}
+
+.drop-text span {
+  color: #8c4a32;
+  font-weight: bold;
+}
+
+.analyze-btn {
+  background-color: #556b2f !important;
+  color:  #f4e4bc !important;
+  font-family: 'Libre Baskerville', serif !important;
+  height: 56px !important;
+  border-radius: 8px !important;
+  text-transform: none !important;
+}
+
+.column-button {
+  font-family: 'Libre Baskerville', serif !important;
+  font-size: 1.1rem !important;
+  background-color: #556b2f !important;
+  color:  #f4e4bc !important;
+  transition: all 0.3s ease !important;
+  text-transform: none !important;
+}
+
+.column-button:hover {
+  background-color: #2e1e0a !important;
+  
+  text-shadow: none !important;
+  border-radius: 4px;
+}
+
+.nav-auth-btn, .nav-home-btn, .nav-btn {
+  font-family: 'Libre Baskerville', serif !important;
+  font-size: 1.5rem !important;
+  color: #f4e4bc !important;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8) !important;
+  transition: all 0.3s ease !important;
+  text-transform: none !important;
+}
+
+.nav-auth-btn:hover, .nav-home-btn:hover, .nav-btn:hover {
+  background-color: #f4e4bc !important;
+  color: #2e1e0a !important;
+  text-shadow: none !important;
+  border-radius: 4px;
+}
+
+.separator {
+  border-color: #dccca7 !important;
+  opacity: 1;
+}
+
+.chat-placeholder {
+  font-style: italic;
+  color: #8c7e6a;
+  text-align: center;
+}
+
+.menu-text {
+  font-family: 'Libre Baskerville', serif !important;
+  color: #2e1e0a !important;
+  font-weight: 600 !important;
+  font-size: 0.95rem !important;
+}
+
+.v-list-item__prepend .v-icon {
+  color: #2e1e0a !important;
   opacity: 1 !important;
-  font-weight: 600;
 }
 
-.custom-input .v-icon {
-  color: #f8f1e0 !important;
+.v-list-item:hover {
+  background-color: rgba(85, 107, 47, 0.1) !important;
 }
 
-.custom-input .v-field--focused {
-  border: 2px solid #556b2f !important;
+.v-list-item[color="error"] .menu-text {
+  color: #8c4a32 !important;
+}
+
+.save-recipe-btn {
+  background-color: #2e1e0a !important;
+  color: #f4e4bc !important;
+  font-family: 'Libre Baskerville', serif !important;
+  text-transform: none !important;
+  letter-spacing: 0;
+  border-radius: 8px !important;
 }
 
 .ingredients-list {
@@ -94,234 +232,60 @@
   padding-top: 16px;
 }
 
-.separator {
-  border-color: #dccca7 !important;
-  opacity: 1;
-}
-
-.fade-enter-active, .fade-leave-active {
-  transition: opacity 0.6s ease;
-}
-.fade-enter-from, .fade-leave-to {
-  opacity: 0;
-}
-
-.custom-input .v-field__input {
-  justify-content: center !important;
-  text-align: center !important;
-}
-
-.custom-input .v-label.v-field-label {
-  left: 50% !important;
-  transform: translateX(-50%) !important;
-  width: 100% !important;
-  justify-content: center !important;
-}
-
-.custom-input .v-field {
-  height: 56px !important;
-  min-height: 56px !important;
-  border-radius: 8px !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-}
-
-.custom-input .v-field__prepend-inner {
-  display: none !important;
-}
-
-.custom-input .v-label {
-  font-family: 'Inter', sans-serif !important;
-  font-weight: 600 !important;
-  font-size: 1rem !important;
-  letter-spacing: normal !important;
-}
-
-.drop-zone {
-  width: 100%;
-  height: 150px;
-  border: 2px dashed #8c857b;
-  border-radius: 12px;
-  background-color: rgba(62, 42, 20, 0.03) !important;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  color: #3e3a35 !important;
-  text-align: center;
-  padding: 20px;
-}
-
-.drop-zone--active {
-  background-color: rgba(85, 107, 47, 0.1) !important;
-  border-color: #556b2f;
-  transform: scale(1.02);
-}
-
-.drop-text {
-  font-family: 'Inter', sans-serif;
-  font-size: 0.95rem;
-  line-height: 1.4;
-}
-
-.selected-text {
-  font-weight: 600;
-  color: #556b2f;
-}
-
-.analyze-btn, 
-.gallery-btn,
-.analyze-btn *, 
-.gallery-btn * {
-  font-family: 'Libre Baskerville', serif !important;
-  text-transform: none !important;
-  font-size: 1.1rem !important;
-  letter-spacing: 0.5px !important;
-  font-weight: 400 !important;
-  border-radius: 8px !important;
-}
-
-.analyze-btn {
-  margin-bottom: 16px !important; 
-  background-color: #556b2f !important;
-  color: #ffffff !important;
-  height: 56px !important;
-  border-radius: 8px !important;
-}
-
-.gallery-btn {
-  background-color: #8c4a32 !important; 
-  color: #ffffff !important;
-  height: 56px !important;
-  border-radius: 8px !important;
-}
-
-.clear-btn-solid {
-  background-color: #dccca7 !important;
-  color: #4a3a2a !important;
-  min-width: 56px !important;
-  height: 56px !important;
-  border-radius: 8px !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-}
-
-.d-flex .analyze-btn {
-  margin-bottom: 0 !important;
-}
-
-.v-app-bar {
-  background: linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, transparent 100%) !important;
-}
-
-.nav-auth-btn, .nav-btn, .nav-home-btn {
-  font-family: 'Libre Baskerville', serif !important;
-  font-size: 1.5rem !important;
-  color: #f4e4bc !important;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8) !important;
-  letter-spacing: 0px;
-  
-}
-
-.nav-auth-btn:hover, .nav-btn:hover, .nav-home-btn:hover {
-  background-color: #f4e4bc !important;
-  color: #2e1e0a !important;
-  text-shadow: none !important;
-}
-
-.brand-icon-container {
-  filter: sepia(0.2) contrast(1.1);
-  opacity: 0.9;
-}
-
-.brand-icon-container .v-img {
-  filter: drop-shadow(0px 1px 1px rgba(0,0,0,0.1));
-}
-
-.auth-logo {
-  mix-blend-mode: multiply;
-  
-  filter: sepia(0.3) contrast(1.1) brightness(0.9);
-
-  opacity: 0.85;
-
-  max-width: 200px;
-  height: auto;
-  display: block;
-  margin: 0 auto;
-}
-
-.thematic-snackbar .v-snackbar__wrapper {
-  border-radius: 4px !important;
-  border: 1px solid rgba(140, 74, 50, 0.2) !important;
-}
-
-.snackbar-text {
-  font-family: 'Crimson Text', serif;
-  font-size: 1.05rem;
-  letter-spacing: 0.02em;
-}
-
-.chat-container {
-  background: rgba(244, 237, 225, 0.6);
-  border: 1px dashed #d1c7b7;
-  border-radius: 8px;
-}
-
 .chat-container {
   width: 100%;
-  background-color: rgba(62, 42, 20, 0.03) !important;
-  border: 2px dashed #8c857b;
+  background-color: rgba(244, 237, 225, 0.4) !important;
+  border: 1px solid #dccca7;
   border-radius: 12px;
   padding: 20px;
-  transition: all 0.3s ease;
   display: flex;
   flex-direction: column;
+  min-height: 500px;
 }
 
-.chat-container:focus-within {
-  background-color: rgba(85, 107, 47, 0.05) !important;
-  border-color: #556b2f;
+.chat-display {
+  flex-grow: 1;
+  overflow-y: auto;
+  margin-bottom: 20px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
 .chat-input .v-field__input {
-  color: #5d4037 !important;
-  font-family: 'Crimson Text', serif;
+  min-height: 56px !important;
+  padding-top: 15px !important;
+  font-family: 'Inter', sans-serif;
   font-size: 1.1rem;
 }
 
-.chat-input .v-field__input::placeholder {
-  color: #8c7e6a !important;
-  opacity: 1;
-}
-
-.chat-placeholder {
-  font-style: italic;
-  color: #8c7e6a;
-  text-align: center;
-  padding: 20px;
+.chat-input.v-field--focused {
+  background-color: #ffffff !important;
+  transition: background-color 0.3s ease;
 }
 
 .message {
-  margin-bottom: 10px;
-  padding: 8px 12px;
-  border-radius: 4px;
+  max-width: 85%;
+  padding: 12px 16px;
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  line-height: 1.5;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
 }
 
 .message.user {
-  background: rgba(93, 64, 55, 0.1);
-  text-align: right;
+  background-color: #efe5e3;
   color: #5d4037;
-  font-weight: bold;
+  align-self: flex-end;
+  border-radius: 15px 15px 2px 15px;
+  border: 1px solid #e0d5d2;
 }
 
 .message.assistant {
-  background: transparent;
-  text-align: left;
-  color: #2c3e50;
-  border-left: 3px solid #556b2f;
+  background-color: #ffffff;
+  color: #2e1e0a;
+  align-self: flex-start;
+  border-radius: 15px 15px 15px 2px;
+  border: 1px solid #dccca7;
 }

@@ -9,6 +9,12 @@
     font-size: 2.2rem;
     color: #2e1e0a;
     margin-bottom: 8px;
+  background: linear-gradient(to bottom, #8c4a32 20%, #4a2a14 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: 0.9 !important;
+  letter-spacing: -1px;
+  filter: drop-shadow(1px 1px 0px rgba(255,255,255,0.1));
 }
 
 .auth-input .v-field__prepend-inner {

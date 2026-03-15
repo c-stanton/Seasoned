@@ -5,7 +5,6 @@ using Seasoned.Backend.Models;
 
 namespace Seasoned.Backend.Data;
 
-// Inherit from IdentityDbContext to enable User management
 public class ApplicationDbContext : IdentityDbContext<IdentityUser>
 {
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
@@ -15,12 +14,10 @@ public class ApplicationDbContext : IdentityDbContext<IdentityUser>
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        // Crucial: Call the base method so Identity tables are configured
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.HasPostgresExtension("vector");
 
-        // Optional: Ensure the Recipe table links to the Identity User
         modelBuilder.Entity<Recipe>()
             .HasOne<IdentityUser>()
             .WithMany()

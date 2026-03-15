@@ -1,52 +1,43 @@
 <template>
-  <v-app class="recipe-bg">
-    <v-app-bar 
-      color="transparent"
-      flat
-      elevation="0"
-      class="px-4"
-      height="70"
-    >
-      <v-btn
-        to="/"
-        variant="text"
-        class="nav-home-btn ml-4"
-        elevation="0"
-      >
-        Seasoned
-      </v-btn>
-
+  <v-app :class="['recipe-bg', { 'landing-page': $route.path === '/' }]">
+    
+    <v-app-bar color="transparent" flat elevation="0" class="px-4" height="70">
+      <v-btn to="/" variant="text" class="nav-home-btn">Seasoned</v-btn>
       <v-spacer></v-spacer>
 
       <div class="nav-links d-flex align-center">
-        <v-btn 
-          to="/gallery"
-          variant="text" 
-          class="nav-auth-btn ml-4" 
-          elevation="0"
-        >
-          Collection
-        </v-btn>
+        <v-menu v-if="isLoggedIn" transition="slide-y-transition">
+          <template v-slot:activator="{ props }">
+            <v-btn 
+              v-bind="props" 
+              variant="text" 
+              class="nav-auth-btn px-4 d-flex align-center"
+            >
+              <v-icon icon="mdi-pot-steam" size="small" class="mr-2"></v-icon>
+              <span class="menu-label-text">Menu</span>
+            </v-btn>
+          </template>
 
-        <v-btn 
-          v-if="!isLoggedIn" 
-          to="/login" 
-          variant="text"
-          class="nav-auth-btn ml-4" 
-          elevation="0"
-        >
-          Sign In
-        </v-btn>
-        
-        <v-btn 
-          v-else 
-          @click="logout" 
-          variant="text"
-          class="nav-auth-btn ml-4" 
-          elevation="0"
-        >
-          Logout
-        </v-btn>
+          <v-list class="recipe-card pa-2 mt-2" elevation="4" border>
+            <v-list-item to="/uploader" prepend-icon="mdi-camera-outline">
+              <v-list-item-title class="menu-text">Recipe Uploader </v-list-item-title>
+            </v-list-item>
+            <v-list-item to="/chat" prepend-icon="mdi-chef-hat">
+              <v-list-item-title class="menu-text">Chef Consultation</v-list-item-title>
+            </v-list-item>
+            <v-list-item to="/gallery" prepend-icon="mdi-book-open-variant" class="rounded">
+              <v-list-item-title class="menu-text">My Collection</v-list-item-title>
+            </v-list-item>
+
+            <v-divider class="ma-0"></v-divider>
+
+            <v-list-item @click="logout" prepend-icon="mdi-logout" color="error" class="rounded mt-0">
+              <v-list-item-title class="menu-text">Sign Out</v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </v-menu>
+
+        <v-btn v-else to="/login" variant="text" class="nav-auth-btn">Sign In</v-btn>
       </div>
     </v-app-bar>
 
@@ -57,24 +48,19 @@
 </template>
 
 <script setup>
+import { onMounted } from 'vue'
 import '@/assets/css/app-theme.css'
+const authCookie = useCookie('.AspNetCore.Identity.Application')
 const isLoggedIn = useState('isLoggedIn', () => false)
-const tokenCookie = useCookie('seasoned_token')
 
 onMounted(() => {
-  if (tokenCookie.value) {
-    isLoggedIn.value = true
-  }
+  if (authCookie.value) isLoggedIn.value = true
 })
 
 const logout = () => {
-  tokenCookie.value = null
+  authCookie.value = null
   isLoggedIn.value = false
-  
-  if (import.meta.client) {
-    localStorage.removeItem('token')
-  }
-  
+  if (import.meta.client) localStorage.removeItem('token')
   navigateTo('/login')
 }
 </script>

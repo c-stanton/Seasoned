@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Seasoned.Backend.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/recipe")]
 public class RecipeController : ControllerBase

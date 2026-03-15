@@ -62,40 +62,17 @@
       </v-btn>
     </v-card>
   </v-container>
-
-  <v-snackbar
-    v-model="snackbar.show"
-    :timeout="4000"
-    :color="snackbar.color"
-    class="thematic-snackbar"
-    location="bottom"
-  >
-    <div class="d-flex align-center">
-      <v-icon :icon="snackbar.icon" :color="snackbar.iconColor" class="mr-3"></v-icon>
-      <span class="snackbar-text" :style="{ color: snackbar.textColor }">
-        {{ snackbar.message }}
-      </span>
-    </div>
-  </v-snackbar>
 </template>
 
 <script setup>
 import { ref } from 'vue'
+import '@/assets/css/login.css'
 
 const isLogin = ref(true)
 const email = ref('')
 const password = ref('')
 const authLoading = ref(false)
 const config = useRuntimeConfig()
-
-const snackbar = ref({
-  show: false,
-  message: '',
-  color: '#f4ede1',
-  icon: 'mdi-check-decagram',
-  iconColor: '#556b2f',
-  textColor: '#5d4037'
-})
 
 const handleAuth = async () => {
   authLoading.value = true
@@ -117,39 +94,14 @@ const handleAuth = async () => {
     if (isLogin.value) {
       const isLoggedIn = useState('isLoggedIn')
       isLoggedIn.value = true
-      snackbar.value = {
-        show: true,
-        message: 'Welcome back!',
-        color: '#f4ede1',
-        icon: 'mdi-account-check',
-        iconColor: '#556b2f',
-        textColor: '#5d4037'
-      }
-    setTimeout(() => {
-        navigateTo('/')
-      }, 1200)
+      navigateTo('/')
     } else {
-      snackbar.value = {
-        show: true,
-        message: 'Account created! Try signing in.',
-        color: '#f4ede1',
-        icon: 'mdi-feather',
-        iconColor: '#556b2f',
-        textColor: '#5d4037'
-      }
       isLogin.value = true
       authLoading.value = false
     }
   } catch (err) {
     authLoading.value = false
-    snackbar.value = {
-      show: true,
-      message: 'The archives do not recognize these credentials.',
-      color: '#efe5e3',
-      icon: 'mdi-alert-rhombus',
-      iconColor: '#8c4a32',
-      textColor: '#5d4037'
-    }
+    console.error('Auth error:', err)
   }
 }
 </script>

@@ -16,6 +16,7 @@ services:
 
   # Seasoned App: C# .NET 9 + Nuxt 4
   app:
+    image: git.wrigglyt.xyz/chloe/seasoned:latest
     build: .
     container_name: seasoned-main
     restart: always

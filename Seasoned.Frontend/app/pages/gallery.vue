@@ -3,22 +3,16 @@
     <v-card class="recipe-card pa-10 mx-auto mt-10" max-width="1200" elevation="1">
       
       <header class="text-center mb-10">
-        <h1 class="brand-title">Your Collection</h1>
-        <p class="brand-subtitle">Hand-Picked & Seasoned</p>
+        <v-img 
+          src="/images/seasoned-logo.png" 
+          width="180" 
+          class="mx-auto"
+          contain
+        ></v-img>
+        <p class="brand-subtitle">Your Recipe Collection</p>
       </header>
 
       <v-divider class="mb-10 separator"></v-divider>
-
-      <v-btn 
-        to="/" 
-        class="back-to-home-btn mb-10" 
-        size="large" 
-        elevation="0"
-        block
-      >
-        <v-icon icon="mdi-arrow-left" class="mr-2"></v-icon>
-        Back to Recipe Upload
-      </v-btn>
 
       <v-row v-if="loading" justify="center" class="py-16">
         <v-col cols="12" class="d-flex flex-column align-center">
@@ -190,6 +184,7 @@
 
 
 <script setup>
+import { ref, onMounted } from 'vue'
 import '@/assets/css/gallery.css'
 
 const recipes = ref([])
