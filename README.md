@@ -1,5 +1,5 @@
 # Seasoned
-
+[![Build Status](https://jenkins.wrigglyt.xyz/job/Seasoned/badge/icon)](https://jenkins.wrigglyt.xyz/job/Seasoned/)
 In progress link: https://seasoned.ddns.net/
 
 The Pitch:
@@ -30,7 +30,7 @@ Technical Requirements:
 
 1. AI & Multimodal Intelligence
 
-    Multimodal Extraction: Use Gemini 1.5 Flash to accept image/jpeg inputs and return a strictly validated JSON Schema containing title, ingredients, and steps.
+    Multimodal Extraction: Use Gemini 3.1 Flash Lite to accept image/jpeg inputs and return a strictly validated JSON Schema containing title, ingredients, and steps.
 
     Semantic Search: Implement pgvector in the local database. Recipes will be converted into "embeddings" (via Gemini) to allow users to search for "Comfort food for a rainy day" instead of just keyword matches.
 
