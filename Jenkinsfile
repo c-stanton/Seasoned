@@ -50,7 +50,7 @@ pipeline {
                 script {
                     env.DEPLOY_BRANCH = env.BRANCH_NAME ?: 'main'
                 }
-                sshagent(credentials: ['deploy-ssh-key']) {
+                sshagent(credentials: ['mini2']) {
                     sh """
                         ssh -o StrictHostKeyChecking=no ${env.DEPLOY_USER}@${env.DEPLOY_HOST} << 'DEPLOY_EOF'
                             set -e
