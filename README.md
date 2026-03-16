@@ -1,5 +1,6 @@
 # Seasoned
 [![Build Status](https://jenkins.wrigglyt.xyz/job/Seasoned/badge/icon)](https://jenkins.wrigglyt.xyz/job/Seasoned/)
+
 In progress link: https://seasoned.ddns.net/
 
 The Pitch:
