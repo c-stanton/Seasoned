@@ -4,17 +4,33 @@
 }
 
 .auth-title {
-    font-family: 'Libre Baskerville', serif;
-    font-weight: 700;
-    font-size: 2.2rem;
-    color: #2e1e0a;
-    margin-bottom: 8px;
+  font-family: 'Libre Baskerville', serif;
+  font-weight: 700;
+  font-size: 2.2rem;
+  margin-top: -5px !important; /* Pulls the text up toward the pot */
+  margin-bottom: 8px;
+  line-height: 1.0 !important;
   background: linear-gradient(to bottom, #8c4a32 20%, #4a2a14 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  line-height: 0.9 !important;
-  letter-spacing: -1px;
   filter: drop-shadow(1px 1px 0px rgba(255,255,255,0.1));
+  line-height: 1.1 !important;
+  letter-spacing: -0.5px;
+}
+
+.auth-btn {
+  font-family: 'Libre Baskerville', serif !important;
+  font-size: 1.1rem !important;
+  background-color: #556b2f !important;
+  color:  #f4e4bc !important;
+  transition: all 0.3s ease !important;
+  text-transform: none !important;
+}
+
+.auth-btn:hover {
+  background-color: #2e1e0a !important;
+  text-shadow: none !important;
+  border-radius: 4px;
 }
 
 .auth-input .v-field__prepend-inner {
@@ -23,13 +39,13 @@
 }
 
 .auth-input .v-icon {
-    color: #f8f1e0 !important;
+    color: #2e1e0a !important;
     opacity: 0.6;
 }
 
 .auth-toggle-btn {
-    font-family: 'Inter', sans-serif !important;
-    font-size: 0.85rem !important;
+    font-family: 'Libre Baskerville', serif;
+    font-size: 1.0rem !important;
     color: #6d5e4a !important;
     text-decoration: underline;
     cursor: pointer;
@@ -43,7 +59,48 @@
 .auth-switch-enter-active, .auth-switch-leave-active {
     transition: all 0.3s ease;
 }
+
 .auth-switch-enter-from, .auth-switch-leave-to {
     opacity: 0;
     transform: translateY(10px);
+}
+
+.auth-input :deep(.v-field) {
+  --v-theme-on-surface: 46, 30, 10 !important;
+  --v-field-label-color: 46, 30, 10 !important;
+  color: #2e1e0a !important;
+}
+
+.auth-input :deep(input),
+.auth-input :deep(.v-field__input) {
+  font-family: 'Libre Baskerville', serif !important;
+  color: #2e1e0a !important;
+  -webkit-text-fill-color: #2e1e0a !important; 
+  caret-color: #2e1e0a !important;
+  opacity: 1 !important;
+}
+
+/* Force the font on the floating label */
+.auth-input :deep(.v-label) {
+  font-family: 'Libre Baskerville', serif !important;
+  color: #2e1e0a !important;
+  opacity: 1 !important;
+}
+
+/* Fix for the white Success Message in your screenshot */
+.auth-success {
+    background-color: rgba(85, 107, 47, 0.1) !important;
+    border-color: #556b2f !important;
+    color: #556b2f !important; /* Forces the green text */
+}
+
+.auth-success :deep(.v-icon) {
+    color: #556b2f !important;
+}
+
+/* Fix for the Error Message */
+.auth-error {
+    background-color: rgba(140, 74, 50, 0.1) !important;
+    border-color: #8c4a32 !important;
+    color: #8c4a32 !important;
 }

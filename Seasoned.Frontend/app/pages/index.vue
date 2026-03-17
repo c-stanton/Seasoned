@@ -28,7 +28,7 @@
                 Turn handwritten cards into searchable digital text instantly.
               </p>
               <v-spacer></v-spacer>
-              <v-btn v-if="isLoggedIn" to="/uploader"  class="mt-12 column-button">
+              <v-btn v-if="isLoggedIn" to="/uploader"  class="mt-12 column-btn">
                 Got to Uploader
               </v-btn>
             </v-col>
@@ -39,7 +39,7 @@
                 Chat with an AI chef to scale ingredients, find substitutes, or get inspiration.
               </p>
               <v-spacer></v-spacer>
-              <v-btn v-if="isLoggedIn" to="/chat"  class="mt-12 column-button">
+              <v-btn v-if="isLoggedIn" to="/chat"  class="mt-12 column-btn">
                 Talk to Chef
               </v-btn>
             </v-col>
@@ -50,13 +50,13 @@
                 Build a private collection that keeps your family traditions alive and organized.
               </p>
               <v-spacer></v-spacer>
-              <v-btn v-if="isLoggedIn" to="/gallery"  class="mt-12 column-button">
+              <v-btn v-if="isLoggedIn" to="/gallery"  class="mt-12 column-btn">
                 View Collection
               </v-btn>
             </v-col>
           </v-row>
           <div v-if="!isLoggedIn" class="d-flex flex-column align-center">
-            <v-btn to="/login" class="analyze-btn px-12 py-6 mb-4" size="x-large">
+            <v-btn to="/login" class="column-btn" size="x-large">
               Get Started
             </v-btn>
           </div>

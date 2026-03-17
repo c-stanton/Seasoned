@@ -1,7 +1,7 @@
 <template>
   <v-container>
-    <v-card class="recipe-card pa-10 mx-auto mt-10" max-width="950" elevation="1">
-      <header class="text-center mb-10">
+    <v-card class="recipe-card pa-6 mx-auto mt-4" max-width="950" elevation="1">
+      <header class="text-center mb-4">
         <v-img 
             src="/images/seasoned-logo.png" 
             width="180" 
@@ -12,10 +12,10 @@
         <p class="brand-subtitle">Kitchen Consultation</p>
       </header>
       
-      <v-divider class="mb-10 separator"></v-divider>
+      <v-divider class="mb-6 separator"></v-divider>
 
       <v-row justify="center" class="mb-6">
-        <v-col cols="12" md="10">
+        <v-col cols="12" md="11">
           <div class="chat-container">
             <div class="section-header mb-4 d-flex align-center">
               <v-icon icon="mdi-chef-hat" class="mr-2" size="small"></v-icon>
@@ -29,6 +29,13 @@
               <div v-for="(msg, i) in chatMessages" :key="i" :class="['message', msg.role]">
                 <span class="message-text">{{ msg.text }}</span>
               </div>
+              <div v-if="chatLoading" class="message assistant thinking-bubble">
+                <div class="typing">
+                  <span class="dot"></span>
+                  <span class="dot"></span>
+                  <span class="dot"></span>
+                </div>
+              </div>
             </div>
 
             <v-textarea
@@ -39,16 +46,14 @@
                 max-rows="6"
                 hide-details
                 class="chat-input"
-                @keyup.enter.exact.prevent="askChef"
+                @keydown.enter.exact.prevent="askChef"
                 :loading="chatLoading"
                 >
                 <template v-slot:append-inner>
                     <v-btn 
                     icon="mdi-send-variant" 
                     variant="text" 
-                    size="small" 
-                    color="#8c4a32" 
-                    class="mt-1"
+                    class="mt-1 send-btn"
                     @click="askChef"
                     ></v-btn>
                 </template>
@@ -88,8 +93,7 @@ const askChef = async () => {
   userQuery.value = ''
   chatLoading.value = true
 
-  await nextTick()
-  scrollToBottom()
+  await scrollToBottom()
 
   try {
     const data = await $fetch(`${config.public.apiBase}api/recipe/consult`, {
@@ -105,9 +109,6 @@ const askChef = async () => {
       localStorage.removeItem('pending_recipe')
     }
 
-    await nextTick()
-    scrollToBottom()
-
   } catch (err) {
     chatMessages.value.push({ 
       role: 'assistant', 
@@ -115,12 +116,22 @@ const askChef = async () => {
     })
   } finally {
     chatLoading.value = false
+    await scrollToBottom()
   }
 }
 
-const scrollToBottom = () => {
+const scrollToBottom = async () => {
+  await nextTick()
   if (chatDisplay.value) {
-    chatDisplay.value.scrollTop = chatDisplay.value.scrollHeight
+    const { scrollTop, scrollHeight, clientHeight } = chatDisplay.value
+    const isAtBottom = scrollHeight - scrollTop <= clientHeight + 100
+
+    if (isAtBottom) {
+      chatDisplay.value.scrollTo({
+        top: scrollHeight,
+        behavior: 'smooth'
+      })
+    }
   }
 }
 </script>
