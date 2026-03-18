@@ -66,7 +66,7 @@
           </template>
           
           <template v-else>
-            <v-icon icon="mdi-check-decagram" class="mr-2"></v-icon>
+            <v-icon icon="mdi-check-all" class="mr-2"></v-icon>
             Saved in Archives
           </template>
         </v-btn>

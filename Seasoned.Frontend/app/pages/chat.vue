@@ -9,7 +9,7 @@
             contain
           >
         </v-img>
-        <p class="brand-subtitle">Kitchen Consultation</p>
+        <p class="chat-title">Kitchen Consultation</p>
       </header>
       
       <v-divider class="mb-6 separator"></v-divider>

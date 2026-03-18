@@ -9,7 +9,7 @@
             contain
           >
         </v-img>
-        <p class="brand-subtitle">Recipe Uploader</p>
+        <p class="chat-title">Recipe Uploader</p>
       </header>
 
       <v-divider class="mb-10 separator"></v-divider>

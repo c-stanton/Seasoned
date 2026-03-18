@@ -47,9 +47,24 @@ html, body {
   background: linear-gradient(to bottom, #8c4a32 20%, #4a2a14 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  line-height: 0.9 !important;
-  letter-spacing: -1px;
+  line-height: 1.1 !important;
+  letter-spacing: -0.5px;
   filter: drop-shadow(1px 1px 0px rgba(255,255,255,0.1));
+}
+
+.chat-title {
+  font-family: 'Libre Baskerville', serif;
+  font-weight: 700;
+  font-size: 2.2rem;
+  margin-top: 5px !important;
+  margin-bottom: 8px;
+  line-height: 1.0 !important;
+  background: linear-gradient(to bottom, #8c4a32 20%, #4a2a14 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(1px 1px 0px rgba(255,255,255,0.1));
+  line-height: 1.1 !important;
+  letter-spacing: -0.5px;
 }
 
 .brand-subtitle {
@@ -192,9 +207,11 @@ html, body {
 
 .save-success-btn {
   opacity: 1 !important;
-  color: white !important;
-  cursor: default;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  color: #f4e4bc !important;
+  font-family: 'Libre Baskerville', serif !important;
+  text-transform: none !important;
+  letter-spacing: 0;
+  border-radius: 8px !important;
 }
 
 .transition-swing {
@@ -256,10 +273,9 @@ html, body {
     }
 
   .v-application {
-    display: block !important; /* Prevents flex-grow from creating a 2nd page */
+    display: block !important;
   }
 
-  /* 3. Tighten the Footer (Just in case) */
   footer, .brand-subtitle {
     page-break-after: avoid !important;
   }
@@ -422,7 +438,7 @@ html, body {
 .chat-container {
   width: 100%;
   background-color: rgba(62, 42, 20, 0.03) !important;
-  border: 2px solid #8c857b;
+  border: 2px solid #544521;
   border-radius: 12px;
   padding: 20px;
   transition: all 0.3s ease;

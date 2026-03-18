@@ -9,7 +9,7 @@
           class="mx-auto"
           contain
         ></v-img>
-        <p class="brand-subtitle">Your Recipe Collection</p>
+        <p class="collection-title">Your Recipe Collection</p>
       </header>
 
       <v-divider class="mb-10 separator"></v-divider>
@@ -214,6 +214,7 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
 import '@/assets/css/gallery.css'
+import '@/assets/css/app-theme.css'
 
 const recipes = ref([])
 const loading = ref(true)
