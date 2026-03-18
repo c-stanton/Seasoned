@@ -124,6 +124,10 @@ const uploadImage = async () => {
       method: 'POST',
       body: formData
     });
+
+    if (response) {
+      response.imageUrl = null;
+    }
     recipe.value = response;
   } catch (error) {
     console.error("Error:", error);
