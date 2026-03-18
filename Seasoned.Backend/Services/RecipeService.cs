@@ -23,7 +23,8 @@ public class RecipeService : IRecipeService
     public async Task<Vector> GetEmbeddingAsync(string text)
     {
         var model = _googleAI.GenerativeModel("gemini-embedding-001");
-        var response = await model.EmbedContent(text);
+        var request = new EmbedContentRequest(text);
+        var response = await model.EmbedContent(request);
     
         if (response.Embedding?.Values != null)
         {
