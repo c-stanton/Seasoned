@@ -4,11 +4,17 @@
       <v-divider class="mb-10 separator"></v-divider>
       
       <h2 class="recipe-title text-center mb-4">{{ recipe.title }}</h2>
-      <p v-if="recipe.description" class="recipe-description text-center mb-16 text-italic">
-        {{ recipe.description }}
-      </p>
+      
+      <v-img
+        v-if="recipe.imageUrl"
+        :src="recipe.imageUrl"
+        class="recipe-image rounded-lg mb-8 mx-auto"
+        elevation="2"
+        max-height="400"
+        cover
+      ></v-img>
 
-      <v-row class="mt-10" no-gutters>
+      <v-row class="mt-10" density="compact">
         <v-col cols="12" md="5" class="pe-md-10">
           <div class="section-header justify-center mb-6">
             <v-icon icon="mdi-spoon-sugar" class="mr-2" size="small"></v-icon>
@@ -45,26 +51,25 @@
         </v-btn>
 
         <v-btn
-          v-if="!hasSaved"
-          class="save-recipe-btn px-12"
+          class="px-12 transition-swing"
           size="large"
           elevation="0"
           :loading="isSaving"
+          :disabled="hasSaved"
+          :color="hasSaved ? '#556b2f' : '#5d4a36'"
+          :class="hasSaved ? 'save-success-btn' : 'save-recipe-btn'"
           @click="$emit('save')"
         >
-          <v-icon icon="mdi-content-save-check-outline" class="mr-2"></v-icon>
-          Save to Collection
+          <template v-if="!hasSaved">
+            <v-icon icon="mdi-content-save-check-outline" class="mr-2"></v-icon>
+            Save to Collection
+          </template>
+          
+          <template v-else>
+            <v-icon icon="mdi-check-decagram" class="mr-2"></v-icon>
+            Saved in Archives
+          </template>
         </v-btn>
-        
-        <v-chip
-          v-else
-          color="#556b2f"
-          variant="outlined"
-          prepend-icon="mdi-check-decagram"
-          class="pa-6"
-        >
-          Saved to Archives
-        </v-chip>
       </v-row>
     </div>
   </transition>
@@ -75,7 +80,7 @@ import { ref } from 'vue'
 import '@/assets/css/app-theme.css'
 
 defineProps({
-  //recipe: { type: Object, default: null },
+  recipe: { type: Object, default: null },
   isSaving: { type: Boolean, default: false },
   hasSaved: { type: Boolean, default: false }
 })
@@ -87,7 +92,7 @@ const printRecipe = () => {
 }
 
 // mock output
-const recipe = ref({
+/*const recipe = ref({
   title: "Bakery-Style Lemon Blueberry Muffins",
   ingredients: [
     "2 cups all-purpose flour",
@@ -109,5 +114,5 @@ const recipe = ref({
     "Toss the blueberries in a teaspoon of flour, then gently fold them into the batter.",
     "Divide the batter evenly into the muffin cups and bake for 18-20 minutes until golden."
   ]
-})
+}) */
 </script>

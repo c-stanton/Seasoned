@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using System.IO;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Microsoft.Extensions.Configuration;
 
 namespace Seasoned.Backend.Services;
 
@@ -18,6 +19,11 @@ public class RecipeService : IRecipeService
 
     public async Task<RecipeResponseDto> ParseRecipeImageAsync(IFormFile image)
     {
+        if (image == null || image.Length == 0)
+        {
+                return new RecipeResponseDto { Title = "Error: No image provided" };
+        }
+
         var googleAI = new GoogleAI(_apiKey);
         
         var model = googleAI.GenerativeModel("gemini-3.1-flash-lite-preview"); 
@@ -27,21 +33,15 @@ public class RecipeService : IRecipeService
         var base64Image = Convert.ToBase64String(ms.ToArray());
 
         var prompt = @"Extract the recipe details from this image. 
-        
-        RULES FOR THE 'icon' FIELD:
-        1. Select a valid 'Material Design Icon' name (e.g., 'mdi-pasta', 'mdi-bread-slice', 'mdi-muffin', 'mdi-pizza').
-        2. If the recipe type is ambiguous or you cannot find a specific matching icon, you MUST return 'mdi-silverware-fork-knife'.
-
-        IMPORTANT: Return ONLY a raw JSON string. 
+        Return ONLY a raw JSON string. 
         DO NOT include markdown formatting. 
         JSON structure:
         {
-          ""title"": ""string"",
-          ""icon"": ""string"",
-          ""ingredients"": [""string"", ""string""],
-          ""instructions"": [""string"", ""string""]
+        ""title"": ""string"",
+        ""ingredients"": [""string"", ""string""],
+        ""instructions"": [""string"", ""string""]
         }";
-        
+            
         var generationConfig = new GenerationConfig { 
             ResponseMimeType = "application/json",
             Temperature = 0.1f
@@ -54,24 +54,21 @@ public class RecipeService : IRecipeService
         var response = await model.GenerateContent(request);
         string rawText = response.Text?.Trim() ?? "";
 
-        int start = rawText.IndexOf('{');
-        int end = rawText.LastIndexOf('}');
+        string cleanJson = CleanJsonResponse(rawText);
 
-        if (start == -1 || end == -1) 
+        if (string.IsNullOrEmpty(cleanJson)) 
         {
-            return new RecipeResponseDto { Title = "Error" };
+            return new RecipeResponseDto { Title = "Error: Invalid AI Response" };
         }
-
-        string cleanJson = rawText.Substring(start, (end - start) + 1);
 
         try 
         {
             var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
             var result = JsonSerializer.Deserialize<RecipeResponseDto>(cleanJson, options);
             
-            if (result != null && string.IsNullOrEmpty(result.Icon))
+            if (result != null)
             {
-                result.Icon = "mdi-silverware-fork-knife";
+                result.ImageUrl = $"data:{image.ContentType};base64,{base64Image}";
             }
 
             return result ?? new RecipeResponseDto { Title = "Empty Response" };
@@ -79,8 +76,6 @@ public class RecipeService : IRecipeService
         catch (JsonException ex)
         {
             Console.WriteLine($"Raw AI Output: {rawText}");
-            Console.WriteLine($"Failed to parse JSON: {ex.Message}");
-            
             return new RecipeResponseDto { Title = "Parsing Error" };
         }
     }
@@ -108,7 +103,6 @@ public class RecipeService : IRecipeService
             ""reply"": ""A friendly, thematic response from the Chef."",
             ""recipe"": {
                 ""title"": ""string"",
-                ""icon"": ""string (must be a valid mdi- icon name)"",
                 ""ingredients"": [""string"", ""string""],
                 ""instructions"": [""string"", ""string""]
             } 
@@ -125,11 +119,15 @@ public class RecipeService : IRecipeService
         var request = new GenerateContentRequest(fullPrompt, generationConfig);
         var response = await model.GenerateContent(request);
 
+        string rawText = response.Text ?? "";
+        string jsonToParse = CleanJsonResponse(rawText);
+
+        if (string.IsNullOrEmpty(jsonToParse))
+            return new ChefConsultResponseDto { Reply = "The Chef is at a loss for words. Try rephrasing?" };
+
         try 
         {
             var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-            string jsonToParse = response.Text ?? "{ \"reply\": \"The chef is speechless. Try again?\" }";
-
             var result = JsonSerializer.Deserialize<ChefConsultResponseDto>(jsonToParse, options);
 
             return result ?? new ChefConsultResponseDto { Reply = "Chef is a bit confused!" };
@@ -138,5 +136,13 @@ public class RecipeService : IRecipeService
         {
             return new ChefConsultResponseDto { Reply = "The kitchen is a mess right now. Try again?" };
         }
+    }
+
+    internal string CleanJsonResponse(string rawText)
+    {
+        int start = rawText.IndexOf('{');
+        int end = rawText.LastIndexOf('}');
+        if (start == -1 || end == -1) return string.Empty;
+        return rawText.Substring(start, (end - start) + 1);
     }
 }

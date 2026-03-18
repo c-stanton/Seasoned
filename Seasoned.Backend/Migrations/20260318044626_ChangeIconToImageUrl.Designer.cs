@@ -13,8 +13,8 @@ using Seasoned.Backend.Data;
 namespace Seasoned.Backend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260311160009_AddRecipeFields")]
-    partial class AddRecipeFields
+    [Migration("20260318044626_ChangeIconToImageUrl")]
+    partial class ChangeIconToImageUrl
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -234,8 +234,7 @@ namespace Seasoned.Backend.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("Icon")
-                        .IsRequired()
+                    b.Property<string>("ImageUrl")
                         .HasColumnType("text");
 
                     b.PrimitiveCollection<List<string>>("Ingredients")

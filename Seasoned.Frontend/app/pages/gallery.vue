@@ -30,8 +30,15 @@
               class="rounded-sm mb-4 d-flex align-center justify-center"
               style="border: 1px solid #e8e2d6;"
             >
+              <v-img
+                v-if="recipe.imageUrl"
+                :src="recipe.imageUrl"
+                cover
+                class="recipe-thumbnail"
+              ></v-img>
               <v-icon 
-                :icon="getRecipeIcon(recipe)" 
+                v-else
+                icon="mdi-camera-outline" 
                 size="80" 
                 color="#d1c7b7"
               ></v-icon>
@@ -77,6 +84,7 @@
     <v-dialog v-model="showDetails" max-width="800" persistent>
       <v-card v-if="selectedRecipe" class="recipe-card pa-8">
         <v-btn
+          v-if="!isEditing"
           icon="mdi-close"
           variant="text"
           position="absolute"
@@ -100,7 +108,7 @@
         <v-row justify="center" class="px-md-10">
           <v-col cols="12" md="5" class="d-flex flex-column align-center">
             <div style="width: 100%; max-width: 300px;">
-              <h3 class="section-header mb-4">
+              <h3 class="section-header justify-center mb-4">
                 <v-icon icon="mdi-basket-outline" class="mr-2" size="small"></v-icon>
                 Ingredients
               </h3>
@@ -127,7 +135,7 @@
           </v-col>
 
           <v-col cols="12" md="7">
-            <h3 class="section-header mb-4">
+            <h3 class="section-header justify-center mb-4">
               <v-icon icon="mdi-chef-hat" class="mr-2" size="small"></v-icon>
               Instructions
             </h3>
@@ -178,6 +186,45 @@
           </p>
         </footer>
       </v-card>
+      <v-row justify="center" class="mb-4">
+        <v-col cols="12" class="d-flex flex-column align-center">
+          <v-hover v-slot="{ isHovering, props }">
+            <v-card
+              v-bind="props"
+              width="200"
+              height="200"
+              class="rounded-lg d-flex align-center justify-center cursor-pointer position-relative"
+              @click="$refs.fileInput.click()"
+              :elevation="isHovering ? 4 : 1"
+              style="border: 2px dashed #d1c7b7; background: #fcfaf5;"
+            >
+              <v-img
+                v-if="selectedRecipe.imageUrl"
+                :src="selectedRecipe.imageUrl"
+                cover
+                class="rounded-lg"
+              ></v-img>
+              
+              <div 
+                v-if="isEditing && (!selectedRecipe.imageUrl || isHovering)" 
+                class="d-flex flex-column align-center justify-center position-absolute"
+                style="background: rgba(255,255,255,0.7); inset: 0;"
+              >
+                <v-icon icon="mdi-camera-plus" color="#556b2f" size="large"></v-icon>
+                <span class="brand-subtitle" style="font-size: 0.7rem;">Update Photo</span>
+              </div>
+            </v-card>
+          </v-hover>
+          
+          <input
+            type="file"
+            ref="fileInput"
+            accept="image/*"
+            style="display: none"
+            @change="handleImageUpload"
+          />
+        </v-col>
+      </v-row>
     </v-dialog>
   </v-container>
 </template>
@@ -214,6 +261,17 @@ const fetchRecipes = async () => {
   }
 }
  
+const handleImageUpload = (event) => {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    selectedRecipe.value.imageUrl = e.target.result;
+  };
+  reader.readAsDataURL(file);
+ 
+};
 
 const openRecipe = (recipe) => {
   selectedRecipe.value = { ...recipe }
@@ -252,25 +310,31 @@ const closeDetails = () => {
 
 const saveChanges = async () => {
  try {
-    const payload = { ...selectedRecipe.value };
-    if (typeof payload.ingredients === 'string') {
-      payload.ingredients = payload.ingredients.split('\n').filter(i => i.trim());
-    }
-    if (typeof payload.instructions === 'string') {
-      payload.instructions = payload.instructions.split('\n').filter(i => i.trim());
-    }
+    const payload = { 
+      ...selectedRecipe.value,
+      ingredients: typeof selectedRecipe.value.ingredients === 'string' 
+        ? selectedRecipe.value.ingredients.split('\n').filter(i => i.trim()) 
+        : selectedRecipe.value.ingredients,
+      instructions: typeof selectedRecipe.value.instructions === 'string' 
+        ? selectedRecipe.value.instructions.split('\n').filter(i => i.trim()) 
+        : selectedRecipe.value.instructions
+    };
 
-    await $fetch(`${config.public.apiBase}api/recipe/update/${selectedRecipe.value.id}`, {
+    await $fetch(`${config.public.apiBase}api/recipe/update/${payload.id}`, {
       method: 'PUT',
-      credentials: 'include',
-      body: payload
+      body: payload,
+      credentials: 'include'
     });
 
-    await fetchRecipes();
+    const index = recipes.value.findIndex(r => r.id === payload.id);
+    if (index !== -1) {
+      recipes.value[index] = { ...payload };
+    }
+
     closeDetails();
   } catch (e) {
-    console.error("Failed to update recipe:", e);
-    alert("Could not save changes.");
+    console.error("The kitchen ledger could not be updated:", e);
+    alert("Could not save changes. Please try again.");
   }
 }
 

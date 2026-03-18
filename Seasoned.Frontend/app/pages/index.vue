@@ -1,6 +1,6 @@
 <template>
   <v-container fluid class="pa-0 landing-wrapper">
-    <v-row no-gutters justify="center" align="start" class="pt-6">
+    <v-row density="compact" justify="center" align="start" class="pt-6">
       <v-col cols="12" class="text-center px-4">
         
         <v-card class="recipe-card pa-8 mx-auto mt-2" max-width="900">
@@ -29,7 +29,7 @@
               </p>
               <v-spacer></v-spacer>
               <v-btn v-if="isLoggedIn" to="/uploader"  class="mt-12 column-btn">
-                Got to Uploader
+                Go to Uploader
               </v-btn>
             </v-col>
             <v-col cols="12" md="4" class="text-center d-flex flex-column align-center">

@@ -94,16 +94,24 @@
   text-align: center !important;
 }
 
-.v-textarea .v-field__input {
-  font-weight: 500 !important;
-  color: #2c2925 !important;
+.v-textarea .v-field__input, .v-textarea textarea {
+  font-family: 'Libre Baskerville', serif !important;
+  font-size: 1.1rem !important;
   line-height: 1.6 !important;
+  color: #2c2925 !important
 }
 
 .v-field-label {
   color: #5d4037 !important;
   opacity: 0.6 !important;
 }
+
+.v-textarea .v-label,
+.v-textarea .v-field-label {
+  font-family: 'Libre Baskerville', serif !important;
+  font-style: italic;
+}
+
 
 .v-field__outline {
   --v-field-border-opacity: 1 !important;

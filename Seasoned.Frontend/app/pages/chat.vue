@@ -18,6 +18,7 @@
         <v-col cols="12" md="11">
           <div class="chat-container">
             <div class="section-header mb-4 d-flex align-center">
+              <v-spacer></v-spacer>
               <v-icon icon="mdi-chef-hat" class="mr-2" size="small"></v-icon>
               <span>Ask the Chef</span>
               <v-spacer></v-spacer>
@@ -82,8 +83,38 @@ const userQuery = ref('')
 const chatLoading = ref(false)
 const chatMessages = ref([])
 const chatDisplay = ref(null)
+const router = ref(false)
 const saving = ref(false)
 const hasSaved = ref(false)
+
+const isAuthenticated = async () => {
+  try {
+    await $fetch('/api/auth/manage/info', { credentials: 'include' })
+    return true
+  } catch {
+    return false
+  }
+}
+
+const saveToCollection = async () => {
+  if (!recipe.value || hasSaved.value) return
+
+  saving.value = true
+
+  try {
+    await $fetch(`${config.public.apiBase}api/recipe/save`, {
+      method: 'POST',
+      credentials: 'include',
+      body: recipe.value
+    })
+
+    hasSaved.value = true
+  } catch (error) {
+    console.error("Save failed:", error)
+  } finally {
+    saving.value = false
+  }
+}
 
 const askChef = async () => {
   if (!userQuery.value.trim()) return

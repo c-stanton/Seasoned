@@ -35,7 +35,6 @@ public class RecipeController : ControllerBase
         return Ok(result);
     }
 
-    [Authorize]
     [HttpPost("save")]
     public async Task<IActionResult> SaveRecipe([FromBody] RecipeResponseDto recipeDto)
     {
@@ -49,7 +48,7 @@ public class RecipeController : ControllerBase
         var recipe = new Recipe
         {
             Title = recipeDto.Title,
-            Icon = recipeDto.Icon,
+            ImageUrl = recipeDto.ImageUrl,
             Ingredients = recipeDto.Ingredients,
             Instructions = recipeDto.Instructions,
             CreatedAt = DateTime.UtcNow,
@@ -62,7 +61,6 @@ public class RecipeController : ControllerBase
         return Ok(new { message = "Recipe saved to your collection!" });
     }
 
-    [Authorize]
     [HttpPut("update/{id}")]
     public async Task<IActionResult> UpdateRecipe(int id, [FromBody] Recipe updatedRecipe)
     {
@@ -79,15 +77,19 @@ public class RecipeController : ControllerBase
         existingRecipe.Title = updatedRecipe.Title;
         existingRecipe.Ingredients = updatedRecipe.Ingredients;
         existingRecipe.Instructions = updatedRecipe.Instructions;
+        
+        if (!string.IsNullOrEmpty(updatedRecipe.ImageUrl))
+        {
+            existingRecipe.ImageUrl = updatedRecipe.ImageUrl;
+        }
 
         await _context.SaveChangesAsync();
 
         return Ok(new { message = "Recipe updated successfully!" });
     }
 
-    [Authorize]
     [HttpGet("my-collection")]
-    public async Task<ActionResult<IEnumerable<Recipe>>> GetMyRecipes()
+   public async Task<ActionResult<IEnumerable<Recipe>>> GetMyRecipes()
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
         
