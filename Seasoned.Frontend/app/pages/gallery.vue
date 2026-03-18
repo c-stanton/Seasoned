@@ -12,6 +12,27 @@
         <p class="collection-title">Your Recipe Collection</p>
       </header>
 
+      <v-row justify="center" class="mb-6">
+        <v-col cols="12" md="8" lg="6">
+          <v-text-field
+            v-model="searchQuery"
+            placeholder="Search for 'comfort food' or 'smoothie recipe'"
+            variant="outlined"
+            class="search-bar"
+            hide-details
+            clearable
+            @click:clear="fetchRecipes"
+            :loading="isSearching"
+          >
+            <template v-slot:prepend-inner>
+              <v-icon :color="isSearching ? '#556b2f' : '#2e1e0a'">
+                {{ isSearching ? 'mdi-auto-fix' : 'mdi-magnify' }}
+              </v-icon>
+            </template>
+          </v-text-field>
+        </v-col>
+      </v-row>
+
       <v-divider class="mb-10 separator"></v-divider>
 
       <v-row v-if="loading" justify="center" class="py-16">
@@ -223,6 +244,9 @@ const selectedRecipe = ref(null)
 const isEditing = ref(false)
 const originalRecipe = ref(null)
 const config = useRuntimeConfig()
+const searchQuery = ref('')
+const isSearching = ref(false)
+let debounceTimeout = null
 
 onMounted(async () => {
   await fetchRecipes()
@@ -324,5 +348,32 @@ const sortedRecipes = computed(() => {
   return [...recipes.value].sort((a, b) => {
     return new Date(b.createdAt) - new Date(a.createdAt)
   })
+})
+
+const performSearch = async () => {
+  if (!searchQuery.value) {
+    await fetchRecipes()
+    return
+  }
+
+  try {
+    isSearching.value = true
+    const data = await $fetch(`${config.public.apiBase}api/recipe/search`, {
+      params: { query: searchQuery.value },
+      credentials: 'include'
+    })
+    recipes.value = data
+  } catch (err) {
+    console.error("The Chef couldn't find those flavors:", err)
+  } finally {
+    isSearching.value = false
+  }
+}
+
+watch(searchQuery, (newVal) => {
+  clearTimeout(debounceTimeout)
+  debounceTimeout = setTimeout(() => {
+    performSearch()
+  }, 600)
 })
 </script>
