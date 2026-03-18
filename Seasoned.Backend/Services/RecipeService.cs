@@ -30,7 +30,8 @@ public class RecipeService : IRecipeService
         var requestBody = new
         {
             model = "models/gemini-embedding-001",
-            content = new { parts = new[] { new { text = text } } }
+            content = new { parts = new[] { new { text = text } } },
+            outputDimensionality = 768
         };
 
         var response = await client.PostAsJsonAsync(url, requestBody);
