@@ -2,6 +2,7 @@ using Seasoned.Backend.DTOs;
 using Mscc.GenerativeAI;
 using Microsoft.AspNetCore.Http;
 using System.IO;
+using System.Net.Http.Json;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Microsoft.Extensions.Configuration;
@@ -22,16 +23,37 @@ public class RecipeService : IRecipeService
 
     public async Task<Vector> GetEmbeddingAsync(string text)
     {
-        var model = _googleAI.GenerativeModel("gemini-embedding-001");
-        var request = new EmbedContentRequest(text);
-        var response = await model.EmbedContent(request);
-    
-        if (response.Embedding?.Values != null)
+        using var client = new HttpClient();
+        
+        var url = $"https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-001:embedContent?key={_apiKey}";
+
+        var requestBody = new
         {
-            return new Vector(response.Embedding.Values.ToArray());
+            model = "models/gemini-embedding-001",
+            content = new { parts = new[] { new { text = text } } }
+        };
+
+        var response = await client.PostAsJsonAsync(url, requestBody);
+        
+        if (!response.IsSuccessStatusCode)
+        {
+            var error = await response.Content.ReadAsStringAsync();
+            throw new Exception($"Google API Error: {error}");
         }
 
-    throw new Exception("The Chef couldn't extract the meaning from that recipe text.");
+        var result = await response.Content.ReadFromJsonAsync<JsonElement>();
+        
+        if (result.TryGetProperty("embedding", out var embedding) && 
+            embedding.TryGetProperty("values", out var values))
+        {
+            var floatArray = values.EnumerateArray()
+                                .Select(v => v.GetSingle())
+                                .ToArray();
+                                
+            return new Vector(floatArray);
+        }
+
+        throw new Exception("The Chef couldn't find the embeddings in the response.");
     }
 
     public async Task<RecipeResponseDto> ParseRecipeImageAsync(IFormFile image)
