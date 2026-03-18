@@ -4,6 +4,7 @@ WORKDIR /src/frontend
 COPY Seasoned.Frontend/package*.json ./
 RUN npm install
 COPY Seasoned.Frontend/ .
+RUN npm run test
 RUN npx nuxi generate 
 
 # Stage 2: Build the .NET 9 backend (Debian Slim)
@@ -13,6 +14,7 @@ COPY Seasoned.Backend/*.csproj ./Seasoned.Backend/
 RUN dotnet restore ./Seasoned.Backend/Seasoned.Backend.csproj
 COPY . .
 
+RUN dotnet test ./Seasoned.Tests/Seasoned.Tests.csproj --configuration Release --no-restore
 # Copy Nuxt static files into .NET wwwroot
 COPY --from=frontend-build /src/frontend/.output/public ./Seasoned.Backend/wwwroot
 
