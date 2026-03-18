@@ -18,18 +18,19 @@
 
           <v-form @submit.prevent="handleAuth">
             <v-expand-transition>
-              <div v-if="errorMessage" 
-                :class="[
-                  'auth-message', 
-                  errorMessage.includes('created') ? 'auth-success' : 'auth-error'
-                ]"
-              >
-                <v-icon 
-                  :icon="errorMessage.includes('created') ? 'mdi-check-circle-outline' : 'mdi-alert-circle-outline'" 
-                  size="small" 
-                  class="mr-2"
-                ></v-icon>
-                {{ errorMessage }}
+              <div v-if="errorMessage" class="mb-6"> <div 
+                  :class="[
+                    'auth-message', 
+                    errorMessage.includes('created') ? 'auth-success' : 'auth-error'
+                  ]"
+                >
+                  <v-icon 
+                    :icon="errorMessage.includes('created') ? 'mdi-check-circle-outline' : 'mdi-alert-circle-outline'" 
+                    size="small" 
+                    class="mr-2"
+                  ></v-icon>
+                  <span>{{ errorMessage }}</span>
+                </div>
               </div>
             </v-expand-transition>
             
@@ -37,7 +38,7 @@
               autofocus
               v-model="email"
               label="Email Address"
-              class="mb-4 auth-input"
+              class="mb-0 auth-input"
               color="#8c4a32"
               variant="outlined"
               prepend-inner-icon="mdi-email-outline"
@@ -52,7 +53,7 @@
               v-model="password"
               label="Password"
               type="password"
-              class="mb-8 auth-input"
+              class="mb-6 auth-input"
               variant="outlined"
               color="#8c4a32"
               hide-details
@@ -70,7 +71,7 @@
                 v-model="confirmPassword"
                 label="Confirm Password"
                 type="password"
-                class="mb-8 auth-input"
+                class="mb-6 auth-input"
                 variant="outlined"
                 color="#8c4a32"
                 hide-details
