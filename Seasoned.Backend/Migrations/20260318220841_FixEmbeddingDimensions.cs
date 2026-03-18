@@ -9,7 +9,7 @@ using Pgvector;
 namespace Seasoned.Backend.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreateWith768Vector : Migration
+    public partial class FixEmbeddingDimensions : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

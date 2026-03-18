@@ -40,10 +40,8 @@ public class RecipeService : IRecipeService
         {
                 return new RecipeResponseDto { Title = "Error: No image provided" };
         }
-
-        var googleAI = new GoogleAI(_apiKey);
         
-        var model = googleAI.GenerativeModel("gemini-3.1-flash-lite-preview"); 
+        var model = _googleAI.GenerativeModel("gemini-3.1-flash-lite-preview"); 
 
         using var ms = new MemoryStream();
         await image.CopyToAsync(ms);
@@ -100,8 +98,7 @@ public class RecipeService : IRecipeService
 
     public async Task<ChefConsultResponseDto> ConsultChefAsync(string userPrompt)
     {
-        var googleAI = new GoogleAI(_apiKey);
-        var model = googleAI.GenerativeModel("gemini-3.1-flash-lite-preview");
+        var model = _googleAI.GenerativeModel("gemini-3.1-flash-lite-preview");
 
         var systemPrompt = @"You are the 'Seasoned' Head Chef, a master of real-world culinary arts. 
         You operate a professional kitchen and only provide advice that can be used in a real kitchen.

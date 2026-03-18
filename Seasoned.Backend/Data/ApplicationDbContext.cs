@@ -34,7 +34,7 @@ public class ApplicationDbContext : IdentityDbContext<IdentityUser>
             else
             {
                 entity.Property(r => r.Embedding)
-                    .HasColumnType("vector(1536)"); 
+                    .HasColumnType("vector(768)"); 
             }
         });
     }

@@ -14,8 +14,8 @@ using Seasoned.Backend.Data;
 namespace Seasoned.Backend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260318201722_InitialCreateWith768Vector")]
-    partial class InitialCreateWith768Vector
+    [Migration("20260318220841_FixEmbeddingDimensions")]
+    partial class FixEmbeddingDimensions
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
