@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
+using Pgvector;
 using Seasoned.Backend.Data;
 
 #nullable disable
@@ -13,8 +14,8 @@ using Seasoned.Backend.Data;
 namespace Seasoned.Backend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260318044626_ChangeIconToImageUrl")]
-    partial class ChangeIconToImageUrl
+    [Migration("20260318201722_InitialCreateWith768Vector")]
+    partial class InitialCreateWith768Vector
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -233,6 +234,9 @@ namespace Seasoned.Backend.Migrations
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<Vector>("Embedding")
+                        .HasColumnType("vector(768)");
 
                     b.Property<string>("ImageUrl")
                         .HasColumnType("text");

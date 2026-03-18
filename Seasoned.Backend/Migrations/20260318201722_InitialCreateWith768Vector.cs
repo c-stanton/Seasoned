@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
+using Pgvector;
 
 #nullable disable
 
 namespace Seasoned.Backend.Migrations
 {
     /// <inheritdoc />
-    public partial class ChangeIconToImageUrl : Migration
+    public partial class InitialCreateWith768Vector : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -172,7 +173,8 @@ namespace Seasoned.Backend.Migrations
                     Ingredients = table.Column<List<string>>(type: "text[]", nullable: false),
                     Instructions = table.Column<List<string>>(type: "text[]", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UserId = table.Column<string>(type: "text", nullable: true)
+                    UserId = table.Column<string>(type: "text", nullable: true),
+                    Embedding = table.Column<Vector>(type: "vector(768)", nullable: true)
                 },
                 constraints: table =>
                 {

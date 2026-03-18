@@ -1,3 +1,6 @@
+using Pgvector;
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace Seasoned.Backend.Models;
 
 public class Recipe {
@@ -8,4 +11,7 @@ public class Recipe {
     public List<string> Instructions { get; set; } = new();
     public DateTime CreatedAt { get; set; }
     public string? UserId { get; set; } 
+
+    [Column(TypeName = "vector(768)")]
+    public Vector? Embedding { get; set; }
 }

@@ -5,16 +5,33 @@ using System.IO;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Microsoft.Extensions.Configuration;
+using Pgvector;
 
 namespace Seasoned.Backend.Services;
 
 public class RecipeService : IRecipeService
 {
     private readonly string _apiKey;
+    private readonly GoogleAI _googleAI;
 
     public RecipeService(IConfiguration config)
     {
         _apiKey = config["GEMINI_API_KEY"] ?? throw new ArgumentNullException("API Key missing");
+        _googleAI = new GoogleAI(_apiKey);
+    }
+
+    public async Task<Vector> GetEmbeddingAsync(string text)
+    {
+        var model = _googleAI.GenerativeModel("text-embedding-004");
+        
+        var response = await model.EmbedContent(text);
+    
+        if (response.Embedding?.Values != null)
+        {
+            return new Vector(response.Embedding.Values.ToArray());
+        }
+
+    throw new Exception("The Chef couldn't extract the meaning from that recipe text.");
     }
 
     public async Task<RecipeResponseDto> ParseRecipeImageAsync(IFormFile image)
@@ -75,6 +92,7 @@ public class RecipeService : IRecipeService
         }
         catch (JsonException ex)
         {
+            Console.WriteLine($"Chef's Error: JSON Parsing failed. Message: {ex.Message}");
             Console.WriteLine($"Raw AI Output: {rawText}");
             return new RecipeResponseDto { Title = "Parsing Error" };
         }
@@ -145,4 +163,5 @@ public class RecipeService : IRecipeService
         if (start == -1 || end == -1) return string.Empty;
         return rawText.Substring(start, (end - start) + 1);
     }
+    
 }

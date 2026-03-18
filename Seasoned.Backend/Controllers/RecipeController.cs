@@ -6,6 +6,8 @@ using System.Security.Claims;
 using Seasoned.Backend.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
+using Pgvector;
+using Pgvector.EntityFrameworkCore;
 
 namespace Seasoned.Backend.Controllers;
 
@@ -54,6 +56,9 @@ public class RecipeController : ControllerBase
             CreatedAt = DateTime.UtcNow,
             UserId = userId
         };
+
+        var fullText = $"{recipeDto.Title} {string.Join(" ", recipeDto.Ingredients)} {string.Join(" ", recipeDto.Instructions)}";
+        recipe.Embedding = await _recipeService.GetEmbeddingAsync(fullText);
 
         _context.Recipes.Add(recipe);
         await _context.SaveChangesAsync();
@@ -109,5 +114,24 @@ public class RecipeController : ControllerBase
 
         var result = await _recipeService.ConsultChefAsync(request.Prompt);
         return Ok(result);
+    }
+
+    [HttpGet("search")]
+    public async Task<ActionResult<IEnumerable<Recipe>>> SearchRecipes([FromQuery] string query)
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        
+        if (string.IsNullOrWhiteSpace(query))
+            return await GetMyRecipes();
+            
+        var queryVector = await _recipeService.GetEmbeddingAsync(query);
+
+        var results = await _context.Recipes
+            .Where(r => r.UserId == userId)
+            .OrderBy(r => r.Embedding!.CosineDistance(queryVector))
+            .Take(15)
+            .ToListAsync();
+
+        return Ok(results);
     }
 }
