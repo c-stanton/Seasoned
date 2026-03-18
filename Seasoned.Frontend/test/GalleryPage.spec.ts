@@ -1,6 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { mount } from '@vue/test-utils'
+import { nextTick } from 'vue'
 import { createVuetify } from 'vuetify'
+import { flushPromises } from '@vue/test-utils'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
 import GalleryPage from "@/pages/gallery.vue" 
@@ -37,6 +39,7 @@ vi.stubGlobal('navigateTo', mockNavigate)
 describe('GalleryPage.vue', () => {
   beforeEach(() => {
     vi.clearAllMocks()
+    mockFetch.mockResolvedValue([])
   })
 
   const mountOptions = {
@@ -57,6 +60,46 @@ describe('GalleryPage.vue', () => {
       expect(wrapper.text()).toContain('Bolognese')
     })
   })
+
+  it('triggers semantic search when searchQuery changes', async () => {
+    vi.useFakeTimers()
+    mockFetch.mockResolvedValue([])
+
+    const wrapper = mount(GalleryPage, mountOptions)
+    
+    const vm = wrapper.vm as any
+    vm.searchQuery = 'spicy pasta'
+
+    await nextTick()
+    
+    vi.advanceTimersByTime(600)
+    
+    mockFetch.mockResolvedValueOnce([{ id: 2, title: 'Spicy Pasta' }])
+
+    await flushPromises()
+
+    expect(mockFetch).toHaveBeenCalledWith(
+        expect.stringContaining('api/recipe/search'),
+        expect.objectContaining({ 
+        params: expect.objectContaining({ query: 'spicy pasta' }) 
+        })
+    )
+
+    vi.useRealTimers()
+    })
+
+  it('redirects to login if API returns 401', async () => {
+    mockFetch.mockReset()
+    mockFetch.mockRejectedValue({ status: 401 })
+
+    mount(GalleryPage, mountOptions)
+
+    await flushPromises()
+
+    await vi.waitFor(() => {
+        expect(mockNavigate).toHaveBeenCalledWith('/login')
+    }, { timeout: 1000 })
+    })
 
   it('enters editing mode and formats arrays into strings', async () => {
     mockFetch.mockResolvedValueOnce([

@@ -16,11 +16,26 @@ public class ApplicationDbContext : IdentityDbContext<IdentityUser>
     {
         base.OnModelCreating(modelBuilder);
 
-        modelBuilder.HasPostgresExtension("vector");
+        if (Database.IsNpgsql())
+        {
+            modelBuilder.HasPostgresExtension("vector");
+        }
 
-        modelBuilder.Entity<Recipe>()
-            .HasOne<IdentityUser>()
-            .WithMany()
-            .HasForeignKey(r => r.UserId);
+        modelBuilder.Entity<Recipe>(entity =>
+        {
+            entity.HasOne<IdentityUser>()
+                .WithMany()
+                .HasForeignKey(r => r.UserId);
+
+            if (Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory")
+            {
+                entity.Ignore(r => r.Embedding);
+            }
+            else
+            {
+                entity.Property(r => r.Embedding)
+                    .HasColumnType("vector(1536)"); 
+            }
+        });
     }
 }

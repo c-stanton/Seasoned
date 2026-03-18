@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { mount } from '@vue/test-utils'
 import { createVuetify } from 'vuetify'
+import { createRouter, createWebHistory } from 'vue-router'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
 import Uploader from "@/pages/uploader.vue"
@@ -21,6 +22,11 @@ vi.stubGlobal('useRouter', () => mockRouter)
 const mockFetch = vi.fn()
 vi.stubGlobal('$fetch', mockFetch)
 
+const router = createRouter({
+  history: createWebHistory(),
+  routes: [],
+})
+
 describe('Uploader.vue', () => {
   beforeEach(() => {
     vi.clearAllMocks()
@@ -28,7 +34,7 @@ describe('Uploader.vue', () => {
 
   const mountOptions = {
     global: { 
-      plugins: [vuetify],
+      plugins: [vuetify, router],
       stubs: { RecipeDisplay: true }, 
       provide: { 'router': mockRouter } 
     }
@@ -71,4 +77,5 @@ describe('Uploader.vue', () => {
     expect(vm.recipe.title).toBe('Restored Cake')
     expect(localStorage.getItem('pending_recipe')).toBeNull()
   })
+  
 })
