@@ -31,7 +31,7 @@ html, body {
 
 .recipe-title {
   font-family: 'Libre Baskerville', serif;
-  font-size: 1.4rem;
+  font-size: 1.5rem;
   color: #1e1408;
 }
 
@@ -581,7 +581,7 @@ html, body {
 .typing .dot {
   width: 6px;
   height: 6px;
-  background-color: #556b2f;
+  background-color: #e8dec5;
   border-radius: 50%;
   opacity: 0.4;
   animation: typing-bounce 1.4s infinite ease-in-out both;
@@ -614,8 +614,8 @@ html, body {
 }
 
 .chat-display .message.assistant {
-  background-color: #fcf8ef !important; 
-  color: #2e1e0a !important;
+  background-color: #5d4a36 !important; 
+  color: #f4e4bc !important;
   align-self: flex-start;
   border-radius: 12px 12px 12px 2px;
   border: 1px solid #e8dec5 !important;
