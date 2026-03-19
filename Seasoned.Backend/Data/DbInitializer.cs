@@ -12,7 +12,7 @@ namespace Seasoned.Backend.Data
 
             if (context.Recipes.Any()) return;
 
-            string testUserId = "0c55c0ed-8080-482d-8ebd-1054cdc3b672";
+            string testUserId = "bfc4c4b1-d3b7-4642-a87c-f7186fcd775d";
 
             var dummyEmbedding = new Vector(new float[768]);
 
