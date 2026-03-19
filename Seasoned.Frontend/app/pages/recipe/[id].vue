@@ -11,7 +11,7 @@
 const route = useRoute();
 const config = useRuntimeConfig();
 
-const { data: recipe, error } = await useAsyncData(`recipe-${route.params.id}`, () => {
+const { data: rawRecipe, error } = await useAsyncData(`recipe-${route.params.id}`, () => {
   const baseUrl = config.public.apiBase.endsWith('/') 
     ? config.public.apiBase 
     : `${config.public.apiBase}/`;
@@ -37,11 +37,10 @@ if (error.value || !recipe.value) {
 }
 
 useSeoMeta({
-  title: `${recipe.value.title} | Seasoned`,
-  ogTitle: `Chef's Choice: ${recipe.value.title}`,
-  description: `Check out this delicious recipe for ${recipe.value.title} on Seasoned.`,
-  ogDescription: `A hand-crafted parchment recipe for ${recipe.value.title}.`,
-  ogImage: recipe.value.imageUrl || '/images/seasoned-logo.png',
+  title: `${normalizedRecipe.value.title} | Seasoned`,
+  ogTitle: `Chef's Choice: ${normalizedRecipe.value.title}`,
+  description: `Check out this delicious recipe for ${normalizedRecipe.value.title} on Seasoned.`,
+  ogImage: normalizedRecipe.value.imageUrl || '/images/seasoned-logo.png',
   twitterCard: 'summary_large_image',
   ogType: 'article',
 })
