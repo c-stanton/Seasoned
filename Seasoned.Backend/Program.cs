@@ -59,6 +59,10 @@ using (var scope = app.Services.CreateScope())
         {
             db.Database.Migrate();
         }
+
+        DbInitializer.Initialize(db); 
+        
+        Console.WriteLine("--> Database Seeded Successfully!");
     }
     catch (Exception ex)
     {
