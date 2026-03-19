@@ -70,6 +70,25 @@
             Saved in Archives
           </template>
         </v-btn>
+
+        <v-btn
+          class="px-12 transition-swing"
+          size="large"
+          elevation="0"
+          :color="hasShared ? '#556b2f' : '#5d4a36'"
+          :class="hasShared ? 'share-success-btn' : 'share-btn'"
+          @click="shareRecipe"
+        >
+          <template v-if="!hasShared">
+            <v-icon icon="mdi-share-variant-outline" class="mr-2"></v-icon>
+            Share Recipe
+          </template>
+          
+          <template v-else>
+            <v-icon icon="mdi-content-save-check-outline" class="mr-2"></v-icon>
+            Link Copied!
+          </template>
+        </v-btn>
       </v-row>
     </div>
   </transition>
@@ -78,8 +97,9 @@
 <script setup>
 import { ref } from 'vue'
 import '@/assets/css/app-theme.css'
+const hasShared =ref(false)
 
-defineProps({
+const props = defineProps({
   recipe: { type: Object, default: null },
   isSaving: { type: Boolean, default: false },
   hasSaved: { type: Boolean, default: false }
@@ -91,5 +111,30 @@ const printRecipe = () => {
   window.print()
 }
 
+const shareRecipe = async () => {
+  const shareData = {
+    title: props.recipe.title,
+    text: `Check out this delicious ${props.recipe.title} recipe!`,
+    url: window.location.href
+  }
 
+  try {
+    if (navigator.share) {
+      await navigator.share(shareData)
+      triggerShareSuccess()
+    } else {
+      await navigator.clipboard.writeText(window.location.href)
+      triggerShareSuccess()
+    }
+  } catch (err) {
+    console.error('Error sharing:', err)
+  }
+}
+
+const triggerShareSuccess = () => {
+  hasShared.value = true
+  setTimeout(() => {
+    hasShared.value = false
+  }, 3000)
+}
 </script>

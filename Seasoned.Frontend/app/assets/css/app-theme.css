@@ -227,7 +227,7 @@ html, body {
 }
 
 .save-recipe-btn:hover {
-  background-color: #3b4e1e !important;
+  background-color: #8c4a32 !important;
   color: #f4e4bc !important;
   text-shadow: none !important;
   border-radius: 4px;
@@ -262,6 +262,31 @@ html, body {
   border-radius: 4px;
 }
 
+.share-btn {
+  background-color: #8c4a32 !important;
+  font-family: 'Libre Baskerville', serif !important;
+  color: #f4e4bc !important;
+  text-transform: none !important;
+  letter-spacing: 0;
+  border-radius: 8px !important;
+}
+
+.share-btn:hover {
+  background-color: #3b4e1e !important;
+  color: #f4e4bc !important;
+  text-shadow: none !important;
+  border-radius: 4px;
+}
+
+.share-success-btn {
+  opacity: 1 !important;
+  color: #f4e4bc !important;
+  font-family: 'Libre Baskerville', serif !important;
+  text-transform: none !important;
+  letter-spacing: 0;
+  border-radius: 8px !important;
+}
+
 @media print {
   @page {
     margin: 0 !important;
@@ -283,7 +308,7 @@ html, body {
   .chat-container, .v-app-bar, .no-print, .separator, .v-divider, 
   .recipe-description, button, .v-btn, .drop-zone, .v-card-actions,
   .v-btn--variant-text, .v-btn--variant-elevated,
-  footer, .v-footer, .recipe-actions-row {
+  footer, .v-footer, .recipe-actions-row, .share-btn {
     display: none !important;
     visibility: hidden !important;
     opacity: 0 !important;
