@@ -147,14 +147,6 @@ const saveToCollection = async () => {
     saving.value = false;
     localStorage.setItem('pending_recipe', JSON.stringify(recipe.value))
     
-    snackbar.value = {
-      show: true,
-      message: 'Please sign in to preserve this recipe in your archives.',
-      color: '#efe5e3',
-      icon: 'mdi-account-key',
-      iconColor: '#8c4a32',
-      textColor: '#5d4037'
-    };
 
     setTimeout(() => {
       router.push('/login')
@@ -163,44 +155,24 @@ const saveToCollection = async () => {
   }
 
   try {
-    await $fetch(`${config.public.apiBase}api/recipe/save`, {
+    const response = await $fetch(`${config.public.apiBase}api/recipe/save`, {
       method: 'POST',
       credentials: 'include',
       body: recipe.value
     });
 
+    if (response && response.id) {
+      recipe.value.id = response.id
+    }
+
     hasSaved.value = true;
-    snackbar.value = {
-      show: true,
-      message: 'Recipe added to your collection.',
-      color: '#f4ede1',
-      icon: 'mdi-check-decagram',
-      iconColor: '#556b2f',
-      textColor: '#5d4037'
-    };
+
   } catch (error) {
     console.error("Save failed:", error);
-    snackbar.value = {
-      show: true,
-      message: 'Failure to save recipe.',
-      color: '#f8d7da',
-      icon: 'mdi-alert-rhombus',
-      iconColor: '#8c4a32',
-      textColor: '#5d4037'
-    };
   } finally {
     saving.value = false;
   }
 }
-
-const snackbar = ref({
-  show: false,
-  message: '',
-  color: '#f4ede1',
-  icon: 'mdi-check-decagram',
-  iconColor: '#556b2f',
-  textColor: '#5d4037'
-})
 
 const clearAll = () => {
   files.value = null

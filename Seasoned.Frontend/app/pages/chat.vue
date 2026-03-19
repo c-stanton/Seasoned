@@ -102,11 +102,15 @@ const saveToCollection = async () => {
   saving.value = true
 
   try {
-    await $fetch(`${config.public.apiBase}api/recipe/save`, {
+    const response = await $fetch(`${config.public.apiBase}api/recipe/save`, {
       method: 'POST',
       credentials: 'include',
       body: recipe.value
     })
+
+    if (response && response.id) {
+      recipe.value.id = response.id
+    }
 
     hasSaved.value = true
   } catch (error) {
