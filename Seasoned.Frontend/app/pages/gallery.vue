@@ -241,7 +241,7 @@ import { ref, onMounted, computed, watch } from 'vue'
 import '@/assets/css/gallery.css'
 import '@/assets/css/app-theme.css'
 
-const mockRecipes = [
+/*const mockRecipes = [
   {
     id: 1,
     title: "Miso-Glazed Smashed Burger",
@@ -307,11 +307,11 @@ const mockRecipes = [
     createdAt: "2026-03-11T07:45:00Z"
   }
 ]
-
-//const recipes = ref([])
-const recipes = ref(mockRecipes)
-const loading = ref(false)
-//const loading = ref(true)
+*/
+const recipes = ref([])
+//const recipes = ref(mockRecipes)
+//const loading = ref(false)
+const loading = ref(true)
 const showDetails = ref(false)
 const selectedRecipe = ref(null)
 const isEditing = ref(false)
@@ -322,8 +322,8 @@ const isSearching = ref(false)
 let debounceTimeout = null
 
 onMounted(async () => {
-  //await fetchRecipes()
-  loading.value = false
+  await fetchRecipes()
+  //loading.value = false
 })
 
 const fetchRecipes = async () => {
