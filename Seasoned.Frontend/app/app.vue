@@ -43,6 +43,7 @@
 
     <v-main>
       <NuxtPage />
+      <SessionTimeout />
     </v-main>
   </v-app>
 </template>
@@ -50,6 +51,7 @@
 <script setup>
 import { onMounted } from 'vue'
 import '@/assets/css/app-theme.css'
+import SessionTimeout from './components/SessionTimeout.vue'
 const authCookie = useCookie('.AspNetCore.Identity.Application')
 const isLoggedIn = useState('isLoggedIn', () => false)
 

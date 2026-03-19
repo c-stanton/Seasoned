@@ -127,6 +127,8 @@ const errorMessage = ref('')
 const authLoading = ref(false)
 const config = useRuntimeConfig()
 
+const isLoggedIn = useState('isLoggedIn', () => false)
+
 const toggleMode = () => {
   isLogin.value = !isLogin.value
   errorMessage.value = ''
@@ -144,7 +146,7 @@ const handleAuth = async () => {
   const endpoint = isLogin.value ? 'api/auth/login' : 'api/auth/register'
   
   const url = isLogin.value 
-    ? `${config.public.apiBase}${endpoint}?useCookies=true` 
+    ? `${config.public.apiBase}${endpoint}?useCookies=true&useSessionCookies=false` 
     : `${config.public.apiBase}${endpoint}`
 
   try {
@@ -153,28 +155,31 @@ const handleAuth = async () => {
       body: {
         email: email.value,
         password: password.value
-      }
+      },
+      credentials: 'include' 
     })
 
     if (isLogin.value) {
-      const isLoggedIn = useState('isLoggedIn')
       isLoggedIn.value = true
       navigateTo('/')
     } else {
       isLogin.value = true
       authLoading.value = false
       errorMessage.value = "Account created! Please sign in."
+      password.value = ''
+      confirmPassword.value = ''
     }
   } catch (err) {
     authLoading.value = false
     if (err.status === 401) {
       errorMessage.value = "Invalid email or password. Please try again."
+    } else if (err.status === 400) {
+      errorMessage.value = "Registration failed. Check your password length."
     } else if (err.status === 404) {
       errorMessage.value = "Account not found. Would you like to register?"
     } else {
-      errorMessage.value = "Something went wrong. Please check your connection."
+      errorMessage.value = "Something went wrong."
     }
-    
     console.error('Auth error:', err)
   }
 }
