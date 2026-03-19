@@ -41,7 +41,7 @@
 
       <v-row justify="center" class="mt-12 pb-10">
         <v-btn
-          class="print-btn px-12"
+          class="px=8 print-btn"
           size="large"
           elevation="0"
           @click="printRecipe"
@@ -51,7 +51,7 @@
         </v-btn>
 
         <v-btn
-          class="px-12 transition-swing"
+          class="px-8 transition-swing"
           size="large"
           elevation="0"
           :loading="isSaving"
@@ -72,7 +72,7 @@
         </v-btn>
 
         <v-btn
-          class="px-12 transition-swing"
+          class="px-8 transition-swing"
           size="large"
           elevation="0"
           :color="hasShared ? '#556b2f' : '#5d4a36'"
@@ -90,6 +90,24 @@
           </template>
         </v-btn>
       </v-row>
+      <v-fade-transition>
+        <div v-if="isPublicView" class="public-cta-container mt-16 text-center pa-8">
+          <v-divider class="mb-8 separator"></v-divider>
+          <h3 class="cta-title mb-4">Enjoyed this recipe?</h3>
+          <p class="cta-text mb-6">
+            Join <strong>Seasoned</strong> to scan your own family recipes, 
+            consult with the Chef, and build your digital archive.
+          </p>
+          <v-btn 
+            to="/login" 
+            class="auth-btn px-10" 
+            size="large"
+            elevation="4"
+          >
+            Start Your Collection
+          </v-btn>
+        </div>
+      </v-fade-transition>
     </div>
   </transition>
 </template>
@@ -112,10 +130,14 @@ const printRecipe = () => {
 }
 
 const shareRecipe = async () => {
+  const shareUrl = props.recipe.id 
+      ? `${window.location.origin}/recipe/${props.recipe.id}` 
+      : window.location.href;
+
   const shareData = {
     title: props.recipe.title,
-    text: `Check out this delicious ${props.recipe.title} recipe!`,
-    url: window.location.href
+    text: `Check out this delicious ${props.recipe.title} recipe on Seasoned!`,
+    url: shareUrl
   }
 
   try {
@@ -123,7 +145,7 @@ const shareRecipe = async () => {
       await navigator.share(shareData)
       triggerShareSuccess()
     } else {
-      await navigator.clipboard.writeText(window.location.href)
+      await navigator.clipboard.writeText(shareUrl)
       triggerShareSuccess()
     }
   } catch (err) {

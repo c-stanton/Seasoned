@@ -63,7 +63,23 @@ public class RecipeController : ControllerBase
         _context.Recipes.Add(recipe);
         await _context.SaveChangesAsync();
 
-        return Ok(new { message = "Recipe saved to your collection!" });
+        return Ok(new {id = recipe.Id, message = "Recipe saved to your collection!" });
+    }
+
+    [HttpGet("{id}")]
+    [AllowAnonymous]
+    public async Task<ActionResult<Recipe>> GetRecipe(int id)
+    {
+        var recipe = await _context.Recipes
+            .AsNoTracking()
+            .FirstOrDefaultAsync(r => r.Id == id);
+
+        if (recipe == null)
+        {
+            return NotFound("That recipe seems to have vanished from the archives.");
+        }
+
+        return Ok(recipe);
     }
 
     [HttpPut("update/{id}")]
@@ -123,7 +139,7 @@ public class RecipeController : ControllerBase
     public async Task<ActionResult<IEnumerable<Recipe>>> SearchRecipes([FromQuery] string query)
     {
         Console.WriteLine($"--> Search hit! Query: {query}");
-        
+
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
         
         if (string.IsNullOrWhiteSpace(query))

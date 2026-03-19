@@ -287,6 +287,25 @@ html, body {
   border-radius: 8px !important;
 }
 
+.public-cta-container {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 16px;
+  border: 1px dashed #dccca7;
+}
+
+.cta-title {
+  font-family: 'Libre Baskerville', serif !important;
+  color: #2e1e0a;
+  font-size: 1.8rem;
+}
+
+.cta-text {
+  font-family: 'Libre Baskerville', serif !important;
+  color: #5d4a36;
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
 @media print {
   @page {
     margin: 0 !important;
@@ -308,7 +327,7 @@ html, body {
   .chat-container, .v-app-bar, .no-print, .separator, .v-divider, 
   .recipe-description, button, .v-btn, .drop-zone, .v-card-actions,
   .v-btn--variant-text, .v-btn--variant-elevated,
-  footer, .v-footer, .recipe-actions-row, .share-btn {
+  footer, .v-footer, .recipe-actions-row, .share-btn, .public-cta-container {
     display: none !important;
     visibility: hidden !important;
     opacity: 0 !important;
