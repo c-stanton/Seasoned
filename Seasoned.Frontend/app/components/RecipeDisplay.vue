@@ -91,28 +91,5 @@ const printRecipe = () => {
   window.print()
 }
 
-// mock output
-/*const recipe = ref({
-  title: "Bakery-Style Lemon Blueberry Muffins",
-  ingredients: [
-    "2 cups all-purpose flour",
-    "1/2 cup granulated sugar",
-    "2 tsp baking powder",
-    "1/2 tsp salt",
-    "1/2 cup unsalted butter, melted",
-    "2 large eggs",
-    "1/2 cup whole milk",
-    "1 tbsp fresh lemon zest",
-    "2 tbsp fresh lemon juice",
-    "1 1/2 cups fresh blueberries"
-  ],
-  instructions: [
-    "Preheat your oven to 375°F (190°C) and line a muffin tin with paper liners.",
-    "In a large bowl, whisk together the flour, sugar, baking powder, and salt.",
-    "In a separate bowl, whisk the melted butter, eggs, milk, lemon zest, and lemon juice.",
-    "Pour the wet ingredients into the dry and stir gently until just combined; do not overmix or the muffins will be tough.",
-    "Toss the blueberries in a teaspoon of flour, then gently fold them into the batter.",
-    "Divide the batter evenly into the muffin cups and bake for 18-20 minutes until golden."
-  ]
-}) */
+
 </script>

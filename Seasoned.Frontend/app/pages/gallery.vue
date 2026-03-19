@@ -122,10 +122,14 @@
                 width="160"
                 height="160"
                 :class="[
-                  'rounded-lg d-flex align-center justify-center cursor-pointer position-relative overflow-hidden',
-                  { 'image-drop-zone': isEditing }
+                  'rounded-lg d-flex align-center justify-center position-relative overflow-hidden',
+                  { 
+                    'image-drop-zone': isEditing, 
+                    'cursor-pointer': isEditing
+                  }
                 ]"
-                @click="isEditing ? $refs.fileInput.click() : null"
+                :style="{ pointerEvents: isEditing ? 'auto' : 'none' }"
+                @click="isEditing ? $refs.fileInput.click() : null" 
                 :elevation="isHovering && isEditing ? 4 : 1"
               >
                 <v-img
@@ -163,10 +167,10 @@
 
         <v-divider class="mb-8 separator"></v-divider>
 
-        <v-row class="px-md-4">
-          <v-col cols="12" md="5">
-            <h3 class="section-header mb-4">
-              <v-icon icon="mdi-basket-outline" class="mr-2" size="small"></v-icon>
+        <v-row class="mt-10" density="compact">
+          <v-col cols="12" md="5" class="pe-md-10">
+            <h3 class="section-header justify-center mb-6">
+              <v-icon icon="mdi-spoon-sugar" class="mr-2" size="small"></v-icon>
               Ingredients
             </h3>
             
@@ -182,20 +186,20 @@
               :persistent-placeholder="true"
             ></v-textarea>
             
-            <v-list v-else class="ingredients-list bg-transparent">
-              <v-list-item 
+            <div v-else class="ingredients-container">
+              <div 
                 v-for="(ing, index) in (Array.isArray(selectedRecipe.ingredients) ? selectedRecipe.ingredients : selectedRecipe.ingredients?.split('\n') || [])" 
                 :key="index"
-                class="ingredient-item px-0"
+                class="ingredient-item"
               >
-                • {{ ing }}
-              </v-list-item>
-            </v-list>
+                {{ ing }}
+              </div>
+            </div>
           </v-col>
 
-          <v-col cols="12" md="7">
-            <h3 class="section-header mb-4">
-              <v-icon icon="mdi-chef-hat" class="mr-2" size="small"></v-icon>
+          <v-col cols="12" md="7" class="ps-md-10">
+            <h3 class="section-header justify-center mb-6">
+              <v-icon icon="mdi-pot-steam-outline" class="mr-2" size="small"></v-icon>
               Instructions
             </h3>
 
@@ -214,10 +218,10 @@
             <div v-else
               v-for="(step, index) in (Array.isArray(selectedRecipe.instructions) ? selectedRecipe.instructions : selectedRecipe.instructions?.split('\n') || [])"
               :key="index"
-              class="instruction-step mb-4"
+              class="instruction-step mb-8"
             >
-              <span class="step-number">{{ index + 1 }}</span>
-              <p>{{ step }}</p>
+              <span class="step-number">{{ index + 1 }}.</span>
+              <p class="step-text">{{ step }}</p>
             </div>
           </v-col>
         </v-row>
@@ -237,8 +241,77 @@ import { ref, onMounted, computed, watch } from 'vue'
 import '@/assets/css/gallery.css'
 import '@/assets/css/app-theme.css'
 
-const recipes = ref([])
-const loading = ref(true)
+const mockRecipes = [
+  {
+    id: 1,
+    title: "Miso-Glazed Smashed Burger",
+    imageUrl: "https://picsum.photos/id/42/800/600",
+    ingredients: ["1/2 lb Ground Beef", "1 tbsp White Miso", "Brioche Bun", "Pickled Ginger"],
+    instructions: ["Mix miso into beef.", "Smash thin on high heat.", "Sear until crispy."],
+    createdAt: "2026-03-18T10:00:00Z"
+  },
+  {
+    id: 2,
+    title: "Zesty Yuzu Raspberry Bowl",
+    imageUrl: "https://picsum.photos/id/429/800/600",
+    ingredients: ["1 cup Oats", "2 tbsp Yuzu Juice", "Fresh Raspberries", "Honey"],
+    instructions: ["Soak oats overnight.", "Stir in yuzu.", "Top with berries."],
+    createdAt: "2026-03-17T08:30:00Z"
+  },
+  {
+    id: 3,
+    title: "Caribbean Curry Chickpeas",
+    imageUrl: "https://picsum.photos/id/493/800/600",
+    ingredients: ["1 can Chickpeas", "Coconut Milk", "Curry Powder", "Sweet Potato"],
+    instructions: ["Sauté potatoes.", "Add chickpeas and spices.", "Simmer in coconut milk."],
+    createdAt: "2026-03-16T12:45:00Z"
+  },
+  {
+    id: 4,
+    title: "Tallow-Crisped Truffle Fries",
+    imageUrl: "https://picsum.photos/id/517/800/600",
+    ingredients: ["Russet Potatoes", "Beef Tallow", "Truffle Salt", "Parsley"],
+    instructions: ["Double fry in tallow.", "Toss with truffle salt.", "Garnish with parsley."],
+    createdAt: "2026-03-15T16:20:00Z"
+  },
+  {
+    id: 5,
+    title: "Smoked Gouda & Broccolini Soup",
+    imageUrl: "https://picsum.photos/id/488/800/600",
+    ingredients: ["Broccolini", "Smoked Gouda", "Heavy Cream", "Vegetable Broth"],
+    instructions: ["Simmer broccolini in broth.", "Blend until smooth.", "Melt in cheese."],
+    createdAt: "2026-03-14T11:10:00Z"
+  },
+  {
+    id: 6,
+    title: "Heirloom Tomato Galette",
+    imageUrl: "https://picsum.photos/id/447/800/600",
+    ingredients: ["Puff Pastry", "Heirloom Tomatoes", "Ricotta", "Thyme"],
+    instructions: ["Spread ricotta on pastry.", "Layer tomatoes.", "Bake at 200°C until golden."],
+    createdAt: "2026-03-13T09:00:00Z"
+  },
+  {
+    id: 7,
+    title: "Thai Basil Pesto Pasta",
+    imageUrl: "https://picsum.photos/id/102/800/600",
+    ingredients: ["Linguine", "Thai Basil", "Cashews", "Garlic", "Chili Flakes"],
+    instructions: ["Blend basil, cashews, and garlic.", "Toss with hot pasta.", "Add chili for heat."],
+    createdAt: "2026-03-12T19:30:00Z"
+  },
+  {
+    id: 8,
+    title: "Whipped Feta & Hot Honey Toast",
+    imageUrl: "https://picsum.photos/id/311/800/600",
+    ingredients: ["Sourdough", "Feta Cheese", "Greek Yogurt", "Hot Honey"],
+    instructions: ["Whip feta and yogurt.", "Toast sourdough.", "Spread and drizzle honey."],
+    createdAt: "2026-03-11T07:45:00Z"
+  }
+]
+
+//const recipes = ref([])
+const recipes = ref(mockRecipes)
+const loading = ref(false)
+//const loading = ref(true)
 const showDetails = ref(false)
 const selectedRecipe = ref(null)
 const isEditing = ref(false)
@@ -249,7 +322,8 @@ const isSearching = ref(false)
 let debounceTimeout = null
 
 onMounted(async () => {
-  await fetchRecipes()
+  //await fetchRecipes()
+  loading.value = false
 })
 
 const fetchRecipes = async () => {
@@ -376,4 +450,6 @@ watch(searchQuery, (newVal) => {
     performSearch()
   }, 600)
 })
+
+
 </script>
