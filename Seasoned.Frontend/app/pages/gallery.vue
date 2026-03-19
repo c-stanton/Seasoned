@@ -43,7 +43,7 @@
       </v-row>
 
       <v-row v-else-if="recipes?.length">
-        <v-col v-for="recipe in sortedRecipes" :key="recipe.id" cols="12" sm="6" md="4">
+        <v-col v-for="recipe in (searchQuery ? recipes : sortedRecipes)" :key="recipe.id" cols="12" sm="6" md="4">
           <v-card class="gallery-item-card pa-4">
             <v-sheet
               height="200"
@@ -53,7 +53,7 @@
             >
               <v-img
                 v-if="recipe.imageUrl"
-                :src="recipe.imageUrl"
+                :src="recipe.imageUrl.startsWith('http') ? recipe.imageUrl : `${config.public.apiBase}${recipe.imageUrl}`"
                 cover
                 class="recipe-thumbnail"
               ></v-img>
@@ -134,7 +134,7 @@
               >
                 <v-img
                   v-if="selectedRecipe.imageUrl"
-                  :src="selectedRecipe.imageUrl"
+                  :src="selectedRecipe.imageUrl.startsWith('http') ? selectedRecipe.imageUrl : `${config.public.apiBase}${selectedRecipe.imageUrl}`"
                   cover
                   class="rounded-lg fill-height"
                 ></v-img>
@@ -435,12 +435,13 @@ const performSearch = async () => {
   try {
     isSearching.value = true
     const data = await $fetch(`${config.public.apiBase}api/recipe/search`, {
-      params: { query: searchQuery.value },
+      query: { query: searchQuery.value }, 
       credentials: 'include'
     })
+    console.log("Search results received:", data)
     recipes.value = data
   } catch (err) {
-    console.error("The Chef couldn't find those flavors:", err)
+    console.error("Search failed:", err)
   } finally {
     isSearching.value = false
   }

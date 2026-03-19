@@ -47,7 +47,6 @@ describe('GalleryPage.vue', () => {
   }
 
   it('shows loading state initially and then renders recipes', async () => {
-    
     mockFetch.mockResolvedValueOnce([
       { id: 1, title: 'Bolognese', createdAt: new Date().toISOString(), ingredients: [], instructions: [] }
     ])
@@ -63,7 +62,8 @@ describe('GalleryPage.vue', () => {
 
   it('triggers semantic search when searchQuery changes', async () => {
     vi.useFakeTimers()
-    mockFetch.mockResolvedValue([])
+
+    mockFetch.mockResolvedValueOnce([]) 
 
     const wrapper = mount(GalleryPage, mountOptions)
     
@@ -79,14 +79,15 @@ describe('GalleryPage.vue', () => {
     await flushPromises()
 
     expect(mockFetch).toHaveBeenCalledWith(
-        expect.stringContaining('api/recipe/search'),
-        expect.objectContaining({ 
-        params: expect.objectContaining({ query: 'spicy pasta' }) 
-        })
+      expect.stringContaining('api/recipe/search'),
+      expect.objectContaining({ 
+        query: { query: 'spicy pasta' },
+        credentials: 'include'
+      })
     )
 
     vi.useRealTimers()
-    })
+  })
 
   it('redirects to login if API returns 401', async () => {
     mockFetch.mockReset()
@@ -99,7 +100,7 @@ describe('GalleryPage.vue', () => {
     await vi.waitFor(() => {
         expect(mockNavigate).toHaveBeenCalledWith('/login')
     }, { timeout: 1000 })
-    })
+  })
 
   it('enters editing mode and formats arrays into strings', async () => {
     mockFetch.mockResolvedValueOnce([
@@ -139,18 +140,11 @@ describe('GalleryPage.vue', () => {
 
     expect(mockFetch).toHaveBeenCalledWith(
       expect.stringContaining('api/recipe/update/1'),
-      expect.objectContaining({ method: 'PUT' })
+      expect.objectContaining({ 
+        method: 'PUT',
+        credentials: 'include'
+      })
     )
     expect(vm.recipes[0].title).toBe('New Title')
-  })
-
-  it('redirects to login if API returns 401', async () => {
-    mockFetch.mockRejectedValueOnce({ status: 401 })
-
-    mount(GalleryPage, mountOptions)
-
-    await vi.waitFor(() => {
-      expect(mockNavigate).toHaveBeenCalledWith('/login')
-    })
   })
 })

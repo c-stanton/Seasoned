@@ -122,6 +122,8 @@ public class RecipeController : ControllerBase
     [HttpGet("search")]
     public async Task<ActionResult<IEnumerable<Recipe>>> SearchRecipes([FromQuery] string query)
     {
+        Console.WriteLine($"--> Search hit! Query: {query}");
+        
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
         
         if (string.IsNullOrWhiteSpace(query))
