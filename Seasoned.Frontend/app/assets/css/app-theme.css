@@ -293,6 +293,8 @@ html, body {
     margin: 0 !important;
     padding: 0 !important;
     position: static !important;
+    box-shadow: none !important;
+    border: none !important;
   }
 
   html, body {
@@ -312,9 +314,12 @@ html, body {
   .recipe-card, 
   .v-application, 
   .v-application__wrap,
-  [class*="elevation-"] {
+  .v-card--variant-elevated,
+  [class*="elevation-"],
+  [class*="v-card--variant"] {
     box-shadow: none !important;
     border: none !important;
+    outline: none !important;
     background-color: transparent !important;
     background-image: none !important;
   }
