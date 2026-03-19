@@ -328,9 +328,15 @@ const fetchRecipes = async () => {
       credentials: 'include' 
     })
     recipes.value = data
+    const isLoggedIn = useState('isLoggedIn')
+    isLoggedIn.value = true
   } catch (err) {
     console.error("Failed to load collection:", err)
-    if (err.status === 401) navigateTo('/login')
+    if (err.status === 401) {
+      const isLoggedIn = useState('isLoggedIn')
+      isLoggedIn.value = false
+      navigateTo('/login')
+    }
   } finally {
     loading.value = false
   }
