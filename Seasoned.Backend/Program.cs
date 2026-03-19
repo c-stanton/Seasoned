@@ -27,7 +27,7 @@ builder.Services.ConfigureApplicationCookie(options =>
 {
     options.Cookie.Name = "Seasoned.Session";
     options.Cookie.HttpOnly = true;
-    options.Cookie.SameSite = SameSiteMode.Lax;
+    options.Cookie.SameSite = SameSiteMode.None;
     options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
     options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
     options.Cookie.MaxAge = options.ExpireTimeSpan;
@@ -38,6 +38,13 @@ builder.Services.ConfigureApplicationCookie(options =>
         return Task.CompletedTask;
     };
 });    
+
+builder.Services.Configure<ForwardedHeadersOptions>(options =>
+{
+    options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+    options.KnownNetworks.Clear();
+    options.KnownProxies.Clear();
+});
 
 builder.Services.AddAuthorization();
 
@@ -95,6 +102,7 @@ using (var scope = app.Services.CreateScope())
 }
 
 app.UseDefaultFiles();
+app.UseForwardedHeaders();
 app.UseStaticFiles();
 app.UseCors("SeasonedOriginPolicy");
 app.UseAuthentication();
