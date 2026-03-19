@@ -67,7 +67,7 @@ public class RecipeController : ControllerBase
     }
 
     [HttpPut("update/{id}")]
-    public async Task<IActionResult> UpdateRecipe(int id, [FromBody] Recipe updatedRecipe)
+    public async Task<IActionResult> UpdateRecipe(int id, [FromBody] RecipeUpdateDto updatedRecipe)
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
@@ -76,7 +76,7 @@ public class RecipeController : ControllerBase
 
         if (existingRecipe == null)
         {
-            return NotFound("Recipe not found or you do not have permission to edit it.");
+            return NotFound("Recipe not found or permission denied.");
         }
 
         existingRecipe.Title = updatedRecipe.Title;
@@ -87,6 +87,9 @@ public class RecipeController : ControllerBase
         {
             existingRecipe.ImageUrl = updatedRecipe.ImageUrl;
         }
+
+        var fullText = $"{updatedRecipe.Title} {string.Join(" ", updatedRecipe.Ingredients)} {string.Join(" ", updatedRecipe.Instructions)}";
+        existingRecipe.Embedding = await _recipeService.GetEmbeddingAsync(fullText);
 
         await _context.SaveChangesAsync();
 

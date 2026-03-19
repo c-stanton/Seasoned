@@ -390,27 +390,28 @@ const closeDetails = () => {
 
 const saveChanges = async () => {
  try {
-    const { embedding, ...recipeData } = selectedRecipe.value;
+    const { embedding, user, ...recipeData } = selectedRecipe.value;
+
     const payload = { 
-      ...selectedRecipe.value,
-      createdAt: selectedRecipe.value.createdAt || new Date().toISOString(),
-      ingredients: typeof selectedRecipe.value.ingredients === 'string' 
-        ? selectedRecipe.value.ingredients.split('\n').filter(i => i.trim()) 
-        : selectedRecipe.value.ingredients,
-      instructions: typeof selectedRecipe.value.instructions === 'string' 
-        ? selectedRecipe.value.instructions.split('\n').filter(i => i.trim()) 
-        : selectedRecipe.value.instructions
+      title: recipeData.title,
+      imageUrl: recipeData.imageUrl,
+      ingredients: typeof recipeData.ingredients === 'string' 
+        ? recipeData.ingredients.split('\n').filter(i => i.trim()) 
+        : recipeData.ingredients,
+      instructions: typeof recipeData.instructions === 'string' 
+        ? recipeData.instructions.split('\n').filter(i => i.trim()) 
+        : recipeData.instructions
     };
 
-    await $fetch(`${config.public.apiBase}api/recipe/update/${payload.id}`, {
+    await $fetch(`${config.public.apiBase}api/recipe/update/${selectedRecipe.value.id}`, {
       method: 'PUT',
       body: payload,
       credentials: 'include'
     });
 
-    const index = recipes.value.findIndex(r => r.id === payload.id);
+    const index = recipes.value.findIndex(r => r.id === selectedRecipe.value.id);
     if (index !== -1) {
-      recipes.value[index] = { ...payload };
+      recipes.value[index] = { ...recipes.value[index], ...payload };
     }
 
     closeDetails();
