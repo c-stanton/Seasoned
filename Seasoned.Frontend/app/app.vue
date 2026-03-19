@@ -6,33 +6,31 @@
       <v-spacer></v-spacer>
 
       <div class="nav-links d-flex align-center">
-        <v-menu v-if="isLoggedIn" transition="slide-y-transition">
+        <v-menu v-if="isLoggedIn" transition="slide-y-transition" offset="8">
           <template v-slot:activator="{ props }">
-            <v-btn 
-              v-bind="props" 
-              variant="text" 
-              class="nav-auth-btn px-4 d-flex align-center"
-            >
+            <v-btn v-bind="props" variant="text" class="nav-auth-btn px-4">
               <v-icon icon="mdi-pot-steam" size="small" class="mr-2"></v-icon>
-              <span class="menu-label-text">Menu</span>
+              <span>Menu</span>
             </v-btn>
           </template>
 
-          <v-list class="recipe-card pa-2 mt-2" elevation="4" border>
+          <v-list class="menu-card mt-2" min-width="220">
             <v-list-item to="/uploader" prepend-icon="mdi-camera-outline">
-              <v-list-item-title class="menu-text">Recipe Uploader </v-list-item-title>
+              <v-list-item-title class="menu-text">Recipe Uploader</v-list-item-title>
             </v-list-item>
+
             <v-list-item to="/chat" prepend-icon="mdi-chef-hat">
               <v-list-item-title class="menu-text">Chef Consultation</v-list-item-title>
             </v-list-item>
-            <v-list-item to="/gallery" prepend-icon="mdi-book-open-variant" class="rounded">
+
+            <v-list-item to="/gallery" prepend-icon="mdi-book-open-variant">
               <v-list-item-title class="menu-text">My Collection</v-list-item-title>
             </v-list-item>
 
-            <v-divider class="ma-0"></v-divider>
+            <v-divider class="ma-0" color="#dccca7"></v-divider>
 
-            <v-list-item @click="logout" prepend-icon="mdi-logout" color="error" class="rounded mt-0">
-              <v-list-item-title class="menu-text">Sign Out</v-list-item-title>
+            <v-list-item @click="logout" prepend-icon="mdi-logout">
+              <v-list-item-title class="menu-text" style="color: #8c4a32;">Sign Out</v-list-item-title>
             </v-list-item>
           </v-list>
         </v-menu>

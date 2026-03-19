@@ -16,7 +16,7 @@
         <v-col cols="12" md="8" lg="6">
           <v-text-field
             v-model="searchQuery"
-            placeholder="Search for 'comfort food' or 'smoothie recipe'"
+            placeholder="Search for 'comfort food' or 'hot and brothy'"
             variant="outlined"
             class="search-bar"
             hide-details
@@ -43,7 +43,7 @@
       </v-row>
 
       <v-row v-else-if="recipes?.length">
-        <v-col v-for="recipe in (searchQuery ? recipes : sortedRecipes)" :key="recipe.id" cols="12" sm="6" md="4">
+        <v-col v-for="recipe in (searchQuery?.trim() ? recipes : sortedRecipes)" :key="recipe.id" cols="12" sm="6" md="4">
           <v-card class="gallery-item-card pa-4">
             <v-sheet
               height="200"
@@ -93,10 +93,10 @@
         </v-col>
       </v-row>
       
-      <v-row v-else justify="center" class="py-10 text-center">
+      <v-row v-else justify="center" class=" text-center">
         <v-col cols="12">
-          <p class="brand-subtitle mb-4">Your collection is empty.</p>
-          <v-btn to="/" variant="text" color="#556b2f">Return Home to add some</v-btn>
+          <p class="brand-subtitle mb-10">Your collection is empty.</p>
+          <v-btn to="/" variant="text" class="column-btn">Return Home</v-btn>
         </v-col>
       </v-row>
 
@@ -114,23 +114,32 @@
           @click="closeDetails"
         ></v-btn>
 
-        <v-row align="start" class="mb-6">
-          <v-col cols="12" md="4" class="d-flex flex-column align-center">
+        <v-row 
+          align="center" 
+          class="mb-9 px-md-5" 
+          :justify="!(selectedRecipe.imageUrl || isEditing) ? 'center' : 'start'"
+        >
+          <v-col 
+            v-if="selectedRecipe.imageUrl || isEditing"
+            cols="12" 
+            md="3" 
+            class="d-flex justify-end pe-6"
+            style="flex: 0 0 auto;" 
+          >
             <v-hover v-slot="{ isHovering, props }">
               <v-card
                 v-bind="props"
-                width="160"
-                height="160"
+                width="150"
+                height="150"
                 :class="[
-                  'rounded-lg d-flex align-center justify-center position-relative overflow-hidden',
-                  { 
-                    'image-drop-zone': isEditing, 
-                    'cursor-pointer': isEditing
-                  }
+                  'rounded-lg d-flex align-center justify-center position-relative overflow-hidden elevation-1',
+                  { 'image-drop-zone': isEditing, 'cursor-pointer': isEditing }
                 ]"
-                :style="{ pointerEvents: isEditing ? 'auto' : 'none' }"
-                @click="isEditing ? $refs.fileInput.click() : null" 
-                :elevation="isHovering && isEditing ? 4 : 1"
+                :style="{ 
+                  pointerEvents: isEditing ? 'auto' : 'none',
+                  border: !selectedRecipe.imageUrl && isEditing ? '2px dashed #d1c7b7' : 'none' 
+                }"
+                @click="isEditing ? $refs.fileInput.click() : null"
               >
                 <v-img
                   v-if="selectedRecipe.imageUrl"
@@ -152,7 +161,11 @@
             <input type="file" ref="fileInput" accept="image/*" style="display: none" @change="handleImageUpload" />
           </v-col>
 
-          <v-col cols="12" md="8">
+          <v-col 
+            cols="12" 
+            :md="selectedRecipe.imageUrl || isEditing ? 8 : 12"
+            :class="!(selectedRecipe.imageUrl || isEditing) ? 'text-center' : 'ps-0'"
+          >
             <v-text-field
               v-if="isEditing"
               v-model="selectedRecipe.title"
@@ -161,16 +174,22 @@
               class="recipe-title-edit"
               hide-details
             ></v-text-field>
-            <h2 v-else class="recipe-title" style="font-size: 2.5rem;">{{ selectedRecipe.title }}</h2>
+            <h2 
+              v-else 
+              class="recipe-title" 
+              style="font-size: 2.2rem; line-height: 1.2; margin-bottom: 0;"
+            >
+              {{ selectedRecipe.title }}
+            </h2>
           </v-col>
         </v-row>
 
-        <v-divider class="mb-8 separator"></v-divider>
+        <v-divider class="mb-0 separator"></v-divider>
 
         <v-row class="mt-10" density="compact">
           <v-col cols="12" md="5" class="pe-md-10">
             <h3 class="section-header justify-center mb-6">
-              <v-icon icon="mdi-spoon-sugar" class="mr-2" size="small"></v-icon>
+              <v-icon icon="mdi-spoon-sugar" class="mr-2"></v-icon>
               Ingredients
             </h3>
             
@@ -179,7 +198,6 @@
               v-model="selectedRecipe.ingredients"
               variant="outlined"
               auto-grow
-              rows="10"
               density="comfortable"
               class="auth-input recipe-textarea"
               bg-color="transparent"
@@ -190,14 +208,14 @@
               <div 
                 v-for="(ing, index) in (Array.isArray(selectedRecipe.ingredients) ? selectedRecipe.ingredients : selectedRecipe.ingredients?.split('\n') || [])" 
                 :key="index"
-                class="ingredient-item"
+                class="ingredient-item d-flex align-start mb-4"
               >
                 {{ ing }}
               </div>
             </div>
           </v-col>
 
-          <v-col cols="12" md="7" class="ps-md-10">
+          <v-col cols="12" md="7" class="ps-md-1">
             <h3 class="section-header justify-center mb-6">
               <v-icon icon="mdi-pot-steam-outline" class="mr-2" size="small"></v-icon>
               Instructions
@@ -218,10 +236,10 @@
             <div v-else
               v-for="(step, index) in (Array.isArray(selectedRecipe.instructions) ? selectedRecipe.instructions : selectedRecipe.instructions?.split('\n') || [])"
               :key="index"
-              class="instruction-step mb-8"
+              class="instruction-step mb-8 d-flex align-start"
             >
-              <span class="step-number">{{ index + 1 }}.</span>
-              <p class="step-text">{{ step }}</p>
+              <span class="step-number mr-4">{{ index + 1 }}.</span>
+              <p class="step-text flex-grow-1 mb-0">{{ step }}</p>
             </div>
           </v-col>
         </v-row>
@@ -241,76 +259,7 @@ import { ref, onMounted, computed, watch } from 'vue'
 import '@/assets/css/gallery.css'
 import '@/assets/css/app-theme.css'
 
-/*const mockRecipes = [
-  {
-    id: 1,
-    title: "Miso-Glazed Smashed Burger",
-    imageUrl: "https://picsum.photos/id/42/800/600",
-    ingredients: ["1/2 lb Ground Beef", "1 tbsp White Miso", "Brioche Bun", "Pickled Ginger"],
-    instructions: ["Mix miso into beef.", "Smash thin on high heat.", "Sear until crispy."],
-    createdAt: "2026-03-18T10:00:00Z"
-  },
-  {
-    id: 2,
-    title: "Zesty Yuzu Raspberry Bowl",
-    imageUrl: "https://picsum.photos/id/429/800/600",
-    ingredients: ["1 cup Oats", "2 tbsp Yuzu Juice", "Fresh Raspberries", "Honey"],
-    instructions: ["Soak oats overnight.", "Stir in yuzu.", "Top with berries."],
-    createdAt: "2026-03-17T08:30:00Z"
-  },
-  {
-    id: 3,
-    title: "Caribbean Curry Chickpeas",
-    imageUrl: "https://picsum.photos/id/493/800/600",
-    ingredients: ["1 can Chickpeas", "Coconut Milk", "Curry Powder", "Sweet Potato"],
-    instructions: ["Sauté potatoes.", "Add chickpeas and spices.", "Simmer in coconut milk."],
-    createdAt: "2026-03-16T12:45:00Z"
-  },
-  {
-    id: 4,
-    title: "Tallow-Crisped Truffle Fries",
-    imageUrl: "https://picsum.photos/id/517/800/600",
-    ingredients: ["Russet Potatoes", "Beef Tallow", "Truffle Salt", "Parsley"],
-    instructions: ["Double fry in tallow.", "Toss with truffle salt.", "Garnish with parsley."],
-    createdAt: "2026-03-15T16:20:00Z"
-  },
-  {
-    id: 5,
-    title: "Smoked Gouda & Broccolini Soup",
-    imageUrl: "https://picsum.photos/id/488/800/600",
-    ingredients: ["Broccolini", "Smoked Gouda", "Heavy Cream", "Vegetable Broth"],
-    instructions: ["Simmer broccolini in broth.", "Blend until smooth.", "Melt in cheese."],
-    createdAt: "2026-03-14T11:10:00Z"
-  },
-  {
-    id: 6,
-    title: "Heirloom Tomato Galette",
-    imageUrl: "https://picsum.photos/id/447/800/600",
-    ingredients: ["Puff Pastry", "Heirloom Tomatoes", "Ricotta", "Thyme"],
-    instructions: ["Spread ricotta on pastry.", "Layer tomatoes.", "Bake at 200°C until golden."],
-    createdAt: "2026-03-13T09:00:00Z"
-  },
-  {
-    id: 7,
-    title: "Thai Basil Pesto Pasta",
-    imageUrl: "https://picsum.photos/id/102/800/600",
-    ingredients: ["Linguine", "Thai Basil", "Cashews", "Garlic", "Chili Flakes"],
-    instructions: ["Blend basil, cashews, and garlic.", "Toss with hot pasta.", "Add chili for heat."],
-    createdAt: "2026-03-12T19:30:00Z"
-  },
-  {
-    id: 8,
-    title: "Whipped Feta & Hot Honey Toast",
-    imageUrl: "https://picsum.photos/id/311/800/600",
-    ingredients: ["Sourdough", "Feta Cheese", "Greek Yogurt", "Hot Honey"],
-    instructions: ["Whip feta and yogurt.", "Toast sourdough.", "Spread and drizzle honey."],
-    createdAt: "2026-03-11T07:45:00Z"
-  }
-]
-*/
 const recipes = ref([])
-//const recipes = ref(mockRecipes)
-//const loading = ref(false)
 const loading = ref(true)
 const showDetails = ref(false)
 const selectedRecipe = ref(null)
@@ -323,7 +272,6 @@ let debounceTimeout = null
 
 onMounted(async () => {
   await fetchRecipes()
-  //loading.value = false
 })
 
 const fetchRecipes = async () => {
@@ -427,6 +375,7 @@ const sortedRecipes = computed(() => {
 })
 
 const performSearch = async () => {
+  const currentQuery = searchQuery.value
   if (!searchQuery.value) {
     await fetchRecipes()
     return
@@ -435,11 +384,12 @@ const performSearch = async () => {
   try {
     isSearching.value = true
     const data = await $fetch(`${config.public.apiBase}api/recipe/search`, {
-      query: { query: searchQuery.value }, 
+      query: { query: currentQuery }, 
       credentials: 'include'
     })
-    console.log("Search results received:", data)
-    recipes.value = data
+    if (searchQuery.value === currentQuery) {
+      recipes.value = data
+    }
   } catch (err) {
     console.error("Search failed:", err)
   } finally {
