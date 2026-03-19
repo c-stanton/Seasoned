@@ -406,7 +406,8 @@ const saveChanges = async () => {
 
     const index = recipes.value.findIndex(r => r.id === selectedRecipe.value.id);
     if (index !== -1) {
-      recipes.value[index] = { ...recipes.value[index], ...payload };
+      const updatedRecipe = { ...recipes.value[index], ...payload };
+      recipes.value.splice(index, 1, updatedRecipe); 
     }
 
     closeDetails();

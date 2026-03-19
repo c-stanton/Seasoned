@@ -27,9 +27,10 @@ builder.Services.ConfigureApplicationCookie(options =>
 {
     options.Cookie.Name = "Seasoned.Session";
     options.Cookie.HttpOnly = true;
-    options.Cookie.SameSite = SameSiteMode.None;
+    options.Cookie.SameSite = SameSiteMode.Lax;
     options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
     options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+    options.Cookie.MaxAge = options.ExpireTimeSpan;
     options.SlidingExpiration = true; 
     options.Events.OnRedirectToLogin = context =>
     {
@@ -51,7 +52,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("SeasonedOriginPolicy", policy =>
     {
-        policy.WithOrigins("https://seasoned.ddns.net")
+        policy.WithOrigins("https://seasoned.ddns.net", "https://www.seasoned.ddns.net")
               .AllowAnyMethod()
               .AllowAnyHeader()
               .AllowCredentials();

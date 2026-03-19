@@ -145,16 +145,16 @@ const handleAuth = async () => {
   authLoading.value = true
   const endpoint = isLogin.value ? 'api/auth/login' : 'api/auth/register'
   
-  const url = isLogin.value 
-    ? `${config.public.apiBase}${endpoint}?useCookies=true&useSessionCookies=false` 
-    : `${config.public.apiBase}${endpoint}`
+  const url = `${config.public.apiBase}${endpoint}`
 
   try {
     const response = await $fetch(url, {
       method: 'POST',
       body: {
         email: email.value,
-        password: password.value
+        password: password.value,
+        useCookies: true,
+        useSessionCookies: false
       },
       credentials: 'include' 
     })
@@ -162,6 +162,7 @@ const handleAuth = async () => {
     if (isLogin.value) {
       isLoggedIn.value = true
       navigateTo('/')
+
     } else {
       isLogin.value = true
       authLoading.value = false
@@ -170,6 +171,7 @@ const handleAuth = async () => {
       confirmPassword.value = ''
     }
   } catch (err) {
+    
     authLoading.value = false
     if (err.status === 401) {
       errorMessage.value = "Invalid email or password. Please try again."
