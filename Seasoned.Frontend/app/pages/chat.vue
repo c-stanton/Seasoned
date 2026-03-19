@@ -78,27 +78,7 @@ import { ref, nextTick } from 'vue'
 import '@/assets/css/app-theme.css'
 
 const config = useRuntimeConfig()
-const recipe = ref({
-  title: "Peanut Butter Cookies",
-  description: "A classic, soft, and chewy family favorite.",
-  ingredients: [
-    "1/2 c. Butter",
-    "1/2 c. peanut butter",
-    "1/2 c. white sugar",
-    "1/2 c. brown sugar",
-    "1 egg",
-    "1 1/2 c. flour",
-    "3/4 tsp. soda",
-    "1/2 tsp. baking powder",
-    "1/4 tsp. salt"
-  ],
-  instructions: [
-    "Chill dough and form into a large ball or make a roll.",
-    "Slice about 1/8 or 1/4 inch thick.",
-    "Flatten with a fork dipped in flour, making a criss-cross pattern.",
-    "Bake in a 375°F oven."
-  ]
-})
+const recipe = ref(null)
 const userQuery = ref('')
 const chatLoading = ref(false)
 const chatMessages = ref([])
