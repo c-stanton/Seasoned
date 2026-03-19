@@ -31,7 +31,7 @@ html, body {
 
 .recipe-title {
   font-family: 'Libre Baskerville', serif;
-  font-size: 1.5rem;
+  font-size: 1.5rem !important;
   color: #1e1408;
 }
 
@@ -619,4 +619,87 @@ html, body {
   align-self: flex-start;
   border-radius: 12px 12px 12px 2px;
   border: 1px solid #e8dec5 !important;
+}
+
+/* Mobile Experience: Full-screen Parchment */
+@media (max-width: 959px) {
+  .landing-wrapper {
+    height: auto !important;
+    min-height: 100vh !important;
+    overflow: visible !important;
+  }
+
+  html, body {
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  /* 2. Kill the Wood Background and apply Parchment to the whole page */
+  .recipe-bg, .landing-page, .v-application {
+    background-color: #f4e4bc !important; 
+    background-image: none !important;
+    min-height: 100vh !important;
+  }
+
+  /* 3. Make the Card fill the width and remove the 'floating' shadow */
+  .v-container {
+    padding: 0 !important;
+    margin: 0 !important;
+    max-width: 100% !important;
+  }
+
+  .recipe-card {
+    margin: 0 !important;
+    padding: 25px 15px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    min-height: 100vh;
+    /* Keeps the subtle paper texture without the wood peeking through */
+    background-image: url("https://www.transparenttextures.com/patterns/natural-paper.png") !important;
+  }
+
+  /* 4. Force columns to stack so they don't squash */
+  .recipe-content .v-row {
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  .recipe-content .v-col {
+    max-width: 100% !important;
+    width: 100% !important;
+    padding-bottom: 20px !important;
+  }
+
+  .nav-auth-btn, 
+  .nav-home-btn, 
+  .nav-btn,
+  .v-btn.v-btn--variant-text {
+    color: #2e1e0a !important;
+    font-size: 0.9rem;
+    text-shadow: none !important;
+    font-weight: 700 !important;
+    text-shadow: none;
+  }
+
+  /* 2. Adjust the hover state for mobile (touch) */
+  .nav-auth-btn:hover, 
+  .nav-home-btn:hover, 
+  .nav-btn:hover {
+    background-color: rgba(46, 30, 10, 0.1) !important; /* Subtle dark tint */
+    color: #8c4a32 !important; /* Use your rust-orange accent on hover */
+  }
+
+  /* 3. If you have an App Bar, ensure it doesn't stay transparent with white text */
+  .v-app-bar {
+    background-color: #f4e4bc !important; 
+    border-bottom: 1px solid #dccca7 !important;
+  }
+  
+  /* 4. Fix the icon colors in the nav if they are white */
+  .v-app-bar .v-icon {
+    color: #2e1e0a !important;
+  }
 }

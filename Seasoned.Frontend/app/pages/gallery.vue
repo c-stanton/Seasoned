@@ -16,7 +16,7 @@
         <v-col cols="12" md="8" lg="6">
           <v-text-field
             v-model="searchQuery"
-            placeholder="Search for 'comfort food' or 'hot and brothy'"
+            placeholder="Search for 'comfort food'"
             variant="outlined"
             class="search-bar"
             hide-details
