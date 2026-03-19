@@ -280,7 +280,7 @@ html, body {
     position: relative !important;
   }
 
-  .chat-container, .v-app-bar, .no-print, .separator, .v-divider, .recipe-description, button, .v-btn {
+  .chat-container, .v-app-bar, .no-print, .separator, .v-divider, .recipe-description, button, .v-btn, .drop-zone, .v-card, .recipe-card {
     display: none !important;
     height: 0 !important;
     margin: 0 !important;
@@ -312,6 +312,7 @@ html, body {
   .recipe-card, 
   .v-application, 
   .v-application__wrap,
+  .v-card--variant-elevated,
   [class*="elevation-"] {
     box-shadow: none !important;
     border: none !important;
