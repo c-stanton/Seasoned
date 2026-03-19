@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { mount } from '@vue/test-utils'
 import { nextTick } from 'vue'
+import { ref } from 'vue'
 import { createVuetify } from 'vuetify'
 import { flushPromises } from '@vue/test-utils'
 import * as components from 'vuetify/components'
@@ -35,6 +36,11 @@ vi.stubGlobal('$fetch', mockFetch)
 
 const mockNavigate = vi.fn()
 vi.stubGlobal('navigateTo', mockNavigate)
+
+vi.stubGlobal('useState', (key, init) => {
+  const state = ref(init ? init() : null)
+  return state
+})
 
 describe('GalleryPage.vue', () => {
   beforeEach(() => {
