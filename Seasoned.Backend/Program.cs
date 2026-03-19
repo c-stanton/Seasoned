@@ -13,6 +13,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddScoped<IRecipeService, RecipeService>();
 
+builder.Services.AddAuthentication(IdentityConstants.ApplicationScheme)
+    .AddCookie(IdentityConstants.ApplicationScheme);
+
 builder.Services.AddIdentityApiEndpoints<IdentityUser>( options => {
     options.Password.RequireDigit = false;
     options.Password.RequiredLength = 6;
@@ -28,7 +31,7 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.Cookie.Name = "Seasoned.Session";
     options.Cookie.HttpOnly = true;
     options.Cookie.SameSite = SameSiteMode.None;
-    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+    options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
     options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
     options.Cookie.MaxAge = options.ExpireTimeSpan;
     options.SlidingExpiration = true; 
@@ -101,8 +104,8 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
-app.UseDefaultFiles();
 app.UseForwardedHeaders();
+app.UseDefaultFiles();
 app.UseStaticFiles();
 app.UseCors("SeasonedOriginPolicy");
 app.UseAuthentication();
