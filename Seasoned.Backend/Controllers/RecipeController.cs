@@ -155,4 +155,23 @@ public class RecipeController : ControllerBase
 
         return Ok(results);
     }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteRecipe(int id)
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        
+        var recipe = await _context.Recipes
+            .FirstOrDefaultAsync(r => r.Id == id && r.UserId == userId);
+
+        if (recipe == null)
+        {
+            return NotFound("Recipe not found or you don't have permission to delete it.");
+        }
+
+        _context.Recipes.Remove(recipe);
+        await _context.SaveChangesAsync();
+
+        return Ok(new { message = "Recipe deleted from your archives." });
+    }
 }

@@ -70,24 +70,28 @@
             </p>
             
             <v-card-actions class="justify-center">
-              <v-card-actions class="justify-center">
-                <v-btn 
-                  variant="text" 
-                  color="#556b2f"
-                  class="save-btn"
-                  @click="openRecipe(recipe)"
-                >
-                  Open
-                </v-btn>
-                <v-btn 
-                  variant="text" 
-                  color="#8c4a32" 
-                  class="cancel-btn"
-                  @click="editRecipe(recipe)"
-                >
-                  Edit
-                </v-btn>
-              </v-card-actions>
+              <v-btn 
+                variant="text" 
+                color="#556b2f"
+                class="save-btn"
+                @click="openRecipe(recipe)"
+              >
+                Open
+              </v-btn>
+              <v-btn 
+                variant="text" 
+                color="#8c4a32" 
+                class="cancel-btn"
+                @click="editRecipe(recipe)"
+              >
+                Edit
+              </v-btn>
+              <v-btn 
+                variant="text" 
+                color="#8c4a32" 
+                icon="mdi-trash-can-outline"
+                @click="deleteRecipe(recipe.id)"
+              ></v-btn>
             </v-card-actions>
           </v-card>
         </v-col>
@@ -250,6 +254,46 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+    
+    <v-dialog v-model="deleteConfirmVisible" max-width="400" persistent>
+      <v-card 
+        class="recipe-card elevation-5" 
+        style="height: auto !important; min-height: unset !important; display: block !important;"
+      >
+        <div class="pa-8 text-center">
+          <v-icon 
+            icon="mdi-alert-rhombus-outline" 
+            color="#8c4a32" 
+            size="48" 
+            class="mb-4"
+          ></v-icon>
+          
+          <h3 class="recipe-title mb-10" style="font-size: 1.5rem; line-height: 1;">
+            Remove from Archive?
+          </h3>
+          
+          <div class="d-flex justify-center align-center mt-6">
+            <v-btn 
+              variant="text" 
+              class="cancel-btn px-4 mr-4" 
+              @click="deleteConfirmVisible = false"
+            >
+              Keep it
+            </v-btn>
+            
+            <v-btn 
+              color="#8c4a32" 
+              class="save-recipe-btn px-6 text-white" 
+              elevation="1"
+              :loading="isDeleting"
+              @click="confirmDelete"
+            >
+              Yes, Delete
+            </v-btn>
+          </div>
+        </div>
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 
@@ -269,6 +313,9 @@ const config = useRuntimeConfig()
 const searchQuery = ref('')
 const isSearching = ref(false)
 let debounceTimeout = null
+const deleteConfirmVisible = ref(false)
+const recipeToDelete = ref(null)
+const isDeleting = ref(false)
 
 onMounted(async () => {
   await fetchRecipes()
@@ -403,6 +450,32 @@ watch(searchQuery, (newVal) => {
     performSearch()
   }, 600)
 })
+
+const deleteRecipe = (id) => {
+  recipeToDelete.value = id
+  deleteConfirmVisible.value = true
+}
+
+const confirmDelete = async () => {
+  if (!recipeToDelete.value) return;
+
+  try {
+    isDeleting.value = true
+    await $fetch(`${config.public.apiBase}api/recipe/${recipeToDelete.value}`, {
+      method: 'DELETE',
+      credentials: 'include'
+    });
+
+    recipes.value = recipes.value.filter(r => r.id !== recipeToDelete.value);
+    
+    deleteConfirmVisible.value = false;
+    recipeToDelete.value = null;
+  } catch (err) {
+    console.error("The archive could not be cleared:", err);
+  } finally {
+    isDeleting.value = false
+  }
+}
 
 
 </script>
