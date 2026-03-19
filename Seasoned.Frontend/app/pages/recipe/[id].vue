@@ -1,7 +1,7 @@
 <template>
   <div class="recipe-bg min-h-screen">
     <v-container>
-       <RecipeDisplay v-if="recipe" :recipe="recipe" :is-public-view="true" />
+       <RecipeDisplay v-if="normalizedRecipe" :recipe="normalizedRecipe" :is-public-view="true" />
        <v-progress-linear v-else indeterminate color="#8c4a32" />
     </v-container>
   </div>
@@ -11,9 +11,26 @@
 const route = useRoute();
 const config = useRuntimeConfig();
 
-const { data: recipe, error } = await useAsyncData(`recipe-${route.params.id}`, () => 
-  $fetch(`${config.public.apiBase}api/recipe/${route.params.id}`)
-)
+const { data: recipe, error } = await useAsyncData(`recipe-${route.params.id}`, () => {
+  const baseUrl = config.public.apiBase.endsWith('/') 
+    ? config.public.apiBase 
+    : `${config.public.apiBase}/`;
+    
+  return $fetch(`${baseUrl}api/recipe/${route.params.id}`);
+});
+
+const normalizedRecipe = computed(() => {
+  if (!rawRecipe.value) return null;
+  
+  const r = rawRecipe.value;
+  return {
+    id: r.id || r.Id,
+    title: r.title || r.Title || 'Untitled Recipe',
+    ingredients: r.ingredients || r.Ingredients || [],
+    instructions: r.instructions || r.Instructions || [],
+    imageUrl: r.imageUrl || r.ImageUrl || null
+  };
+});
 
 if (error.value || !recipe.value) {
   throw createError({ statusCode: 404, statusMessage: 'Recipe not found' })
