@@ -80,14 +80,6 @@ onMounted(() => {
   if (savedRecipe) {
     recipe.value = JSON.parse(savedRecipe)
     localStorage.removeItem('pending_recipe')
-      snackbar.value = {
-      show: true,
-      message: 'Restored your analyzed recipe.',
-      color: '#f4ede1',
-      icon: 'mdi-history',
-      iconColor: '#556b2f',
-      textColor: '#5d4037'
-    }
   }
 })
 
@@ -146,11 +138,7 @@ const saveToCollection = async () => {
   if (!isAuth) {
     saving.value = false;
     localStorage.setItem('pending_recipe', JSON.stringify(recipe.value))
-    
-
-    setTimeout(() => {
-      router.push('/login')
-    }, 2000)
+    router.push('/login')
     return;
   }
 

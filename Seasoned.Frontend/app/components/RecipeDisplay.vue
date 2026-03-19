@@ -51,6 +51,7 @@
         </v-btn>
 
         <v-btn
+          v-if="!isPublicView"
           class="px-8 transition-swing"
           size="large"
           elevation="0"
@@ -120,7 +121,8 @@ const hasShared =ref(false)
 const props = defineProps({
   recipe: { type: Object, default: null },
   isSaving: { type: Boolean, default: false },
-  hasSaved: { type: Boolean, default: false }
+  hasSaved: { type: Boolean, default: false },
+  isPublicView: { type: Boolean, default: false }
 })
 
 defineEmits(['save'])
