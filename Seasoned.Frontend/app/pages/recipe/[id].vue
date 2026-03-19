@@ -8,6 +8,7 @@
 </template>
 
 <script setup>
+import { computed } from 'vue'
 const route = useRoute();
 const config = useRuntimeConfig();
 
@@ -32,7 +33,7 @@ const normalizedRecipe = computed(() => {
   };
 });
 
-if (error.value || !recipe.value) {
+if (error.value || !normalizedRecipe.value) {
   throw createError({ statusCode: 404, statusMessage: 'Recipe not found' })
 }
 
