@@ -390,6 +390,7 @@ const closeDetails = () => {
 
 const saveChanges = async () => {
  try {
+    const { embedding, ...recipeData } = selectedRecipe.value;
     const payload = { 
       ...selectedRecipe.value,
       createdAt: selectedRecipe.value.createdAt || new Date().toISOString(),
