@@ -280,11 +280,18 @@ html, body {
     position: relative !important;
   }
 
-  .chat-container, .v-app-bar, .no-print, .separator, .v-divider, .recipe-description, button, .v-btn, .drop-zone {
+  .chat-container, .v-app-bar, .no-print, .separator, .v-divider, 
+  .recipe-description, button, .v-btn, .drop-zone, .v-card-actions,
+  .v-btn--variant-text, .v-btn--variant-elevated,
+  footer, .v-footer, .recipe-actions-row {
     display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
     height: 0 !important;
     margin: 0 !important;
     padding: 0 !important;
+    overflow: hidden !important;
+    position: absolute !important;
   }
 
   .v-application, .v-application__wrap, main.v-main, .v-container, .recipe-card {
@@ -312,20 +319,27 @@ html, body {
 
   .v-card, 
   .recipe-card, 
-  .v-application, 
-  .v-application__wrap,
+  .v-theme--light,
   .v-card--variant-elevated,
+  .v-card__underlay,
   [class*="elevation-"],
   [class*="v-card--variant"] {
     box-shadow: none !important;
-    border: none !important;
+    -webkit-box-shadow: none !important;
+    filter: none !important;
+    --v-shadow-key-umbra: none !important;
+    --v-shadow-key-penumbra: none !important;
+    --v-shadow-key-ambient: none !important;
+    border: 0px solid transparent !important;
     outline: none !important;
-    background-color: transparent !important;
+    background: transparent !important;
     background-image: none !important;
+    display: contents !important;
   }
   
   header.text-center {
-    margin-bottom: 5px !important;
+    margin-bottom: 0px !important;
+    padding-bottom: 0px !important;
   }
 
   .recipe-content {
@@ -339,7 +353,8 @@ html, body {
   }
 
   .recipe-title {
-    margin-bottom: 40px !important;
+    margin-top: -20px !important;
+    margin-bottom: 20px !important;
     font-size: 1.6rem !important;
     text-align: center;
     font-weight: bold !important;
