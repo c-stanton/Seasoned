@@ -51,22 +51,30 @@ var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
 {
+    var services = scope.ServiceProvider;
+    var db = services.GetRequiredService<ApplicationDbContext>();
+
     try 
     {
-        var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-        
         if (db.Database.GetPendingMigrations().Any())
         {
             db.Database.Migrate();
         }
-
-        DbInitializer.Initialize(db); 
-        
-        Console.WriteLine("--> Database Seeded Successfully!");
     }
     catch (Exception ex)
     {
-        Console.WriteLine($"Database Migration skipped or failed: {ex.Message}");
+        Console.WriteLine($"Migration notice: {ex.Message}");
+    }
+
+    try
+    {
+        Console.WriteLine("--> Checking if Seeding is needed...");
+        DbInitializer.Initialize(db);
+        Console.WriteLine("--> Database Seed Completed!");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Seeding failed: {ex.Message}");
     }
 }
 
