@@ -58,6 +58,8 @@ pipeline {
                             set -e
                             cd ${env.DEPLOY_PATH} || mkdir -p ${env.DEPLOY_PATH} && cd ${env.DEPLOY_PATH}
                             
+                            if [ -f .env ]; then cp .env /tmp/.seasoned_env_bak; fi
+
                             # Clone or pull the repo (contains docker-compose.yml)
                             if [ -d .git ]; then
                                 git fetch origin
@@ -65,6 +67,10 @@ pipeline {
                             else
                                 git clone ${env.GIT_REPO_URL} .
                             fi
+                            
+                            if [ -f /tmp/.seasoned_env_bak ]; then mv /tmp/.seasoned_env_bak .env; fi
+                            
+                            if [ ! -f .env ]; then echo "WARNING: .env file is missing on server!"; fi
                             
                             # Set the image tag for this deployment
                             export IMAGE_TAG=${env.IMAGE_TAG}
