@@ -15,8 +15,12 @@ Env.Load("../.env");
 var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddEnvironmentVariables();
 
-var jwtKey = builder.Configuration["Jwt:Key"] 
-             ?? throw new InvalidOperationException("JWT Key is missing from configuration!");
+var jwtKey = builder.Configuration.GetValue<string>("Jwt:Key");
+
+if (string.IsNullOrWhiteSpace(jwtKey))
+{
+    throw new InvalidOperationException("CRITICAL: JWT Key is missing or empty! Check your .env/Docker environment mapping.");
+}
 
 var jwtIssuer = builder.Configuration["Jwt:Issuer"] ?? "SeasonedAPI";
 var jwtAudience = builder.Configuration["Jwt:Audience"] ?? "SeasonedFrontend";
