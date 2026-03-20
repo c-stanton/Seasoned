@@ -60,26 +60,17 @@ pipeline {
                             
                             if [ -f .env ]; then cp .env /tmp/.seasoned_env_bak; fi
 
-                            # Clone or pull the repo (contains docker-compose.yml)
-                            if [ -d .git ]; then
-                                git fetch origin
-                                git reset --hard origin/${env.DEPLOY_BRANCH}
-                            else
-                                git clone ${env.GIT_REPO_URL} .
-                            fi
-                            
+                            git fetch origin
+                            git reset --hard origin/${env.DEPLOY_BRANCH}
+
                             if [ -f /tmp/.seasoned_env_bak ]; then mv /tmp/.seasoned_env_bak .env; fi
-                            
-                            if [ ! -f .env ]; then echo "WARNING: .env file is missing on server!"; fi
-                            
-                            # Set the image tag for this deployment
+
                             export IMAGE_TAG=${env.IMAGE_TAG}
                             export DOCKER_REGISTRY=${env.DOCKER_REGISTRY}
                             export DOCKER_IMAGE=${env.DOCKER_IMAGE}
-                            
-                            # Pull latest image and deploy
-                            docker compose pull
-                            docker compose up -d
+
+                            docker compose --env-file .env pull
+                            docker compose --env-file .env up -d --force-recreate
 DEPLOY_EOF
                     """
                 }
