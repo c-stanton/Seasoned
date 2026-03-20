@@ -2,7 +2,7 @@ export default defineNuxtConfig({
   future: {
     compatibilityVersion: 4,
   },
-  ssr: false,
+  ssr: true,
   srcDir: 'app/',
   dir: {
     public: 'public/'

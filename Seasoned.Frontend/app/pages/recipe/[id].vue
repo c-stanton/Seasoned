@@ -17,8 +17,14 @@ import { computed } from 'vue'
 definePageMeta({
   auth: false
 })
+
 const route = useRoute();
 const config = useRuntimeConfig();
+const imageUrl = normalizedRecipe.value.imageUrl;
+
+const absoluteOgImage = imageUrl?.startsWith('http') 
+  ? imageUrl 
+  : `${config.public.apiBase}${imageUrl || '/images/seasoned-logo.png'}`;
 
 const { data: rawRecipe, error } = await useAsyncData(`recipe-${route.params.id}`, () => {
   const baseUrl = config.public.apiBase.endsWith('/') 
@@ -49,7 +55,7 @@ useSeoMeta({
   title: `${normalizedRecipe.value.title} | Seasoned`,
   ogTitle: `Chef's Choice: ${normalizedRecipe.value.title}`,
   description: `Check out this delicious recipe for ${normalizedRecipe.value.title} on Seasoned.`,
-  ogImage: normalizedRecipe.value.imageUrl || '/images/seasoned-logo.png',
+  ogImage: absoluteOgImage,
   twitterCard: 'summary_large_image',
   ogType: 'article',
 })
