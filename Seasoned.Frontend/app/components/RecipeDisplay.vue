@@ -39,6 +39,26 @@
         </v-col>
       </v-row>
 
+      <v-expand-transition>
+        <v-card 
+          v-if="showSavePrompt" 
+          class="mx-auto mb-6 pa-4 save-prompt-card"
+          max-width="500"
+          color="#fdfbf7" 
+          elevation="2"
+        >
+          <div class="d-flex align-center">
+            <v-icon color="#8c4a32" class="mr-4" size="large">mdi-feather</v-icon>
+            <div>
+              <p class="text-subtitle-1 font-weight-bold mb-0" style="color: #5d4a36;">A Quick Note...</p>
+              <p class="text-body-2 mb-0" style="color: #8c7e6a;">To create a shareable link, please <strong>Save to Collection</strong> first.</p>
+            </div>
+            <v-spacer></v-spacer>
+            <v-btn icon="mdi-close" variant="text" size="small" color="#8c7e6a" @click="showSavePrompt = false"></v-btn>
+          </div>
+        </v-card>
+      </v-expand-transition>
+
       <v-row justify="center" class="mt-12 pb-10">
         <v-btn
           class="px-8 print-btn"
@@ -117,6 +137,7 @@
 import { ref } from 'vue'
 import '@/assets/css/app-theme.css'
 const hasShared =ref(false)
+const showSavePrompt = ref(false)
 
 const props = defineProps({
   recipe: { type: Object, default: null },
@@ -133,7 +154,8 @@ const printRecipe = () => {
 
 const shareRecipe = async () => {
   if (!props.recipe?.id) {
-    alert("Please save this recipe to your collection first to generate a shareable link!");
+    showSavePrompt.value = true;
+    setTimeout(() => { showSavePrompt.value = false; }, 6000);
     return;
   }
 

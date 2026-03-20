@@ -665,6 +665,12 @@ html, body {
   border: 1px solid #e8dec5 !important;
 }
 
+.save-prompt-card {
+  border: 1px solid #e0d5c5 !important;
+  border-left: 4px solid #8c4a32 !important;
+  border-radius: 8px !important;
+}
+
 /* Mobile Experience: Full-screen Parchment */
 @media (max-width: 959px) {
   .landing-wrapper {
@@ -678,14 +684,12 @@ html, body {
     overflow: visible !important;
   }
 
-  /* 2. Kill the Wood Background and apply Parchment to the whole page */
   .recipe-bg, .landing-page, .v-application {
     background-color: #f4e4bc !important; 
     background-image: none !important;
     min-height: 100vh !important;
   }
 
-  /* 3. Make the Card fill the width and remove the 'floating' shadow */
   .v-container {
     padding: 0 !important;
     margin: 0 !important;
@@ -701,11 +705,9 @@ html, body {
     border-radius: 0 !important;
     box-shadow: none !important;
     min-height: 100vh;
-    /* Keeps the subtle paper texture without the wood peeking through */
     background-image: url("https://www.transparenttextures.com/patterns/natural-paper.png") !important;
   }
 
-  /* 4. Force columns to stack so they don't squash */
   .recipe-content .v-row {
     display: flex !important;
     flex-direction: column !important;
@@ -728,21 +730,18 @@ html, body {
     text-shadow: none;
   }
 
-  /* 2. Adjust the hover state for mobile (touch) */
   .nav-auth-btn:hover, 
   .nav-home-btn:hover, 
   .nav-btn:hover {
-    background-color: rgba(46, 30, 10, 0.1) !important; /* Subtle dark tint */
-    color: #8c4a32 !important; /* Use your rust-orange accent on hover */
+    background-color: rgba(46, 30, 10, 0.1) !important;
+    color: #8c4a32 !important;
   }
 
-  /* 3. If you have an App Bar, ensure it doesn't stay transparent with white text */
   .v-app-bar {
     background-color: #f4e4bc !important; 
     border-bottom: 1px solid #dccca7 !important;
   }
-  
-  /* 4. Fix the icon colors in the nav if they are white */
+
   .v-app-bar .v-icon {
     color: #2e1e0a !important;
   }
