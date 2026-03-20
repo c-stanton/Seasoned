@@ -25,26 +25,12 @@ if (string.IsNullOrWhiteSpace(jwtKey))
 var jwtIssuer = builder.Configuration["Jwt:Issuer"] ?? "SeasonedAPI";
 var jwtAudience = builder.Configuration["Jwt:Audience"] ?? "SeasonedFrontend";
 
-builder.Services.AddAuthentication(options => {
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-})
-
-.AddJwtBearer(options => {
-    options.TokenValidationParameters = new TokenValidationParameters {
-        ValidateIssuer = true,
-        ValidateAudience = true,
-        ValidateLifetime = true,
-        ValidateIssuerSigningKey = true,
-        ValidIssuer = jwtIssuer,
-        ValidAudience = jwtAudience,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
-    };
-});
+builder.Services.AddAuthentication(IdentityConstants.BearerScheme)
+    .AddBearerToken(IdentityConstants.BearerScheme);
 
 builder.Services.AddScoped<IRecipeService, RecipeService>();
 
-builder.Services.AddIdentityApiEndpoints<IdentityUser>( options => {
+builder.Services.AddIdentityApiEndpoints<IdentityUser>(options => {
     options.Password.RequireDigit = false;
     options.Password.RequiredLength = 6;
     options.Password.RequireNonAlphanumeric = false;
@@ -52,8 +38,7 @@ builder.Services.AddIdentityApiEndpoints<IdentityUser>( options => {
     options.Password.RequireLowercase = false;
     options.User.RequireUniqueEmail = true;
 })
-.AddEntityFrameworkStores<ApplicationDbContext>()
-.AddDefaultTokenProviders();
+.AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.AddAuthorization();
 
