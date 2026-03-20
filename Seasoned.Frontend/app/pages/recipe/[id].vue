@@ -9,6 +9,9 @@
 
 <script setup>
 import { computed } from 'vue'
+definePageMeta({
+  auth: false
+})
 const route = useRoute();
 const config = useRuntimeConfig();
 

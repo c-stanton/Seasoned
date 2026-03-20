@@ -41,7 +41,7 @@
 
       <v-row justify="center" class="mt-12 pb-10">
         <v-btn
-          class="px=8 print-btn"
+          class="px-8 print-btn"
           size="large"
           elevation="0"
           @click="printRecipe"
@@ -132,9 +132,12 @@ const printRecipe = () => {
 }
 
 const shareRecipe = async () => {
-  const shareUrl = props.recipe.id 
-      ? `${window.location.origin}/recipe/${props.recipe.id}` 
-      : window.location.href;
+  if (!props.recipe?.id) {
+    alert("Please save this recipe to your collection first to generate a shareable link!");
+    return;
+  }
+
+  const shareUrl = `${window.location.origin}/recipe/${props.recipe.id}`;
 
   const shareData = {
     title: props.recipe.title,
@@ -144,14 +147,13 @@ const shareRecipe = async () => {
 
   try {
     if (navigator.share) {
-      await navigator.share(shareData)
-      triggerShareSuccess()
+      await navigator.share(shareData);
     } else {
-      await navigator.clipboard.writeText(shareUrl)
-      triggerShareSuccess()
+      await navigator.clipboard.writeText(shareUrl);
     }
+    triggerShareSuccess();
   } catch (err) {
-    console.error('Error sharing:', err)
+    if (err.name !== 'AbortError') console.error('Error sharing:', err);
   }
 }
 
