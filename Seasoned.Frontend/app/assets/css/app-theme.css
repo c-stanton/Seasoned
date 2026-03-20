@@ -121,6 +121,10 @@ html, body {
   color: #5d4a36 !important;
   font-size: 1.1rem;
   text-align: center;
+  inline-size: 100%;
+  overflow-wrap: break-word !important; 
+  word-break: break-all !important; 
+  padding: 0 10px !important;
 }
 
 .drop-text span {
