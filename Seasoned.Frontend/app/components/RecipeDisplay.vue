@@ -1,6 +1,6 @@
 <template>
   <transition name="fade">
-    <div v-if="recipe" class="recipe-content mx-auto" style="max-width: 900px;">
+    <div v-if="recipe" class="recipe-content">
       <v-divider class="mb-10 separator"></v-divider>
       
       <h2 class="recipe-title text-center mb-4">{{ recipe.title }}</h2>
@@ -165,6 +165,7 @@ const printRecipe = () => {
 const shareRecipe = async () => {
   if (!props.recipe?.id) {
     showSavePrompt.value = true;
+
     setTimeout(() => {
       showSavePrompt.value = false;
     }, 8000);
