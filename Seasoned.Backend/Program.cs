@@ -25,9 +25,6 @@ if (string.IsNullOrWhiteSpace(jwtKey))
 var jwtIssuer = builder.Configuration["Jwt:Issuer"] ?? "SeasonedAPI";
 var jwtAudience = builder.Configuration["Jwt:Audience"] ?? "SeasonedFrontend";
 
-builder.Services.AddAuthentication(IdentityConstants.BearerScheme)
-    .AddBearerToken(IdentityConstants.BearerScheme);
-
 builder.Services.AddScoped<IRecipeService, RecipeService>();
 
 builder.Services.AddIdentityApiEndpoints<IdentityUser>(options => {
