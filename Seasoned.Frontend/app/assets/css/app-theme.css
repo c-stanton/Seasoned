@@ -9,6 +9,10 @@ html, body {
   background-image: url("https://www.transparenttextures.com/patterns/tileable-wood-colored.png") !important;
   background-size: 500px;
   background-attachment: fixed;
+  background-repeat: repeat !important;
+  min-height: 100vh !important;
+  width: 100% !important;
+  display: block !important;
 }
 
 .landing-wrapper {

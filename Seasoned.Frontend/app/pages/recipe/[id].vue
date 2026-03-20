@@ -1,12 +1,11 @@
 <template>
-  <div class="recipe-bg min-h-screen pb-12">
-    <v-container class="py-10">
-      <RecipeDisplay 
+  <div class="recipe-bg">
+    <v-container class="py-10 d-flex justify-center"> <RecipeDisplay 
         v-if="normalizedRecipe" 
         :recipe="normalizedRecipe" 
         :is-public-view="true" 
-        class="recipe-card mx-auto"
-        style="max-width: 1000px;" 
+        class="recipe-card"
+        style="width: 100%; max-width: 1000px;" 
       />
       <v-progress-linear v-else indeterminate color="#8c4a32" />
     </v-container>
