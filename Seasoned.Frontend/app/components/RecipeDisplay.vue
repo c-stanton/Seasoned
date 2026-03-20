@@ -42,19 +42,29 @@
       <v-expand-transition>
         <v-card 
           v-if="showSavePrompt" 
-          class="mx-auto mb-6 pa-4 save-prompt-card"
-          max-width="500"
-          color="#fdfbf7" 
-          elevation="2"
+          class="mx-auto mb-8 save-prompt-paper"
+          max-width="600"
+          elevation="4"
         >
-          <div class="d-flex align-center">
+          <div class="d-flex align-center pa-5">
             <v-icon color="#8c4a32" class="mr-4" size="large">mdi-feather</v-icon>
-            <div>
-              <p class="text-subtitle-1 font-weight-bold mb-0" style="color: #5d4a36;">A Quick Note...</p>
-              <p class="text-body-2 mb-0" style="color: #8c7e6a;">To create a shareable link, please <strong>Save to Collection</strong> first.</p>
+            
+            <div class="text-left">
+              <p class="prompt-title mb-1">A Note from the Chef</p>
+              <p class="prompt-text mb-0">
+                To share this creation with others, please <strong>Save to Collection</strong> first.
+              </p>
             </div>
+            
             <v-spacer></v-spacer>
-            <v-btn icon="mdi-close" variant="text" size="small" color="#8c7e6a" @click="showSavePrompt = false"></v-btn>
+            
+            <v-btn 
+              icon="mdi-close" 
+              variant="text" 
+              size="small" 
+              color="#5d4a36" 
+              @click="showSavePrompt = false"
+            ></v-btn>
           </div>
         </v-card>
       </v-expand-transition>
@@ -155,7 +165,9 @@ const printRecipe = () => {
 const shareRecipe = async () => {
   if (!props.recipe?.id) {
     showSavePrompt.value = true;
-    setTimeout(() => { showSavePrompt.value = false; }, 6000);
+    setTimeout(() => {
+      showSavePrompt.value = false;
+    }, 8000);
     return;
   }
 
