@@ -25,6 +25,9 @@ services:
     environment:
       - GEMINI_API_KEY=${GEMINI_API_KEY}
       - NUXT_PUBLIC_API_BASE=${NUXT_PUBLIC_API_BASE}
+      - Jwt__Key=${JWT__KEY}
+      - Jwt__Issuer=${JWT__ISSUER}
+      - Jwt__Audience=${JWT__AUDIENCE}
       - ConnectionStrings__DefaultConnection=${ConnectionStrings__DefaultConnection}
       - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_HTTP_PORTS=8080

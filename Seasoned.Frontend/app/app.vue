@@ -50,17 +50,23 @@
 import { onMounted } from 'vue'
 import '@/assets/css/app-theme.css'
 import SessionTimeout from './components/SessionTimeout.vue'
-const authCookie = useCookie('.AspNetCore.Identity.Application')
 const isLoggedIn = useState('isLoggedIn', () => false)
 
 onMounted(() => {
-  if (authCookie.value) isLoggedIn.value = true
+  if (import.meta.client) {
+    const token = localStorage.getItem('auth_token')
+    if (token) {
+      isLoggedIn.value = true
+    }
+  }
 })
 
 const logout = () => {
-  authCookie.value = null
   isLoggedIn.value = false
-  if (import.meta.client) localStorage.removeItem('token')
+  if (import.meta.client) {
+    localStorage.removeItem('auth_token')
+    localStorage.removeItem('token') 
+  }
   navigateTo('/login')
 }
 </script>

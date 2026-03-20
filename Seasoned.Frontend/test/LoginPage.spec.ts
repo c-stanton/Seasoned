@@ -21,8 +21,8 @@ vi.stubGlobal('$fetch', mockFetch)
 
 const mockNavigate = vi.fn()
 vi.stubGlobal('navigateTo', mockNavigate)
+vi.stubGlobal('localStorage', { setItem: vi.fn(), getItem: vi.fn(), removeItem: vi.fn() })
 
-// Mock Nuxt's useState
 vi.stubGlobal('useState', () => ({ value: false }))
 
 describe('LoginPage.vue', () => {
@@ -37,15 +37,12 @@ describe('LoginPage.vue', () => {
   it('switches between Login and Register modes', async () => {
     const wrapper = mount(LoginPage, mountOptions)
     
-    // Default is Login
     expect(wrapper.find('h1').text()).toBe('Sign In')
     expect(wrapper.find('input[label="Confirm Password"]').exists()).toBe(false)
 
-    // Click toggle
     await wrapper.find('.auth-toggle-btn').trigger('click')
     
     expect(wrapper.find('h1').text()).toBe('Join Us')
-    // V-expand-transition might need a tick or we check the v-if logic
     expect(wrapper.vm.isLogin).toBe(false)
   })
 
@@ -65,7 +62,7 @@ describe('LoginPage.vue', () => {
   })
 
   it('calls login API and redirects on success', async () => {
-    mockFetch.mockResolvedValueOnce({ token: 'fake-token' })
+    mockFetch.mockResolvedValueOnce({ accessToken: 'fake-token' })
     const wrapper = mount(LoginPage, mountOptions)
     const vm = wrapper.vm as any
     

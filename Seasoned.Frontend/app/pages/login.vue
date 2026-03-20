@@ -145,23 +145,27 @@ const handleAuth = async () => {
   authLoading.value = true
   const endpoint = isLogin.value ? 'api/auth/login' : 'api/auth/register'
   
-  const url = isLogin.value 
-    ? `${config.public.apiBase}${endpoint}?useCookies=true&useSessionCookies=false` 
-    : `${config.public.apiBase}${endpoint}`
+  const url = `${config.public.apiBase}${endpoint}`
 
   try {
     const response = await $fetch(url, {
       method: 'POST',
       body: {
         email: email.value,
-        password: password.value
-      },
-      credentials: 'include' 
+        password: password.value,
+        useCookies: false,
+        useSessionCookies: false
+      }
     })
 
     if (isLogin.value) {
-      isLoggedIn.value = true
-      navigateTo('/')
+      if (response.accessToken) {
+        localStorage.setItem('auth_token', response.accessToken)
+        isLoggedIn.value = true
+        navigateTo('/')
+      } else {
+        throw new Error('Token not received')
+      }
     } else {
       isLogin.value = true
       authLoading.value = false
