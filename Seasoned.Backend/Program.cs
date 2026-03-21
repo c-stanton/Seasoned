@@ -103,13 +103,13 @@ app.UseRouting();
 app.UseCors("SeasonedOriginPolicy");
 app.UseAuthentication();
 app.UseAuthorization();
+app.MapGroup("/api/auth").MapIdentityApi<IdentityUser>();
+app.MapControllers();
 
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 }
 
-app.MapGroup("/api/auth").MapIdentityApi<IdentityUser>();
-app.MapControllers();
 app.MapFallbackToFile("index.html");
 app.Run();

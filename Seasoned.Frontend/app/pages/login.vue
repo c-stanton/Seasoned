@@ -143,7 +143,7 @@ const handleAuth = async () => {
   }
 
   authLoading.value = true
-  const endpoint = isLogin.value ? 'api/auth/login' : 'api/auth/register'
+  const endpoint = isLogin.value ? '/api/auth/login' : '/api/auth/register'
   
   const url = `${config.public.apiBase}${endpoint}`
 
