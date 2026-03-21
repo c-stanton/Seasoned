@@ -99,6 +99,7 @@ app.UseForwardedHeaders(new ForwardedHeadersOptions
 
 app.UseDefaultFiles();
 app.UseStaticFiles();
+app.UseRouting();
 app.UseCors("SeasonedOriginPolicy");
 app.UseAuthentication();
 app.UseAuthorization();
