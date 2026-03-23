@@ -52,7 +52,7 @@
     >
       <v-divider class="w-100 mb-4" color="#dccca7"></v-divider>
       <div class="text-center w-100 menu-text" style="font-size: 0.9rem; opacity: 0.8;">
-        Built by and maintained by Chloe Stanton
+        Built and maintained by Chloe Stanton
       </div>
     </v-footer>
   </v-app>
